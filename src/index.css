@@ -1,0 +1,162 @@
+@import "tailwindcss";
+@plugin "tailwindcss-animate";
+
+@theme {
+  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+}
+
+:root {
+  --background: oklch(22% .09 285);
+  --foreground: oklch(98% .004 285);
+  --primary: oklch(58% .21 20);
+  --primary-foreground: oklch(99% .003 60);
+  --accent: oklch(78% .16 60);
+  --muted: oklch(32% .08 295);
+  --muted-foreground: oklch(84% .03 300);
+  --secondary: oklch(34% .1 295);
+  --secondary-foreground: oklch(98% .004 285);
+  --card: oklch(28% .09 295);
+  --card-foreground: oklch(98% .004 285);
+  --border: oklch(99% 0 0/.16);
+  --input: oklch(99% 0 0/.18);
+  --ring: oklch(70% .19 35);
+}
+
+body {
+  background-color: #0d061c;
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  background-image: 
+    radial-gradient(circle at 10% 0%, rgba(88, 40, 220, 0.4) 0%, transparent 50%),
+    radial-gradient(circle at 90% 80%, rgba(255, 60, 0, 0.4) 0%, transparent 60%),
+    radial-gradient(circle at 50% 100%, rgba(220, 90, 20, 0.3) 0%, transparent 50%);
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+.mesh-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.8;
+  z-index: -1;
+}
+.mesh-bg.grid-lines {
+  background-image: none; /* Removing grid lines as they don't match the clean look of the image */
+}
+
+@keyframes orb-pulse {
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.08); }
+}
+
+@keyframes marquee {
+  0% { transform: translate(0px); }
+  100% { transform: translate(-50%); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-14px); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translate(0px); }
+  25% { transform: translate(-6px); }
+  75% { transform: translate(6px); }
+}
+
+@keyframes waveform {
+  0%, 100% { transform: scaleY(0.3); }
+  50% { transform: scaleY(1); }
+}
+
+.animate-orb-pulse {
+  animation: orb-pulse 2s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* UI Components */
+.glass {
+  background: oklch(99% 0 0 / 0.08);
+  background-image: linear-gradient(160deg, oklch(99% 0 0/.14) 0%, oklch(99% 0 0/.03) 60%, oklch(99% 0 0/.08) 100%);
+  border: 1px solid oklch(99% 0 0/.16);
+  backdrop-filter: blur(18px) saturate(1.4);
+  box-shadow: 0 24px 60px -30px oklch(0 0 0/.55), inset 0 1px 0 0 oklch(99% 0 0/.18);
+  border-radius: 16px;
+}
+
+.bg-signature {
+  background-image: linear-gradient(115deg, oklch(44% .19 285) 0%, oklch(55% .22 15) 58%, oklch(72% .19 48) 100%);
+  color: oklch(99% .003 60);
+}
+
+.glass-button {
+  background: oklch(99% 0 0 / 0.08);
+  background-image: linear-gradient(160deg, oklch(99% 0 0/.14) 0%, oklch(99% 0 0/.03) 60%, oklch(99% 0 0/.08) 100%);
+  border: 1px solid oklch(99% 0 0/.16);
+  backdrop-filter: blur(18px) saturate(1.4);
+  color: oklch(98% .004 285);
+  box-shadow: 0 24px 60px -30px oklch(0 0 0/.55), inset 0 1px 0 0 oklch(99% 0 0/.18);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.glass-button:hover {
+  background: oklch(99% 0 0 / 0.12);
+  transform: scale(1.02);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 9999px;
+  background: oklch(99% 0 0 / 0.08);
+  background-image: linear-gradient(160deg, oklch(99% 0 0/.14) 0%, oklch(99% 0 0/.03) 60%, oklch(99% 0 0/.08) 100%);
+  border: 1px solid oklch(99% 0 0/.16);
+  backdrop-filter: blur(18px) saturate(1.4);
+  padding: 6px 16px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: oklch(84% .03 300);
+}
+
+.text-gradient {
+  background-image: linear-gradient(115deg, oklch(44% .19 285) 0%, oklch(55% .22 15) 58%, oklch(72% .19 48) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans);
+  letter-spacing: -0.025em;
+}
+
+.font-body {
+  font-family: var(--font-body);
+}
