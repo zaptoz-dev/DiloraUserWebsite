@@ -13,15 +13,15 @@ export default function VoiceLab() {
   // Add audio properties to the languages array. 
   // You will need to place your audio files in the 'public/audio/' directory.
   const languages = [
-    { lang: "Hindi", script: "हिन्दी", text: "नमस्ते! मैं दिलोरा बोल रही हूँ।", audio: { female: "/audio/Hindi_female.mp3", male: "/audio/hindi_male.mp3" } },
-    { lang: "English", script: "English (IN)", text: "Hi, this is Dilora calling.", audio: { female: "/audio/English_female.mp3", male: "/audio/english_male.mp3" } },
-    { lang: "Tamil", script: "தமிழ்", text: "வணக்கம், நான் திலோரா.", audio: { female: "/audio/Tamil_female.mp3", male: "/audio/tamil_male.mp3" } },
-    { lang: "Telugu", script: "తెలుగు", text: "నమస్కారం, నేను దిలోరా.", audio: { female: "/audio/telugu_female.mp3", male: "/audio/telugu_male.mp3" } },
-    { lang: "Kannada", script: "ಕನ್ನಡ", text: "ನಮಸ್ಕಾರ, ನಾನು ದಿಲೋರಾ.", audio: { female: "/audio/kannada_female.mp3", male: "/audio/kannada_male.mp3" } },
-    { lang: "Malayalam", script: "മലയാളം", text: "നമസ്കാരം, ഞാൻ ദിലോറ.", audio: { female: "/audio/malayalam_female.mp3", male: "/audio/malayalam_male.mp3" } },
-    { lang: "Marathi", script: "मराठी", text: "नमस्कार, मी दिलोरा.", audio: { female: "/audio/Marathi_female.mp3", male: "/audio/marathi_male.mp3" } },
-    { lang: "Gujarati", script: "ગુજરાતી", text: "નમસ્તે, હું દિલોરા.", audio: { female: "/audio/Gujrati_female.mp3", male: "/audio/gujarati_male.mp3" } },
-    { lang: "Odia", script: "ଓଡ଼ିଆ", text: "ନମସ୍କାର, ମୁଁ ଦିଲୋରା।", audio: { female: "/audio/Odia_female.mp3", male: "/audio/odia_male.mp3" } },
+    { lang: "Hindi", script: "हिन्दी", text: "नमस्ते! मैं दिलोरा बोल रही हूँ।", audio: { female: "/audio/Hindi_female.mp3", male: "/audio/Hindi_Male.mp3" } },
+    { lang: "English", script: "English (IN)", text: "Hi, this is Dilora calling.", audio: { female: "/audio/English_female.mp3", male: "/audio/English_Male.mp3" } },
+    { lang: "Tamil", script: "தமிழ்", text: "வணக்கம், நான் திலோரா.", audio: { female: "/audio/Tamil_female.mp3", male: "/audio/Tamil_Male.mp3" } },
+    { lang: "Telugu", script: "తెలుగు", text: "నమస్కారం, నేను దిలోరా.", audio: { female: "/audio/telugu_female.mp3", male: "/audio/Telugu_Male.mp3" } },
+    { lang: "Kannada", script: "ಕನ್ನಡ", text: "ನಮಸ್ಕಾರ, ನಾನು ದಿಲೋರಾ.", audio: { female: "/audio/kannada_female.mp3", male: "/audio/Kannada_Male.mp3" } },
+    { lang: "Malayalam", script: "മലയാളം", text: "നമസ്കാരം, ഞാൻ ദിലോറ.", audio: { female: "/audio/malayalam_female.mp3", male: "/audio/Malayalam_Male.mp3" } },
+    { lang: "Marathi", script: "मराठी", text: "नमस्कार, मी दिलोरा.", audio: { female: "/audio/Marathi_female.mp3", male: "/audio/Marathi_Male.mp3" } },
+    { lang: "Gujarati", script: "ગુજરાતી", text: "નમસ્તે, હું દિલોરા.", audio: { female: "/audio/Gujrati_female.mp3", male: "/audio/Gujrati_Male.mp3" } },
+    { lang: "Odia", script: "ଓଡ଼ିଆ", text: "ନମସ୍କାର, ମୁଁ ଦିଲୋରା।", audio: { female: "/audio/Odia_female.mp3", male: "/audio/Odia_Male.mp3" } },
   ];
 
   const handleMouseEnter = (lang: string, audioPath?: string) => {
