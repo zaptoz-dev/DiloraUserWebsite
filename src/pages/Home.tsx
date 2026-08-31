@@ -149,7 +149,7 @@ export default function Home() {
               { lang: "Malayalam", script: "മലയാളം", text: "നമസ്കാരം, ഞാൻ ദിലോറ." },
               { lang: "Marathi", script: "मराठी", text: "नमस्कार, मी दिलोरा." },
               { lang: "Gujarati", script: "ગુજરાતી", text: "નમસ્તે, હું દિલોરા." },
-              { lang: "Marwari", script: "मारवाड़ी", text: "राम राम सा, म्हैं दिलोरा।" },
+              { lang: "Odia", script: "ଓଡ଼ିଆ", text: "ନମସ୍କାର, ମୁଁ ଦିଲୋରା।" },
             ].map((voice, idx) => {
               const isPlaying = playingLang === voice.lang;
 
