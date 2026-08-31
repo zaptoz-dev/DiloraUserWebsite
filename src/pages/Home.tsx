@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Badge from '../components/ui/Badge';
 import GlassCard from '../components/ui/GlassCard';
@@ -7,6 +7,44 @@ import Orb from '../components/Orb';
 export default function Home() {
   const [voiceType, setVoiceType] = useState<'female' | 'male'>('female');
   const [playingLang, setPlayingLang] = useState<string | null>(null);
+
+  const currentAudioRef = useRef<HTMLAudioElement | null>(null);
+
+  const languages = [
+    { lang: "Hindi", script: "हिन्दी", text: "नमस्ते! मैं दिलोरा बोल रही हूँ।", audio: { female: "/audio/hindi_female.mp3", male: "/audio/hindi_male.mp3" } },
+    { lang: "English", script: "English (IN)", text: "Hi, this is Dilora calling.", audio: { female: "/audio/english_female.mp3", male: "/audio/english_male.mp3" } },
+    { lang: "Tamil", script: "தமிழ்", text: "வணக்கம், நான் திலோரா.", audio: { female: "/audio/tamil_female.mp3", male: "/audio/tamil_male.mp3" } },
+    { lang: "Telugu", script: "తెలుగు", text: "నమస్కారం, నేను దిలోరా.", audio: { female: "/audio/telugu_female.mp3", male: "/audio/telugu_male.mp3" } },
+    { lang: "Kannada", script: "ಕನ್ನಡ", text: "ನಮಸ್ಕಾರ, ನಾನು ದಿಲೋರಾ.", audio: { female: "/audio/kannada_female.mp3", male: "/audio/kannada_male.mp3" } },
+    { lang: "Malayalam", script: "മലയാളം", text: "നമസ്കാരം, ഞാൻ ദിലോറ.", audio: { female: "/audio/malayalam_female.mp3", male: "/audio/malayalam_male.mp3" } },
+    { lang: "Marathi", script: "मराठी", text: "नमस्कार, मी दिलोरा.", audio: { female: "/audio/marathi_female.mp3", male: "/audio/marathi_male.mp3" } },
+    { lang: "Gujarati", script: "ગુજરાતી", text: "નમસ્તે, હું દિલોરા.", audio: { female: "/audio/gujarati_female.mp3", male: "/audio/gujarati_male.mp3" } },
+    { lang: "Odia", script: "ଓଡ଼ିଆ", text: "ନମସ୍କାର, ମୁଁ ଦିଲୋରା।", audio: { female: "/audio/odia_female.mp3", male: "/audio/odia_male.mp3" } },
+  ];
+
+  const handleMouseEnter = (lang: string, audioPath?: string) => {
+    setPlayingLang(lang);
+    if (currentAudioRef.current) {
+      currentAudioRef.current.pause();
+      currentAudioRef.current.currentTime = 0;
+    }
+    if (audioPath) {
+      const baseUrl = import.meta.env.BASE_URL || '/';
+      const fullAudioPath = audioPath.startsWith('/') ? `${baseUrl}${audioPath.slice(1)}` : `${baseUrl}${audioPath}`;
+      const audio = new Audio(fullAudioPath);
+      audio.play().catch(e => console.log("Audio play failed or file missing:", e));
+      currentAudioRef.current = audio;
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setPlayingLang(null);
+    if (currentAudioRef.current) {
+      currentAudioRef.current.pause();
+      currentAudioRef.current.currentTime = 0;
+      currentAudioRef.current = null;
+    }
+  };
 
   const features = [
     { title: "Multi-agent, multi-agency", desc: "Run unlimited agents across client workspaces with isolated data and billing." },
@@ -139,28 +177,19 @@ export default function Home() {
             </button>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-left">
-            {[
-              { lang: "Hindi", script: "हिन्दी", text: "नमस्ते! मैं दिलोरा बोल रही हूँ।" },
-              { lang: "English", script: "English (IN)", text: "Hi, this is Dilora calling." },
-              { lang: "Tamil", script: "தமிழ்", text: "வணக்கம், நான் திலோரா." },
-              { lang: "Telugu", script: "తెలుగు", text: "నమస్కారం, నేను దిలోరా." },
-              { lang: "Kannada", script: "ಕನ್ನಡ", text: "ನಮಸ್ಕಾರ, ನಾನು ದಿಲೋರಾ." },
-              { lang: "Malayalam", script: "മലയാളം", text: "നമസ്കാരം, ഞാൻ ദിലോറ." },
-              { lang: "Marathi", script: "मराठी", text: "नमस्कार, मी दिलोरा." },
-              { lang: "Gujarati", script: "ગુજરાતી", text: "નમસ્તે, હું દિલોરા." },
-              { lang: "Odia", script: "ଓଡ଼ିଆ", text: "ନମସ୍କାର, ମୁଁ ଦିଲୋରା।" },
-            ].map((voice, idx) => {
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            {languages.map((voice, idx) => {
               const isPlaying = playingLang === voice.lang;
+              const currentAudioPath = voiceType === 'female' ? voice.audio.female : voice.audio.male;
 
               return (
                 <GlassCard 
                   key={idx} 
                   className={`group cursor-pointer transition-all duration-500 relative overflow-hidden h-[220px] flex flex-col justify-between ${
-                    isPlaying ? 'bg-gradient-to-br from-[#ff3c00]/40 to-[#9b66ff]/40 border-white/30 scale-[1.02]' : 'hover:bg-white/5 border-white/10'
+                    isPlaying ? 'bg-gradient-to-br from-[#ff3c00]/40 to-[#9b66ff]/40 border-white/30 shadow-[0_0_30px_rgba(255,107,0,0.15)] scale-[1.02]' : 'hover:bg-white/5 border-white/10'
                   }`}
-                  onMouseEnter={() => setPlayingLang(voice.lang)}
-                  onMouseLeave={() => setPlayingLang(null)}
+                  onMouseEnter={() => handleMouseEnter(voice.lang, currentAudioPath)}
+                  onMouseLeave={handleMouseLeave}
                 >
                   <div className="flex justify-between items-start relative z-10">
                     <div>
