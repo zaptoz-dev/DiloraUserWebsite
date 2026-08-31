@@ -23,7 +23,6 @@ export default function Navbar() {
     { name: 'Voice Lab', path: '/voice-lab' },
     { name: 'Industries', path: '/industries' },
     { name: 'Pricing', path: '/pricing' },
-    { name: 'About', path: '/about' },
   ];
 
   const closeMenu = () => setMobileMenuOpen(false);

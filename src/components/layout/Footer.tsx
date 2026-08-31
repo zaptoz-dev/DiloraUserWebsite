@@ -49,7 +49,6 @@ export default function Footer() {
           <div>
             <h3 className="font-semibold text-lg mb-4 text-white">Company</h3>
             <ul className="flex flex-col gap-2">
-              <li><Link to="/about" className="text-[var(--muted-foreground)] hover:text-white transition-colors">About us</Link></li>
               <li><Link to="/demo" className="text-[var(--muted-foreground)] hover:text-white transition-colors">Get a demo</Link></li>
             </ul>
           </div>

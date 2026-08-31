@@ -47,12 +47,14 @@ export default function Home() {
   };
 
   const features = [
-    { title: "Multi-agent, multi-agency", desc: "Run unlimited agents across client workspaces with isolated data and billing." },
+    { title: "Voice recording", desc: "Automatically record, store, and playback every conversation for quality assurance and training." },
+    { title: "Lead gathering", desc: "Intelligently capture, qualify, and route leads directly to your CRM during the call." },
     { title: "Voice that passes for human", desc: "Sub-500ms turn taking, natural fillers, barge-in and real interruptions." },
-    { title: "9 Indian languages", desc: "Hindi, English, Tamil, Telugu, Kannada, Malayalam, Marathi, Gujarati, Marwari." },
+    { title: "9 Indian languages", desc: "Hindi, English, Tamil, Telugu, Kannada, Malayalam, Marathi, Gujarati, Odia." },
     { title: "Always on the line", desc: "24/7 pickup, zero queue, thousands of concurrent conversations." },
     { title: "Live analytics & summaries", desc: "Transcripts, intent, sentiment and outcome on every single call." },
     { title: "Telephony & CRM ready", desc: "Exotel, Twilio, Plivo, Zoho, Salesforce, HubSpot, Google Sheets." },
+    { title: "Multi-agent, multi-agency", desc: "Run unlimited agents across client workspaces with isolated data and billing." },
   ];
 
   const steps = [
@@ -102,16 +104,16 @@ export default function Home() {
 
       {/* Features Grid */}
       <section className="py-24 px-4">
-        <div className="max-w-6xl mx-auto text-center">
+        <div className="max-w-7xl mx-auto text-center">
           <Badge className="mb-6 border-white/20 text-gray-300 tracking-widest text-[10px]">BUILT FOR THE LINE</Badge>
-          <h2 className="text-4xl md:text-[44px] font-bold mb-4 tracking-tight leading-tight">
+          <h2 className="text-4xl md:text-[44px] font-bold mb-16 tracking-tight leading-tight">
             A complete calling operation,<br />inside one voice.
           </h2>
           <p className="text-sm md:text-base text-gray-400 mb-16">
             From first hello to CRM disposition, Dilora runs the conversation end to end.
           </p>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-left">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-left">
             {features.map((feature, idx) => (
               <div key={idx} className="bg-[#1e1536]/80 backdrop-blur-md border border-white/10 rounded-2xl p-8 hover:-translate-y-1 transition-transform duration-500 shadow-xl">
                 <div className="text-[#ff9d00] mb-4">
@@ -182,11 +184,15 @@ export default function Home() {
               const isPlaying = playingLang === voice.lang;
               const currentAudioPath = voiceType === 'female' ? voice.audio.female : voice.audio.male;
 
+              const activeClasses = voiceType === 'female'
+                ? 'bg-gradient-to-br from-[#ff3c00]/40 to-[#9b66ff]/40 border-white/30 shadow-[0_0_30px_rgba(255,107,0,0.15)] scale-[1.02]'
+                : 'bg-gradient-to-br from-[#00f2fe]/40 to-[#4facfe]/40 border-white/30 shadow-[0_0_30px_rgba(0,242,254,0.15)] scale-[1.02]';
+
               return (
                 <GlassCard 
                   key={idx} 
                   className={`group cursor-pointer transition-all duration-500 relative overflow-hidden h-[220px] flex flex-col justify-between ${
-                    isPlaying ? 'bg-gradient-to-br from-[#ff3c00]/40 to-[#9b66ff]/40 border-white/30 shadow-[0_0_30px_rgba(255,107,0,0.15)] scale-[1.02]' : 'hover:bg-white/5 border-white/10'
+                    isPlaying ? activeClasses : 'hover:bg-white/5 border-white/10'
                   }`}
                   onMouseEnter={() => handleMouseEnter(voice.lang, currentAudioPath)}
                   onMouseLeave={handleMouseLeave}

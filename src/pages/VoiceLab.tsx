@@ -97,11 +97,15 @@ export default function VoiceLab() {
               const isPlaying = playingLang === voice.lang;
               const currentAudioPath = voiceType === 'female' ? voice.audio.female : voice.audio.male;
               
+              const activeClasses = voiceType === 'female'
+                ? 'bg-gradient-to-br from-[#ff3c00]/40 to-[#9b66ff]/40 border-white/30 shadow-[0_0_30px_rgba(255,107,0,0.15)] scale-[1.02]'
+                : 'bg-gradient-to-br from-[#00f2fe]/40 to-[#4facfe]/40 border-white/30 shadow-[0_0_30px_rgba(0,242,254,0.15)] scale-[1.02]';
+
               return (
                 <GlassCard 
                   key={idx} 
                   className={`group cursor-pointer transition-all duration-500 relative overflow-hidden h-[240px] flex flex-col justify-between ${
-                    isPlaying ? 'bg-gradient-to-br from-[#ff3c00]/40 to-[#9b66ff]/40 border-white/30 shadow-[0_0_30px_rgba(255,107,0,0.15)] scale-[1.02]' : 'hover:bg-white/5 border-white/10'
+                    isPlaying ? activeClasses : 'hover:bg-white/5 border-white/10'
                   }`}
                   onMouseEnter={() => handleMouseEnter(voice.lang, currentAudioPath)}
                   onMouseLeave={handleMouseLeave}

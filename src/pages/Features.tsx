@@ -4,14 +4,14 @@ import TryItLiveCTA from '../components/TryItLiveCTA';
 
 export default function Features() {
   const features = [
+    { title: "Voice recording", desc: "Automatically record, store, and playback every conversation for quality assurance, training, and compliance." },
+    { title: "Lead gathering", desc: "Intelligently capture, qualify, and route leads directly to your CRM during the call without human intervention." },
     { title: "Multi-agent, multi-agency", desc: "Every agency gets its own workspace: agents, numbers, scripts, voices and reports stay separated. Clone a winning agent into a new client account in seconds and roll changes out across a whole portfolio from one console." },
     { title: "Voice that passes for human", desc: "Dilora listens while it speaks. Callers can cut in mid-sentence, change their mind, mumble a pincode — the agent recovers the way a trained tele-caller would, not the way an IVR does." },
-    { title: "9 Indian languages", desc: "Pick a voice and a language per campaign, or let Dilora detect the caller's language in the first two seconds and switch. Code-mixed Hinglish is handled natively, not as an afterthought." },
+    { title: "9 Indian languages", desc: "Pick a voice and a language per campaign, or let Dilora detect the caller's language in the first two seconds and switch. Hindi, English, Tamil, Telugu, Kannada, Malayalam, Marathi, Gujarati, Odia." },
     { title: "Always on the line", desc: "Festival spikes, midnight enquiries, Monday-morning floods — Dilora answers all of them at once and never sounds tired on the four hundredth call." },
     { title: "Live analytics & summaries", desc: "Each call lands in your dashboard with a searchable transcript, a three-line summary, detected intent, sentiment curve and the action taken — so ops teams coach the agent instead of guessing." },
     { title: "Telephony & CRM ready", desc: "Bring your own numbers and your own CRM. Dilora writes back dispositions, creates leads and fires webhooks the moment a conversation ends." },
-    { title: "Custom scripts per client", desc: "Version your prompts, A/B test openers, lock compliance lines so they can never be skipped, and keep a changelog of who changed what." },
-    { title: "Compliance & recordings", desc: "Recording consent, DNC list enforcement, PII redaction in transcripts and configurable retention keep legal comfortable while your calls keep running." },
     { title: "Warm human handoff", desc: "When intent gets complex or sentiment drops, Dilora transfers the call and pushes the summary to the agent's screen before they say hello." },
   ];
 
