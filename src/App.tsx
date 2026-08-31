@@ -14,6 +14,14 @@ function App() {
     <Router>
       <ScrollToTop />
       <div className="mesh-bg grid-lines"></div>
+      
+      {/* Animated Ambient Background Blobs */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0 opacity-40">
+        <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-[#ff3c00] rounded-full mix-blend-screen filter blur-[100px] animate-blob"></div>
+        <div className="absolute top-[-10%] right-[-10%] w-96 h-96 bg-[#9b66ff] rounded-full mix-blend-screen filter blur-[100px] animate-blob animation-delay-2000"></div>
+        <div className="absolute bottom-[-20%] left-[20%] w-[500px] h-[500px] bg-[#5828dc] rounded-full mix-blend-screen filter blur-[120px] animate-blob animation-delay-4000"></div>
+      </div>
+
       <div className="relative z-10 flex flex-col min-h-screen">
         <Navbar />
         <main className="flex-grow">

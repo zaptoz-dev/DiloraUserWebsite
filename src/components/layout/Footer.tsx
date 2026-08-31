@@ -50,6 +50,16 @@ export default function Footer() {
             <h3 className="font-semibold text-lg mb-4 text-white">Company</h3>
             <ul className="flex flex-col gap-2">
               <li><Link to="/demo" className="text-[var(--muted-foreground)] hover:text-white transition-colors">Get a demo</Link></li>
+              <li className="mt-2">
+                <a 
+                  href="https://www.zaptoz.com/contact-us" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="font-medium text-transparent bg-clip-text bg-gradient-to-r from-[#00c6ff] to-[#0072ff] hover:from-[#ff3c00] hover:to-[#9b66ff] transition-all duration-300"
+                >
+                  Get started with Zaptoz &rarr;
+                </a>
+              </li>
             </ul>
           </div>
         </div>
