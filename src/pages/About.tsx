@@ -14,7 +14,7 @@ export default function About() {
       {/* Hero Section */}
       <section className="py-24 px-4 text-center">
         <div className="max-w-4xl mx-auto">
-          <Badge className="mb-6">ABOUT DILORA</Badge>
+          <Badge className="mb-6">ABOUT DIALORA</Badge>
           <h1 className="text-5xl md:text-6xl font-semibold leading-tight tracking-tight mb-6">
             Making business calls <span className="text-gradient">feel human</span> again.
           </h1>

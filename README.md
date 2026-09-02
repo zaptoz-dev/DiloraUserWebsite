@@ -1,7 +1,7 @@
-# Dilora website
+# Dialora website
 
-Marketing site for Dilora, plus the live **demo-call** integration: a visitor
-fills in the form on `/demo` and Dilora rings their phone through
+Marketing site for Dialora, plus the live **demo-call** integration: a visitor
+fills in the form on `/demo` and Dialora rings their phone through
 [Bolna](https://bolna.ai).
 
 - **Frontend** — Vite + React 18 + TypeScript + Tailwind v4, routed with
@@ -66,13 +66,13 @@ instance.
 Deployed to EC2 as a systemd service behind Caddy:
 
 ```bash
-export DILORA_HOST=ec2-user@<ip>
-export DILORA_KEY=./<key>.pem
-export DILORA_URL=https://<public-url>
+export DIALORA_HOST=ec2-user@<ip>
+export DIALORA_KEY=./<key>.pem
+export DIALORA_URL=https://<public-url>
 ./deploy.sh
 ```
 
-`deploy/dilora-site.service` and `deploy/Caddyfile` are the box-side config.
+`deploy/dialora-site.service` and `deploy/Caddyfile` are the box-side config.
 Caddy must set `X-Forwarded-For` (it does by default) — the server trusts one
 proxy hop so the per-IP limit sees real visitor addresses rather than
 `127.0.0.1`.
@@ -80,7 +80,7 @@ proxy hop so the per-IP limit sees real visitor addresses rather than
 ### The GitHub Pages build
 
 `vite.config.ts` takes its `base` from `BASE_PATH`, defaulting to
-`/DiloraUserWebsite/` for GitHub Pages; the server build uses `BASE_PATH=/`.
+`/DialoraUserWebsite/` for GitHub Pages; the server build uses `BASE_PATH=/`.
 
 Note that GitHub Pages is static and has no `/api/demo-call`, so the demo form
 cannot work there. Either retire the Pages deployment in favour of the server,

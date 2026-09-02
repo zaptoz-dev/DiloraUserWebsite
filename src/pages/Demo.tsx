@@ -77,7 +77,7 @@ export default function Demo() {
 
       setStatus({
         kind: 'placed',
-        message: `Dilora is dialling ${normalized} now. Pick up — it usually rings within a few seconds.`,
+        message: `Dialora is dialling ${normalized} now. Pick up — it usually rings within a few seconds.`,
       });
       // Clear the number so a stray second submit can't re-dial the same person.
       setPhone('');
@@ -100,10 +100,10 @@ export default function Demo() {
         <div className="max-w-3xl mx-auto">
           <Badge className="mb-6">LIVE CALLBACK</Badge>
           <h1 className="text-4xl md:text-5xl font-semibold leading-tight tracking-tight mb-6">
-            Hear Dilora on your <span className="text-gradient">own phone</span>.
+            Hear Dialora on your <span className="text-gradient">own phone</span>.
           </h1>
           <p className="text-lg text-[var(--muted-foreground)] leading-relaxed max-w-2xl mx-auto">
-            Tell us where to call and Dilora will ring you straight away — a real
+            Tell us where to call and Dialora will ring you straight away — a real
             call from the live agent, not a recording.
           </p>
         </div>
@@ -171,7 +171,7 @@ export default function Demo() {
                    </div>
                    <p className="text-xs text-[var(--muted-foreground)] min-h-[1rem]">
                       {phone.trim() === ''
-                        ? 'Dilora will call this number in the next few seconds.'
+                        ? 'Dialora will call this number in the next few seconds.'
                         : normalized
                           ? `Will dial ${normalized}`
                           : 'That number doesn’t look complete yet.'}
@@ -192,7 +192,7 @@ export default function Demo() {
                 </div>
 
                 <div className="flex flex-col gap-2">
-                   <label htmlFor="intent" className="text-sm font-medium">What do you want Dilora to do?</label>
+                   <label htmlFor="intent" className="text-sm font-medium">What do you want Dialora to do?</label>
                    <select
                       id="intent"
                       value={intent}
@@ -232,7 +232,7 @@ export default function Demo() {
                        className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white"
                      />
                    )}
-                   {busy ? 'Placing your call…' : 'Get a Call From Dilora'}
+                   {busy ? 'Placing your call…' : 'Get a Call From Dialora'}
                 </button>
 
                 <div aria-live="polite">

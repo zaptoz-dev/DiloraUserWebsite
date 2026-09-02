@@ -1,15 +1,15 @@
-# Install to /etc/systemd/system/dilora-site.service on the EC2 box, then:
-#   sudo systemctl daemon-reload && sudo systemctl enable --now dilora-site
+# Install to /etc/systemd/system/dialora-site.service on the EC2 box, then:
+#   sudo systemctl daemon-reload && sudo systemctl enable --now dialora-site
 [Unit]
-Description=Dilora website (static SPA + Bolna demo-call API)
+Description=Dialora website (static SPA + Bolna demo-call API)
 After=network.target
 
 [Service]
 Type=simple
 User=ec2-user
-WorkingDirectory=/opt/dilora-site
+WorkingDirectory=/opt/dialora-site
 # Holds BOLNA_API_KEY — mode 600, never committed.
-EnvironmentFile=/opt/dilora-site/.env
+EnvironmentFile=/opt/dialora-site/.env
 ExecStart=/usr/local/bin/node server/index.js
 Restart=always
 RestartSec=3

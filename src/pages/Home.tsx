@@ -12,7 +12,7 @@ export default function Home() {
 
   const languages = [
     { lang: "Hindi", script: "हिन्दी", text: "नमस्ते! मैं दिलोरा बोल रही हूँ।", audio: { female: "/audio/Hindi_female.mp3", male: "/audio/Hindi_Male.mp3" } },
-    { lang: "English", script: "English (IN)", text: "Hi, this is Dilora calling.", audio: { female: "/audio/English_female.mp3", male: "/audio/English_Male.mp3" } },
+    { lang: "English", script: "English (IN)", text: "Hi, this is Dialora calling.", audio: { female: "/audio/English_female.mp3", male: "/audio/English_Male.mp3" } },
     { lang: "Tamil", script: "தமிழ்", text: "வணக்கம், நான் திலோரா.", audio: { female: "/audio/Tamil_female.mp3", male: "/audio/Tamil_Male.mp3" } },
     { lang: "Telugu", script: "తెలుగు", text: "నమస్కారం, నేను దిలోరా.", audio: { female: "/audio/telugu_female.mp3", male: "/audio/Telugu_Male.mp3" } },
     { lang: "Kannada", script: "ಕನ್ನಡ", text: "ನಮಸ್ಕಾರ, ನಾನು ದಿಲೋರಾ.", audio: { female: "/audio/kannada_female.mp3", male: "/audio/Kannada_Male.mp3" } },
@@ -60,8 +60,8 @@ export default function Home() {
   const steps = [
     { num: "01", title: "Set up your agent", desc: "Describe the job in plain language, or start from a proven template for your sector. Guardrails and objectives in minutes, not sprints." },
     { num: "02", title: "Choose voice & language", desc: "Pick a male or female voice in any of nine Indian languages. Tune pace, warmth and how assertive the agent should be." },
-    { num: "03", title: "Connect calls & CRM", desc: "Attach your numbers from Exotel, Twilio or Plivo, then point Dilora at your CRM so every outcome is written back." },
-    { num: "04", title: "Dilora handles the calls", desc: "Inbound and outbound, at any volume, with transcripts, summaries and escalations landing in your dashboard live." },
+    { num: "03", title: "Connect calls & CRM", desc: "Attach your numbers from Exotel, Twilio or Plivo, then point Dialora at your CRM so every outcome is written back." },
+    { num: "04", title: "Dialora handles the calls", desc: "Inbound and outbound, at any volume, with transcripts, summaries and escalations landing in your dashboard live." },
   ];
 
   return (
@@ -79,7 +79,7 @@ export default function Home() {
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ff3c00] to-[#ff9d00]">that scale.</span>
             </h1>
             <p className="text-xl text-gray-300 mb-10 max-w-[450px] leading-relaxed">
-              Dilora answers, qualifies, books and follows up in nine Indian languages—with the natural pace of your best agent.
+              Dialora answers, qualifies, books and follows up in nine Indian languages—with the natural pace of your best agent.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-start gap-4">
               <Link to="/demo" className="flex items-center justify-center gap-2 w-full sm:w-auto bg-gradient-to-r from-[#5828dc] via-[#9b66ff] to-[#ff6b00] px-8 py-3.5 rounded-full text-[15px] font-semibold text-white hover:scale-105 transition-transform hover:shadow-[0_0_30px_rgba(255,107,0,0.5)]">
@@ -110,7 +110,7 @@ export default function Home() {
             A complete calling operation,<br />inside one voice.
           </h2>
           <p className="text-sm md:text-base text-gray-400 mb-16">
-            From first hello to CRM disposition, Dilora runs the conversation end to end.
+            From first hello to CRM disposition, Dialora runs the conversation end to end.
           </p>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-left">
@@ -157,7 +157,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto text-center">
           <Badge className="mb-6">VOICE LAB</Badge>
           <h2 className="text-4xl md:text-5xl font-semibold mb-6 tracking-tight">
-            Hear Dilora speak your customer's language.
+            Hear Dialora speak your customer's language.
           </h2>
           
           <div className="inline-flex glass rounded-full p-1 mb-12 border border-white/10">

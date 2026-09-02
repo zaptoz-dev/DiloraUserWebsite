@@ -1,28 +1,28 @@
 #!/usr/bin/env bash
 #
-# Deploy the Dilora website to its EC2 box. Idempotent: rsync the working tree,
+# Deploy the Dialora website to its EC2 box. Idempotent: rsync the working tree,
 # install, build, restart the service.
 #
 #   ./deploy.sh
 #
 # Host and key come from the environment so nothing sensitive is committed:
 #
-#   export DILORA_HOST=ec2-user@<new-ec2-ip>
-#   export DILORA_KEY=path/to/key.pem
-#   export DILORA_URL=https://<public-url>
+#   export DIALORA_HOST=ec2-user@<new-ec2-ip>
+#   export DIALORA_KEY=path/to/key.pem
+#   export DIALORA_URL=https://<public-url>
 #
 # .env is synced deliberately (the box has no other source of the Bolna key)
 # and re-chmodded to 600 on arrival. It is git-ignored, so it never enters a
 # commit; nothing here writes the key to a log.
 set -euo pipefail
 
-HOST="${DILORA_HOST:-}"
-KEY="${DILORA_KEY:-}"
-URL="${DILORA_URL:-}"
-APP_DIR="${DILORA_APP_DIR:-/opt/dilora-site}"
+HOST="${DIALORA_HOST:-}"
+KEY="${DIALORA_KEY:-}"
+URL="${DIALORA_URL:-}"
+APP_DIR="${DIALORA_APP_DIR:-/opt/dialora-site}"
 
-[[ -n "$HOST" ]] || { echo "Set DILORA_HOST, e.g. ec2-user@1.2.3.4" >&2; exit 1; }
-[[ -n "$KEY"  ]] || { echo "Set DILORA_KEY, e.g. ./dilora.pem" >&2; exit 1; }
+[[ -n "$HOST" ]] || { echo "Set DIALORA_HOST, e.g. ec2-user@1.2.3.4" >&2; exit 1; }
+[[ -n "$KEY"  ]] || { echo "Set DIALORA_KEY, e.g. ./dialora.pem" >&2; exit 1; }
 [[ -f "$KEY"  ]] || { echo "Missing SSH key: $KEY" >&2; exit 1; }
 
 cd "$(dirname "$0")"
@@ -56,11 +56,11 @@ chmod 600 .env
 # with bundled optional deps), so we let install resolve the platform extras.
 npm install --no-audit --no-fund --silent
 # BASE_PATH=/ because this server hosts the site at the root, unlike the
-# GitHub Pages build which lives under /DiloraUserWebsite/.
+# GitHub Pages build which lives under /DialoraUserWebsite/.
 BASE_PATH=/ npm run build 2>&1 | tail -5
-sudo systemctl restart dilora-site
+sudo systemctl restart dialora-site
 sleep 3
-systemctl is-active dilora-site
+systemctl is-active dialora-site
 REMOTE
 
 if [[ -n "$URL" ]]; then

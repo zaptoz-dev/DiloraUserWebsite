@@ -6,7 +6,7 @@ export default function Industries() {
   const industries = [
     { emoji: "🏙️", title: "Real Estate", desc: "Qualify portal leads within 30 seconds of enquiry, capture budget and locality, and book site visits straight into the sales calendar." },
     { emoji: "🩺", title: "Healthcare & Clinics", desc: "Answer every missed clinic call, book and reschedule appointments, and run vaccination or follow-up reminder campaigns." },
-    { emoji: "🎧", title: "BPOs & Call Centers", desc: "Absorb tier-1 volume, pre-qualify before a human picks up, and let Dilora run the overflow shift nobody wants to staff." },
+    { emoji: "🎧", title: "BPOs & Call Centers", desc: "Absorb tier-1 volume, pre-qualify before a human picks up, and let Dialora run the overflow shift nobody wants to staff." },
     { emoji: "📦", title: "E-commerce & D2C", desc: "Confirm COD orders, cut RTO, chase abandoned carts and handle delivery status calls without a support queue." },
     { emoji: "🏦", title: "Banking, NBFC & Insurance", desc: "Run eligibility checks, renewal reminders and KYC nudges with consent capture and compliance lines locked in." },
     { emoji: "💸", title: "Collections & Recovery", desc: "Polite, consistent, fully logged reminder calls at scale — with promise-to-pay capture and zero script drift." },
@@ -15,7 +15,7 @@ export default function Industries() {
     { emoji: "🚗", title: "Automotive Dealerships", desc: "Book test drives, run service reminders and follow up on quotes before the customer walks into a rival showroom." },
     { emoji: "🚚", title: "Logistics & Delivery", desc: "Confirm addresses before dispatch, coordinate re-attempts, and update consignees automatically." },
     { emoji: "🏛️", title: "Government & Public Services", desc: "Broadcast scheme information, run citizen surveys and handle grievance intake in regional languages." },
-    { emoji: "🍽️", title: "Restaurants", desc: "Never drop a reservation or takeaway order during the dinner rush — Dilora takes them all in parallel." },
+    { emoji: "🍽️", title: "Restaurants", desc: "Never drop a reservation or takeaway order during the dinner rush — Dialora takes them all in parallel." },
     { emoji: "🧑💼", title: "HR & Recruitment", desc: "Screen applicants at volume: availability, notice period, CTC, location and language fit — scored automatically." },
     { emoji: "🎫", title: "Events & Ticketing", desc: "Handle ticket enquiries, confirm RSVPs and run reminder waves before doors open." },
     { emoji: "🛠️", title: "Local Services", desc: "Salons, repair shops and clinics get a receptionist that works nights, weekends and festival weeks." },
@@ -31,7 +31,7 @@ export default function Industries() {
             Built for businesses that <span className="text-gradient">live on the phone</span>.
           </h1>
           <p className="text-xl text-[var(--muted-foreground)] leading-relaxed">
-            From the first lead response to the final payment reminder, Dilora adapts to your operation.
+            From the first lead response to the final payment reminder, Dialora adapts to your operation.
           </p>
         </div>
       </section>

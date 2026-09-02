@@ -1,5 +1,5 @@
 /**
- * Dilora website server.
+ * Dialora website server.
  *
  * Serves the built Vite SPA out of dist/ and exposes the one endpoint that
  * needs a secret: POST /api/demo-call, which places a Bolna call on behalf of
@@ -191,7 +191,7 @@ const PORT = Number(process.env.PORT) || 3000;
 const HOST = process.env.HOST || "127.0.0.1";
 
 app.listen(PORT, HOST, () => {
-  console.log(`Dilora site listening on http://${HOST}:${PORT}`);
+  console.log(`Dialora site listening on http://${HOST}:${PORT}`);
   if (!process.env.BOLNA_API_KEY || !process.env.BOLNA_AGENT_ID) {
     console.warn(
       "WARNING: BOLNA_API_KEY / BOLNA_AGENT_ID are not set — /api/demo-call will fail."

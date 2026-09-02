@@ -14,7 +14,7 @@ export default function VoiceLab() {
   // You will need to place your audio files in the 'public/audio/' directory.
   const languages = [
     { lang: "Hindi", script: "हिन्दी", text: "नमस्ते! मैं दिलोरा बोल रही हूँ।", audio: { female: "/audio/Hindi_female.mp3", male: "/audio/Hindi_Male.mp3" } },
-    { lang: "English", script: "English (IN)", text: "Hi, this is Dilora calling.", audio: { female: "/audio/English_female.mp3", male: "/audio/English_Male.mp3" } },
+    { lang: "English", script: "English (IN)", text: "Hi, this is Dialora calling.", audio: { female: "/audio/English_female.mp3", male: "/audio/English_Male.mp3" } },
     { lang: "Tamil", script: "தமிழ்", text: "வணக்கம், நான் திலோரா.", audio: { female: "/audio/Tamil_female.mp3", male: "/audio/Tamil_Male.mp3" } },
     { lang: "Telugu", script: "తెలుగు", text: "నమస్కారం, నేను దిలోరా.", audio: { female: "/audio/telugu_female.mp3", male: "/audio/Telugu_Male.mp3" } },
     { lang: "Kannada", script: "ಕನ್ನಡ", text: "ನಮಸ್ಕಾರ, ನಾನು ದಿಲೋರಾ.", audio: { female: "/audio/kannada_female.mp3", male: "/audio/Kannada_Male.mp3" } },
@@ -35,7 +35,7 @@ export default function VoiceLab() {
 
     // Play the new audio if a path is provided
     if (audioPath) {
-      // Note: Because we use base: '/DiloraUserWebsite/' on GitHub Pages, we prepend the base path in production.
+      // Note: Because we use base: '/DialoraUserWebsite/' on GitHub Pages, we prepend the base path in production.
       // In development, Vite serves from the root.
       const baseUrl = import.meta.env.BASE_URL || '/';
       const fullAudioPath = audioPath.startsWith('/') ? `${baseUrl}${audioPath.slice(1)}` : `${baseUrl}${audioPath}`;
@@ -65,7 +65,7 @@ export default function VoiceLab() {
             A voice your customers will <span className="text-gradient">stay on the line</span> for.
           </h1>
           <p className="text-xl text-[var(--muted-foreground)] leading-relaxed mb-12">
-            Switch voice and language, then preview how Dilora sounds in the moments that matter.
+            Switch voice and language, then preview how Dialora sounds in the moments that matter.
           </p>
           
           <div className="inline-flex glass rounded-full p-1 mb-16 border border-white/10">
@@ -161,7 +161,7 @@ export default function VoiceLab() {
                         </>
                       ) : (
                         <span className="text-xs text-gray-400 font-medium transition-opacity">
-                          Hover or tap to hear Dilora
+                          Hover or tap to hear Dialora
                         </span>
                       )}
                     </div>

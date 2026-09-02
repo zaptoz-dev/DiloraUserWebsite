@@ -36,7 +36,7 @@ export default function Navbar() {
       >
         <Link to="/" className="flex items-center gap-3 font-body font-bold text-xl tracking-tight" onClick={closeMenu}>
           <img src={logoImg} alt="Logo" className="h-8 object-contain rounded-md" />
-          <span>Dilora</span>
+          <span>Dialora</span>
         </Link>
 
         {/* Desktop Nav */}

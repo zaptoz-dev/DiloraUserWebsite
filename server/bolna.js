@@ -1,6 +1,6 @@
 /**
  * Bolna API client. Ported from the TSI Stock Brokers dashboard
- * (src/lib/bolna.ts), trimmed to the one thing the Dilora site needs: firing a
+ * (src/lib/bolna.ts), trimmed to the one thing the Dialora site needs: firing a
  * single instant demo call.
  *
  * The API key is read from the environment and never leaves this process — the
