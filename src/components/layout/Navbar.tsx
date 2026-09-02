@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 
-import logoImg from '../../assets/logo.jpg';
-
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -35,7 +33,6 @@ export default function Navbar() {
         }`}
       >
         <Link to="/" className="flex items-center gap-3 font-body font-bold text-xl tracking-tight" onClick={closeMenu}>
-          <img src={logoImg} alt="Logo" className="h-8 object-contain rounded-md" />
           <span>Dialora</span>
         </Link>
 
