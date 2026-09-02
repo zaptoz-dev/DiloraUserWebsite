@@ -1,0 +1,12 @@
+# Installed to /etc/caddy/Caddyfile on the box; `sudo systemctl reload caddy`.
+#
+# nip.io resolves 16-112-67-135.nip.io -> 16.112.67.135, which gives Caddy a
+# real hostname to get a Let's Encrypt cert for without owning a domain.
+# Swap this line for the real domain when there is one; nothing else changes.
+16-112-67-135.nip.io {
+	encode gzip zstd
+
+	# Caddy sets X-Forwarded-For, which server/index.js reads via
+	# `trust proxy: 1` so the per-IP demo-call limit sees real visitor IPs.
+	reverse_proxy 127.0.0.1:3000
+}

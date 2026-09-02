@@ -1,0 +1,20 @@
+# Install to /etc/systemd/system/dilora-site.service on the EC2 box, then:
+#   sudo systemctl daemon-reload && sudo systemctl enable --now dilora-site
+[Unit]
+Description=Dilora website (static SPA + Bolna demo-call API)
+After=network.target
+
+[Service]
+Type=simple
+User=ec2-user
+WorkingDirectory=/opt/dilora-site
+# Holds BOLNA_API_KEY — mode 600, never committed.
+EnvironmentFile=/opt/dilora-site/.env
+ExecStart=/usr/local/bin/node server/index.js
+Restart=always
+RestartSec=3
+# The app binds loopback; the reverse proxy is the only public listener.
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target

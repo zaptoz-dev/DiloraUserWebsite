@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# tsc build artifacts that would shadow vite.config.ts
+/vite.config.js
+/vite.config.d.ts

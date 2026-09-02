@@ -1,0 +1,19 @@
+# Install to /etc/systemd/system/caddy.service
+[Unit]
+Description=Caddy web server
+After=network.target
+
+[Service]
+Type=notify
+User=caddy
+Group=caddy
+ExecStart=/usr/local/bin/caddy run --environ --config /etc/caddy/Caddyfile
+ExecReload=/usr/local/bin/caddy reload --config /etc/caddy/Caddyfile --force
+Restart=on-abnormal
+# Cert storage lives here; must survive restarts or we re-request certs and
+# risk hitting Let's Encrypt rate limits.
+StateDirectory=caddy
+ConfigurationDirectory=caddy
+
+[Install]
+WantedBy=multi-user.target
