@@ -9,6 +9,7 @@ export default function Home() {
   const [playingLang, setPlayingLang] = useState<string | null>(null);
 
   const currentAudioRef = useRef<HTMLAudioElement | null>(null);
+  const [autoplayBlocked, setAutoplayBlocked] = useState(false);
 
   const languages = [
     { lang: "Hindi", script: "हिन्दी", text: "नमस्ते! मैं डायलोरा बोल रही हूँ।", audio: { female: "/audio/Hindi_female.mp3", male: "/audio/Hindi_Male.mp3" } },
@@ -33,8 +34,19 @@ export default function Home() {
       const baseUrl = import.meta.env.BASE_URL || '/';
       const fullAudioPath = audioPath.startsWith('/') ? `${baseUrl}${audioPath.slice(1)}` : `${baseUrl}${audioPath}`;
       const audio = new Audio(fullAudioPath);
-      audio.play().catch(e => console.log("Audio play failed or file missing:", e));
       currentAudioRef.current = audio;
+      
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          setAutoplayBlocked(false);
+        }).catch(e => {
+          console.log("Audio play failed:", e);
+          if (e.name === 'NotAllowedError') {
+            setAutoplayBlocked(true);
+          }
+        });
+      }
     }
   };
 
@@ -268,7 +280,9 @@ export default function Home() {
                           <svg className="w-3.5 h-3.5 text-[#ffb000]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
                           </svg>
-                          <span className="text-[11px] text-[#ffb000] font-medium uppercase tracking-wide">Now playing — {voiceType}</span>
+                          <span className="text-[11px] text-[#ffb000] font-medium uppercase tracking-wide">
+                            {autoplayBlocked ? "Click to enable sound" : `Now playing — ${voiceType}`}
+                          </span>
                         </>
                       ) : (
                         <span className="text-[11px] text-gray-400 font-medium uppercase tracking-wide transition-opacity">
