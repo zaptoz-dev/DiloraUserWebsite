@@ -93,7 +93,7 @@ export default function VoiceLab() {
       {/* Voice Grid */}
       <section className="pb-24 px-4">
         <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+          <div className="flex flex-wrap justify-center gap-5 max-w-7xl mx-auto">
             {languages.map((voice, idx) => {
               const isPlaying = playingLang === voice.lang;
               const currentAudioPath = voiceType === 'female' ? voice.audio.female : voice.audio.male;
@@ -105,7 +105,7 @@ export default function VoiceLab() {
               return (
                 <GlassCard 
                   key={idx} 
-                  className={`group cursor-pointer transition-all duration-500 relative overflow-hidden h-[240px] flex flex-col justify-between ${
+                  className={`w-full sm:w-[calc(50%-10px)] md:w-[calc(33.33%-14px)] lg:w-[calc(20%-16px)] group cursor-pointer transition-all duration-500 relative overflow-hidden min-h-[260px] flex flex-col justify-between ${
                     isPlaying ? activeClasses : 'hover:bg-white/5 border-white/10'
                   }`}
                   onMouseEnter={() => handleMouseEnter(voice.lang, currentAudioPath)}
