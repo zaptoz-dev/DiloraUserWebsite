@@ -13,7 +13,7 @@
 import express from "express";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { placeInstantCall } from "./bolna.js";
+import { placeInstantCall, getExecution } from "./bolna.js";
 import { toE164 } from "../shared/phone.js";
 import { checkAllowance, getLimits } from "./rateLimit.js";
 
@@ -75,6 +75,81 @@ const INTENT_LABELS = {
   other: "Other",
 };
 
+// ---------------------------------------------------------------------------
+// Calling hours
+//
+// Bolna enforces India's TRAI telemarketing window (9 AM-9 PM IST) on its own
+// side for +91 numbers. It doesn't reject an out-of-window /call — it accepts
+// the request (status "queued"), then flips the execution to "rescheduled"
+// for the next 9 AM IST a moment later, with no error and no webhook to us.
+// Confirmed 2026-09-03: a call placed at 9:35 PM IST came back "queued" and
+// was "rescheduled" to 08:59:59 AM IST the next day within 300ms.
+//
+// So this is checked twice: up front, to give an honest error instead of a
+// false "calling you now" (checkIndiaCallingHours); and again just after
+// placing the call, to catch a reschedule for any other reason — a DND-listed
+// number, for instance — that the pre-check can't see coming
+// (confirmCallWasPlaced).
+// ---------------------------------------------------------------------------
+
+const IST_OFFSET_MS = (5 * 60 + 30) * 60_000;
+const CALL_WINDOW_START_HOUR = 9; // 9 AM IST
+const CALL_WINDOW_END_HOUR = 21; // 9 PM IST
+
+function istHourNow() {
+  // Lets the smoke test exercise both branches deterministically instead of
+  // depending on whatever time it happens to run.
+  const override = process.env.DEMO_TEST_IST_HOUR;
+  if (override !== undefined) return Number(override);
+  return new Date(Date.now() + IST_OFFSET_MS).getUTCHours();
+}
+
+function isWithinIndiaCallingHours() {
+  const hour = istHourNow();
+  return hour >= CALL_WINDOW_START_HOUR && hour < CALL_WINDOW_END_HOUR;
+}
+
+function checkIndiaCallingHours(phoneNumber) {
+  if (!phoneNumber.startsWith("+91")) return { ok: true };
+  if (isWithinIndiaCallingHours()) return { ok: true };
+  return {
+    ok: false,
+    reason:
+      "Indian telecom rules only allow us to call between 9 AM and 9 PM IST. Please try again during those hours.",
+  };
+}
+
+function formatIstClock(date) {
+  const ist = new Date(date.getTime() + IST_OFFSET_MS);
+  const h24 = ist.getUTCHours();
+  const m = String(ist.getUTCMinutes()).padStart(2, "0");
+  const h12 = ((h24 + 11) % 12) + 1;
+  return `${h12}:${m} ${h24 < 12 ? "AM" : "PM"} IST`;
+}
+
+/**
+ * Bolna's synchronous /call response only ever says "queued" — the reschedule
+ * happens a moment later, entirely on Bolna's side. So after placing a call we
+ * re-fetch the execution once, after a short delay, to see whether it actually
+ * held. Bounded to ~1.5s total: long enough to catch the reschedule (observed
+ * at ~250ms), short enough not to make the visitor wait on a spinner.
+ */
+const CONFIRM_DELAY_MS = Number(process.env.DEMO_CONFIRM_DELAY_MS) || 1200;
+
+async function confirmCallWasPlaced(executionId) {
+  await new Promise((r) => setTimeout(r, CONFIRM_DELAY_MS));
+  try {
+    const execution = await getExecution(executionId);
+    if (execution.status === "rescheduled" && execution.scheduled_at) {
+      return { rescheduled: true, scheduledAt: execution.scheduled_at };
+    }
+  } catch {
+    // Can't confirm — fall through and tell the visitor it's in progress
+    // rather than blocking the response on a Bolna hiccup.
+  }
+  return { rescheduled: false };
+}
+
 app.post("/api/demo-call", async (req, res) => {
   const body = req.body ?? {};
 
@@ -102,6 +177,11 @@ app.post("/api/demo-call", async (req, res) => {
     return res
       .status(400)
       .json({ error: "That email address doesn't look right.", field: "email" });
+  }
+
+  const hours = checkIndiaCallingHours(phoneNumber);
+  if (!hours.ok) {
+    return res.status(422).json({ error: hours.reason, field: "phone" });
   }
 
   const allowance = checkAllowance(req.ip, phoneNumber);
@@ -133,6 +213,20 @@ app.post("/api/demo-call", async (req, res) => {
     console.log(
       `[demo-call] placed execution=${result.execution_id} status=${result.status}`
     );
+
+    const confirmation = await confirmCallWasPlaced(result.execution_id);
+    if (confirmation.rescheduled) {
+      console.log(
+        `[demo-call] execution=${result.execution_id} was rescheduled to ${confirmation.scheduledAt}`
+      );
+      return res.json({
+        executionId: result.execution_id,
+        status: "rescheduled",
+        message: `That number couldn't be reached right now, so Bolna has scheduled the call for ${formatIstClock(
+          new Date(confirmation.scheduledAt)
+        )} instead.`,
+      });
+    }
 
     return res.json({
       executionId: result.execution_id,

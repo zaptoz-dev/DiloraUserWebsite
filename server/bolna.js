@@ -112,3 +112,8 @@ export async function placeInstantCall(recipientPhoneNumber, userData) {
     body: JSON.stringify(body),
   });
 }
+
+/** GET /executions/{id} — used to confirm a call Bolna just accepted actually got dialled. */
+export async function getExecution(executionId) {
+  return request(`/executions/${executionId}`, { headers: jsonHeaders() });
+}

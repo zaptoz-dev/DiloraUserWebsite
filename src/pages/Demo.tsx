@@ -20,6 +20,10 @@ type Status =
   | { kind: 'idle' }
   | { kind: 'placing' }
   | { kind: 'placed'; message: string }
+  // Bolna accepted the request but didn't actually dial — most commonly
+  // because it fell outside India's 9 AM-9 PM calling-hours rule and Bolna
+  // pushed it to the next allowed slot instead of erroring.
+  | { kind: 'rescheduled'; message: string }
   | { kind: 'error'; message: string };
 
 export default function Demo() {
@@ -75,10 +79,14 @@ export default function Demo() {
       const body = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(body?.error || `Something went wrong (${res.status}).`);
 
-      setStatus({
-        kind: 'placed',
-        message: `Dialora is dialling ${normalized} now. Pick up — it usually rings within a few seconds.`,
-      });
+      if (body.status === 'rescheduled') {
+        setStatus({ kind: 'rescheduled', message: body.message });
+      } else {
+        setStatus({
+          kind: 'placed',
+          message: `Dialora is dialling ${normalized} now. Pick up — it usually rings within a few seconds.`,
+        });
+      }
       // Clear the number so a stray second submit can't re-dial the same person.
       setPhone('');
       setNotes('');
@@ -239,6 +247,12 @@ export default function Demo() {
                   {status.kind === 'placed' && (
                     <div className="rounded-xl border border-[var(--border)] bg-white/5 px-4 py-3 text-sm">
                       <p className="font-semibold mb-1">Calling you now.</p>
+                      <p className="text-[var(--muted-foreground)]">{status.message}</p>
+                    </div>
+                  )}
+                  {status.kind === 'rescheduled' && (
+                    <div className="rounded-xl border border-[var(--ring)]/50 bg-white/5 px-4 py-3 text-sm">
+                      <p className="font-semibold mb-1">Call scheduled, not placed yet.</p>
                       <p className="text-[var(--muted-foreground)]">{status.message}</p>
                     </div>
                   )}
