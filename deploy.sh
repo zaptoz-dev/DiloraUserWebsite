@@ -11,9 +11,9 @@
 #   export DIALORA_KEY=path/to/key.pem
 #   export DIALORA_URL=https://<public-url>
 #
-# .env is synced deliberately (the box has no other source of the Bolna key)
-# and re-chmodded to 600 on arrival. It is git-ignored, so it never enters a
-# commit; nothing here writes the key to a log.
+# .env is deliberately NOT synced — it holds the Bolna key and lives only on
+# the box, re-chmodded to 600 on arrival. It is git-ignored, so it never enters
+# a commit; nothing here writes the key to a log.
 set -euo pipefail
 
 HOST="${DIALORA_HOST:-}"
