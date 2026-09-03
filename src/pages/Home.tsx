@@ -157,9 +157,31 @@ export default function Home() {
       <section className="py-24 px-4">
         <div className="max-w-6xl mx-auto text-center">
           <Badge className="mb-6">VOICE LAB</Badge>
-          <h2 className="text-4xl md:text-5xl font-semibold mb-6 tracking-tight">
+          <h2 className="text-4xl md:text-5xl font-semibold mb-8 tracking-tight">
             Hear Dialora speak your customer's language.
           </h2>
+          
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-10 animate-in fade-in slide-in-from-bottom-8 duration-700">
+            <div className="flex items-center gap-4 bg-white/5 border border-white/10 px-5 py-3 rounded-2xl shadow-xl hover:bg-white/10 hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#ff3c00]/20 transition-all cursor-default">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#ff3c00] to-[#ff9d00] text-white font-bold shadow-inner">
+                10+
+              </span>
+              <div className="text-left">
+                <p className="text-sm font-bold text-white tracking-tight">Indian & Global Voices</p>
+                <p className="text-[11px] text-gray-400 font-medium mt-0.5">Fluent in multiple languages</p>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-4 bg-white/5 border border-white/10 px-5 py-3 rounded-2xl shadow-xl hover:bg-white/10 hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#9b66ff]/20 transition-all cursor-default">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#9b66ff] to-[#5828dc] text-white shadow-inner">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              </span>
+              <div className="text-left">
+                <p className="text-sm font-bold text-white tracking-tight">Native Regional Accents</p>
+                <p className="text-[11px] text-gray-400 font-medium mt-0.5">Hyper-local authentic tone</p>
+              </div>
+            </div>
+          </div>
           
           <div className="inline-flex glass rounded-full p-1 mb-12 border border-white/10">
             <button 
