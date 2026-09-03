@@ -98,6 +98,21 @@ body {
   50% { transform: scaleY(1); }
 }
 
+@keyframes call-ring {
+  0% { box-shadow: 0 0 0 0 rgba(88, 40, 220, 0.7); transform: scale(1); }
+  25% { transform: scale(1.05) rotate(5deg); }
+  50% { transform: scale(1.05) rotate(-5deg); }
+  75% { transform: scale(1.05) rotate(5deg); }
+  100% { box-shadow: 0 0 0 15px rgba(88, 40, 220, 0); transform: scale(1); }
+}
+
+.hover-call-ring {
+  border-radius: 50%;
+}
+.hover-call-ring:hover {
+  animation: call-ring 1s infinite ease-in-out;
+}
+
 .animate-orb-pulse {
   animation: orb-pulse 2s ease-in-out infinite;
 }

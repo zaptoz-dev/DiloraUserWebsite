@@ -219,6 +219,7 @@ export default function Home() {
                   }`}
                   onMouseEnter={() => handleMouseEnter(voice.lang, currentAudioPath)}
                   onMouseLeave={handleMouseLeave}
+                  onClick={() => handleMouseEnter(voice.lang, currentAudioPath)}
                 >
                   <div className="flex justify-between items-start relative z-10">
                     <div>
