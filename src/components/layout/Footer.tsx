@@ -9,7 +9,7 @@ export default function Footer() {
             Dialora
           </Link>
           <p className="text-[var(--muted-foreground)] text-sm mb-6">
-            AI voice agents that pick up, speak like people and get things done — in nine Indian languages, for agencies and businesses that live on the phone.
+            AI voice agents that pick up, speak like people and get things done — in 10+ Indian and international voices, for agencies and businesses that live on the phone.
           </p>
           <div className="flex flex-wrap gap-3">
             {/* Social Icons */}

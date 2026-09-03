@@ -11,15 +11,16 @@ export default function Home() {
   const currentAudioRef = useRef<HTMLAudioElement | null>(null);
 
   const languages = [
-    { lang: "Hindi", script: "हिन्दी", text: "नमस्ते! मैं दिलोरा बोल रही हूँ।", audio: { female: "/audio/Hindi_female.mp3", male: "/audio/Hindi_Male.mp3" } },
+    { lang: "Hindi", script: "हिन्दी", text: "नमस्ते! मैं डायलोरा बोल रही हूँ।", audio: { female: "/audio/Hindi_female.mp3", male: "/audio/Hindi_Male.mp3" } },
     { lang: "English", script: "English (IN)", text: "Hi, this is Dialora calling.", audio: { female: "/audio/English_female.mp3", male: "/audio/English_Male.mp3" } },
-    { lang: "Tamil", script: "தமிழ்", text: "வணக்கம், நான் திலோரா.", audio: { female: "/audio/Tamil_female.mp3", male: "/audio/Tamil_Male.mp3" } },
-    { lang: "Telugu", script: "తెలుగు", text: "నమస్కారం, నేను దిలోరా.", audio: { female: "/audio/telugu_female.mp3", male: "/audio/Telugu_Male.mp3" } },
-    { lang: "Kannada", script: "ಕನ್ನಡ", text: "ನಮಸ್ಕಾರ, ನಾನು ದಿಲೋರಾ.", audio: { female: "/audio/kannada_female.mp3", male: "/audio/Kannada_Male.mp3" } },
-    { lang: "Malayalam", script: "മലയാളം", text: "നമസ്കാരം, ഞാൻ ദിലോറ.", audio: { female: "/audio/malayalam_female.mp3", male: "/audio/Malayalam_Male.mp3" } },
-    { lang: "Marathi", script: "मराठी", text: "नमस्कार, मी दिलोरा.", audio: { female: "/audio/Marathi_female.mp3", male: "/audio/Marathi_Male.mp3" } },
-    { lang: "Gujarati", script: "ગુજરાતી", text: "નમસ્તે, હું દિલોરા.", audio: { female: "/audio/Gujrati_female.mp3", male: "/audio/Gujrati_Male.mp3" } },
-    { lang: "Odia", script: "ଓଡ଼ିଆ", text: "ନମସ୍କାର, ମୁଁ ଦିଲୋରା।", audio: { female: "/audio/Odia_female.mp3", male: "/audio/Odia_Male.mp3" } },
+    { lang: "Tamil", script: "தமிழ்", text: "வணக்கம், நான் டயலோரா.", audio: { female: "/audio/Tamil_female.mp3", male: "/audio/Tamil_Male.mp3" } },
+    { lang: "Telugu", script: "తెలుగు", text: "నమస్కారం, నేను డయలోరా.", audio: { female: "/audio/Telugu_female.mp3", male: "/audio/Telugu_Male.mp3" } },
+    { lang: "Kannada", script: "ಕನ್ನಡ", text: "ನಮಸ್ಕಾರ, ನಾನು ಡಯಲೋರಾ.", audio: { female: "/audio/Kannada_female.mp3", male: "/audio/Kannada_Male.mp3" } },
+    { lang: "Malayalam", script: "മലയാളം", text: "നമസ്കാരം, ഞാൻ ഡയലോറ.", audio: { female: "/audio/Malayalam_female.mp3", male: "/audio/Malayalam_Male.mp3" } },
+    { lang: "Marathi", script: "मराठी", text: "नमस्कार, मी डायलोरा.", audio: { female: "/audio/Marathi_female.mp3", male: "/audio/Marathi_Male.mp3" } },
+    { lang: "Gujarati", script: "ગુજરાતી", text: "નમસ્તે, હું ડાયલોરા.", audio: { female: "/audio/Gujrati_female.mp3", male: "/audio/Gujrati_Male.mp3" } },
+    { lang: "Odia", script: "ଓଡ଼ିଆ", text: "ନମସ୍କାର, ମୁଁ ଡାୟଲୋରା।", audio: { female: "/audio/Odia_female.mp3", male: "/audio/Odia_Male.mp3" } },
+    { lang: "Bengali", script: "বাংলা", text: "নমস্কার, আমি ডায়ালোরা।", audio: { female: "/audio/Bengali_female.mp3", male: "/audio/Bengali_Male.mp3" } },
   ];
 
   const handleMouseEnter = (lang: string, audioPath?: string) => {
@@ -50,7 +51,7 @@ export default function Home() {
     { title: "Voice recording", desc: "Automatically record, store, and playback every conversation for quality assurance and training." },
     { title: "Lead gathering", desc: "Intelligently capture, qualify, and route leads directly to your CRM during the call." },
     { title: "Voice that passes for human", desc: "Sub-500ms turn taking, natural fillers, barge-in and real interruptions." },
-    { title: "9 Indian languages", desc: "Hindi, English, Tamil, Telugu, Kannada, Malayalam, Marathi, Gujarati, Odia." },
+    { title: "10+ Indian & Int'l Voices", desc: "Hindi, English, Tamil, Telugu, Kannada, Malayalam, Marathi, Gujarati, Odia, Bengali and more." },
     { title: "Always on the line", desc: "24/7 pickup, zero queue, thousands of concurrent conversations." },
     { title: "Live analytics & summaries", desc: "Transcripts, intent, sentiment and outcome on every single call." },
     { title: "Telephony & CRM ready", desc: "Exotel, Twilio, Plivo, Zoho, Salesforce, HubSpot, Google Sheets." },
@@ -59,7 +60,7 @@ export default function Home() {
 
   const steps = [
     { num: "01", title: "Set up your agent", desc: "Describe the job in plain language, or start from a proven template for your sector. Guardrails and objectives in minutes, not sprints." },
-    { num: "02", title: "Choose voice & language", desc: "Pick a male or female voice in any of nine Indian languages. Tune pace, warmth and how assertive the agent should be." },
+    { num: "02", title: "Choose voice & language", desc: "Pick a male or female voice across 10+ Indian and international languages. Tune pace, warmth and how assertive the agent should be." },
     { num: "03", title: "Connect calls & CRM", desc: "Attach your numbers from Exotel, Twilio or Plivo, then point Dialora at your CRM so every outcome is written back." },
     { num: "04", title: "Dialora handles the calls", desc: "Inbound and outbound, at any volume, with transcripts, summaries and escalations landing in your dashboard live." },
   ];
@@ -78,9 +79,9 @@ export default function Home() {
               human. <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#9b66ff] to-[#ff3c00]">Outcomes</span><br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ff3c00] to-[#ff9d00]">that scale.</span>
             </h1>
-            <p className="text-xl text-gray-300 mb-10 max-w-[450px] leading-relaxed">
-              Dialora answers, qualifies, books and follows up in nine Indian languages—with the natural pace of your best agent.
-            </p>
+            <p className="text-lg md:text-xl text-[var(--muted-foreground)] mb-12 max-w-2xl leading-relaxed">
+            Dialora answers, qualifies, books and follows up in 10+ Indian and international languages—with the natural pace of your best agent.
+          </p>
             <div className="flex flex-col sm:flex-row items-center justify-start gap-4">
               <Link to="/demo" className="flex items-center justify-center gap-2 w-full sm:w-auto bg-gradient-to-r from-[#5828dc] via-[#9b66ff] to-[#ff6b00] px-8 py-3.5 rounded-full text-[15px] font-semibold text-white hover:scale-105 transition-transform hover:shadow-[0_0_30px_rgba(255,107,0,0.5)]">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
