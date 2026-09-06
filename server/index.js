@@ -76,48 +76,21 @@ const INTENT_LABELS = {
 };
 
 // ---------------------------------------------------------------------------
-// Calling hours
+// Reschedule detection
 //
-// Bolna enforces India's TRAI telemarketing window (9 AM-9 PM IST) on its own
-// side for +91 numbers. It doesn't reject an out-of-window /call — it accepts
-// the request (status "queued"), then flips the execution to "rescheduled"
-// for the next 9 AM IST a moment later, with no error and no webhook to us.
-// Confirmed 2026-09-03: a call placed at 9:35 PM IST came back "queued" and
-// was "rescheduled" to 08:59:59 AM IST the next day within 300ms.
-//
-// So this is checked twice: up front, to give an honest error instead of a
-// false "calling you now" (checkIndiaCallingHours); and again just after
-// placing the call, to catch a reschedule for any other reason — a DND-listed
-// number, for instance — that the pre-check can't see coming
-// (confirmCallWasPlaced).
+// Bolna can silently decline to actually dial a call it just accepted: a call
+// placed at 9:35 PM IST on 2026-09-03 came back "queued", then flipped to
+// "rescheduled" for 08:59:59 AM IST the next day within 300ms — no error, no
+// webhook. That was traced to this agent's own calling-hours guardrail
+// (`restricted` / `calling_guardrails` in its Bolna config), since turned off
+// (2026-09-07). Rather than hardcode the India 9 AM-9 PM window we'd inferred,
+// this just checks the outcome directly after every call: if Bolna reschedules
+// it for any reason — this guardrail if it's ever turned back on, a DND-listed
+// number, anything else — the visitor sees the real scheduled time instead of
+// a false "pick up now".
 // ---------------------------------------------------------------------------
 
 const IST_OFFSET_MS = (5 * 60 + 30) * 60_000;
-const CALL_WINDOW_START_HOUR = 9; // 9 AM IST
-const CALL_WINDOW_END_HOUR = 21; // 9 PM IST
-
-function istHourNow() {
-  // Lets the smoke test exercise both branches deterministically instead of
-  // depending on whatever time it happens to run.
-  const override = process.env.DEMO_TEST_IST_HOUR;
-  if (override !== undefined) return Number(override);
-  return new Date(Date.now() + IST_OFFSET_MS).getUTCHours();
-}
-
-function isWithinIndiaCallingHours() {
-  const hour = istHourNow();
-  return hour >= CALL_WINDOW_START_HOUR && hour < CALL_WINDOW_END_HOUR;
-}
-
-function checkIndiaCallingHours(phoneNumber) {
-  if (!phoneNumber.startsWith("+91")) return { ok: true };
-  if (isWithinIndiaCallingHours()) return { ok: true };
-  return {
-    ok: false,
-    reason:
-      "Indian telecom rules only allow us to call between 9 AM and 9 PM IST. Please try again during those hours.",
-  };
-}
 
 function formatIstClock(date) {
   const ist = new Date(date.getTime() + IST_OFFSET_MS);
@@ -177,11 +150,6 @@ app.post("/api/demo-call", async (req, res) => {
     return res
       .status(400)
       .json({ error: "That email address doesn't look right.", field: "email" });
-  }
-
-  const hours = checkIndiaCallingHours(phoneNumber);
-  if (!hours.ok) {
-    return res.status(422).json({ error: hours.reason, field: "phone" });
   }
 
   const allowance = checkAllowance(req.ip, phoneNumber);

@@ -67,9 +67,7 @@ function spawnServer(port, extraEnv) {
   return child;
 }
 
-// Fixed at midday IST so the happy path and rate limiter run regardless of
-// when this test actually executes.
-const child = spawnServer(PORT, { DEMO_TEST_IST_HOUR: "12" });
+const child = spawnServer(PORT, {});
 
 // Wait for listen.
 for (let i = 0; i < 50; i++) {
@@ -156,7 +154,7 @@ console.log("\n--- reschedule detection ---");
 // the shared per-IP quota.
 const reschedPort = PORT + 2;
 const reschedBase = `http://127.0.0.1:${reschedPort}`;
-const reschedChild = spawnServer(reschedPort, { DEMO_TEST_IST_HOUR: "12" });
+const reschedChild = spawnServer(reschedPort, {});
 for (let i = 0; i < 50; i++) {
   try { await fetch(`${reschedBase}/api/health`); break; } catch { await new Promise(r => setTimeout(r, 100)); }
 }
@@ -174,32 +172,6 @@ await check("a call Bolna silently reschedules is reported honestly, not as 'cal
   assert(!/dialling|calling you now/i.test(body.message), body.message);
 });
 reschedChild.kill();
-
-console.log("\n--- India calling-hours guard ---");
-const outOfHoursPort = PORT + 1;
-const outOfHoursBase = `http://127.0.0.1:${outOfHoursPort}`;
-const outOfHoursChild = spawnServer(outOfHoursPort, { DEMO_TEST_IST_HOUR: "22" }); // 10 PM IST
-for (let i = 0; i < 50; i++) {
-  try { await fetch(`${outOfHoursBase}/api/health`); break; } catch { await new Promise(r => setTimeout(r, 100)); }
-}
-await check("an Indian number is rejected outside the 9 AM-9 PM IST window", async () => {
-  const res = await fetch(`${outOfHoursBase}/api/demo-call`, {
-    method: "POST", headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ ...good, phone: "9888888888" }),
-  });
-  const body = await res.json();
-  assert(res.status === 422, JSON.stringify({ status: res.status, body }));
-  assert(/9 AM and 9 PM IST/.test(body.error), body.error);
-});
-await check("a non-Indian number is unaffected by the India calling-hours guard", async () => {
-  const res = await fetch(`${outOfHoursBase}/api/demo-call`, {
-    method: "POST", headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ ...good, countryCode: "+44", phone: "7700 900123" }),
-  });
-  const body = await res.json();
-  assert(res.status === 200, JSON.stringify({ status: res.status, body }));
-});
-outOfHoursChild.kill();
 
 console.log("\n--- static site ---");
 await check("serves the SPA at /", async () => {
