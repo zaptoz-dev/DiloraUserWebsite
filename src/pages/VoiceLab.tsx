@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Badge from '../components/ui/Badge';
 import GlassCard from '../components/ui/GlassCard';
+import InteractiveUseCase from '../components/ui/InteractiveUseCase';
 
 export default function VoiceLab() {
   const [voiceType, setVoiceType] = useState<'female' | 'male'>('female');
@@ -123,6 +124,9 @@ export default function VoiceLab() {
           </div>
         </div>
       </section>
+
+      {/* Interactive Use Cases */}
+      <InteractiveUseCase />
 
       {/* Voice Grid */}
       <section className="pb-24 px-4">

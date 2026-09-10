@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Badge from '../components/ui/Badge';
 import GlassCard from '../components/ui/GlassCard';
 import Orb from '../components/Orb';
+import InteractiveUseCase from '../components/ui/InteractiveUseCase';
 
 export default function Home() {
   const [voiceType, setVoiceType] = useState<'female' | 'male'>('female');
@@ -164,6 +165,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Interactive Use Cases */}
+      <InteractiveUseCase />
 
       {/* Voice Lab Preview */}
       <section className="py-24 px-4">
