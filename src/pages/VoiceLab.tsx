@@ -125,8 +125,6 @@ export default function VoiceLab() {
         </div>
       </section>
 
-      {/* Interactive Use Cases */}
-      <InteractiveUseCase />
 
       {/* Voice Grid */}
       <section className="pb-24 px-4">
@@ -224,6 +222,9 @@ export default function VoiceLab() {
           </div>
         </div>
       </section>
+
+      {/* Interactive Use Cases */}
+      <InteractiveUseCase />
     </div>
   );
 }
