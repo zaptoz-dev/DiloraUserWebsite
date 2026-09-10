@@ -381,6 +381,9 @@ export default function Home() {
       {/* Animated Workflow Evolution (Without Dialora vs With Dialora Infinity Loop) */}
       <WorkflowComparison />
 
+      {/* Interactive Use Case Demo (See Dialora in Your Industry) */}
+      <InteractiveUseCase />
+
       {/* The Part That Makes Dialora Different (NuPlay Inspired Comparison) */}
       <section className="py-28 px-4 relative">
         <div className="max-w-6xl mx-auto">
