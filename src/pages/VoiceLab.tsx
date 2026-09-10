@@ -83,32 +83,34 @@ export default function VoiceLab() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-12 animate-in fade-in slide-in-from-bottom-8 duration-700">
-            <div className="flex items-center gap-4 bg-white/5 border border-white/10 px-5 py-3.5 rounded-2xl shadow-xl hover:bg-white/10 hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#ff3c00]/20 transition-all cursor-default">
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#ff3c00] to-[#ff9d00] text-white font-bold text-lg shadow-inner">
+            <div className="flex items-center gap-4 bg-[#0f1422] border border-white/10 px-5 py-3.5 rounded-2xl shadow-xl hover:border-[#245ae2]/40 transition-all cursor-default">
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#245ae2]/20 border border-[#245ae2]/30 text-[#60a5fa] font-bold text-lg shadow-inner">
                 10+
               </span>
               <div className="text-left">
                 <p className="text-[15px] font-bold text-white tracking-tight">Indian & Global Voices</p>
-                <p className="text-xs text-gray-400 font-medium mt-0.5">Fluent in multiple languages</p>
+                <p className="text-xs text-slate-400 font-medium mt-0.5">Fluent in multiple languages</p>
               </div>
             </div>
             
-            <div className="flex items-center gap-4 bg-white/5 border border-white/10 px-5 py-3.5 rounded-2xl shadow-xl hover:bg-white/10 hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#9b66ff]/20 transition-all cursor-default">
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#9b66ff] to-[#5828dc] text-white shadow-inner">
+            <div className="flex items-center gap-4 bg-[#0f1422] border border-white/10 px-5 py-3.5 rounded-2xl shadow-xl hover:border-[#245ae2]/40 transition-all cursor-default">
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#245ae2]/20 border border-[#245ae2]/30 text-[#60a5fa] shadow-inner">
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
               </span>
               <div className="text-left">
                 <p className="text-[15px] font-bold text-white tracking-tight">Native Regional Accents</p>
-                <p className="text-xs text-gray-400 font-medium mt-0.5">Hyper-local & authentic tone</p>
+                <p className="text-xs text-slate-400 font-medium mt-0.5">Hyper-local & authentic tone</p>
               </div>
             </div>
           </div>
           
-          <div className="inline-flex glass rounded-full p-1 mb-16 border border-white/10">
+          <div className="inline-flex bg-[#0f1422] rounded-full p-1.5 mb-16 border border-white/10">
             <button 
               onClick={() => setVoiceType('female')}
               className={`px-8 py-3 rounded-full text-sm font-semibold transition-all duration-300 ${
-                voiceType === 'female' ? 'bg-gradient-to-r from-[#9b66ff] to-[#ff3c00] text-white shadow-lg' : 'text-gray-400 hover:text-white'
+                voiceType === 'female' 
+                  ? 'bg-[#245ae2] text-white shadow-[0_0_20px_rgba(36,90,226,0.5)]' 
+                  : 'text-slate-400 hover:text-white'
               }`}
             >
               Female Voice
@@ -116,7 +118,9 @@ export default function VoiceLab() {
             <button 
               onClick={() => setVoiceType('male')}
               className={`px-8 py-3 rounded-full text-sm font-semibold transition-all duration-300 ${
-                voiceType === 'male' ? 'bg-gradient-to-r from-[#9b66ff] to-[#ff3c00] text-white shadow-lg' : 'text-gray-400 hover:text-white'
+                voiceType === 'male' 
+                  ? 'bg-[#245ae2] text-white shadow-[0_0_20px_rgba(36,90,226,0.5)]' 
+                  : 'text-slate-400 hover:text-white'
               }`}
             >
               Male Voice
@@ -124,7 +128,6 @@ export default function VoiceLab() {
           </div>
         </div>
       </section>
-
 
       {/* Voice Grid */}
       <section className="pb-24 px-4">
@@ -134,9 +137,7 @@ export default function VoiceLab() {
               const isPlaying = playingLang === voice.lang;
               const currentAudioPath = voiceType === 'female' ? voice.audio.female : voice.audio.male;
               
-              const activeClasses = voiceType === 'female'
-                ? 'bg-gradient-to-br from-[#ff3c00]/40 to-[#9b66ff]/40 border-white/30 shadow-[0_0_30px_rgba(255,107,0,0.15)] scale-[1.02]'
-                : 'bg-gradient-to-br from-[#00f2fe]/40 to-[#4facfe]/40 border-white/30 shadow-[0_0_30px_rgba(0,242,254,0.15)] scale-[1.02]';
+              const activeClasses = 'bg-[#141b2c] border-[#245ae2] shadow-[0_0_30px_rgba(36,90,226,0.3)] scale-[1.02]';
 
               return (
                 <GlassCard 
@@ -176,8 +177,8 @@ export default function VoiceLab() {
                             key={i} 
                             className={`w-1.5 rounded-full transition-all duration-300 origin-center ${
                               isPlaying 
-                                ? 'bg-gradient-to-t from-[#ff9d00] via-[#ff3c00] to-[#5828dc] shadow-[0_0_8px_rgba(255,60,0,0.5)]' 
-                                : 'bg-[#5828dc]/40 h-1.5'
+                                ? 'bg-gradient-to-t from-[#245ae2] via-[#60a5fa] to-[#d6f549] shadow-[0_0_8px_rgba(36,90,226,0.6)]' 
+                                : 'bg-[#245ae2]/20 h-1.5'
                             }`}
                             style={isPlaying ? { 
                               height: `${30 + Math.random() * 70}%`,
@@ -192,15 +193,15 @@ export default function VoiceLab() {
                     <div className="flex items-center gap-2">
                       {isPlaying ? (
                         <>
-                          <svg className="w-4 h-4 text-[#ffb000]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <svg className="w-4 h-4 text-[#60a5fa]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
                           </svg>
-                          <span className="text-xs text-[#ffb000] font-medium">
+                          <span className="text-xs text-[#60a5fa] font-medium">
                             {autoplayBlocked ? "Click to enable sound" : `Now playing — ${voiceType} voice`}
                           </span>
                         </>
                       ) : (
-                        <span className="text-xs text-gray-400 font-medium transition-opacity">
+                        <span className="text-xs text-slate-400 font-medium transition-opacity">
                           Hover or tap to hear Dialora
                         </span>
                       )}
@@ -211,12 +212,12 @@ export default function VoiceLab() {
             })}
           </div>
           
-          <div className="mt-12 text-center text-[var(--muted-foreground)] text-sm">
-            <p>Demo previews use placeholder audio. Production voices are studio-recorded per language.</p>
+          <div className="mt-12 text-center text-slate-400 text-sm">
+            <p>Production voices feature studio-grade acoustic clarity and hyper-local inflection per language.</p>
           </div>
           
-          <div className="mt-20 flex justify-center">
-             <Link to="/demo" className="bg-gradient-to-r from-[#5828dc] via-[#9b66ff] to-[#ff6b00] px-8 py-4 rounded-full text-lg font-semibold text-white hover:scale-105 transition-transform hover:shadow-[0_0_30px_rgba(255,107,0,0.5)]">
+          <div className="mt-16 flex justify-center">
+             <Link to="/demo" className="bg-[#245ae2] hover:bg-[#1d4ed8] px-8 py-4 rounded-full text-base font-semibold text-white transition-all hover:scale-105 shadow-[0_0_30px_rgba(36,90,226,0.4)]">
                 Get a demo call
              </Link>
           </div>

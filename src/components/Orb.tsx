@@ -7,18 +7,18 @@ export default function Orb() {
       <div className="absolute inset-0 rounded-full border border-white/5" style={{ transform: 'scale(0.8)' }}></div>
       <div className="absolute inset-0 rounded-full border border-white/5" style={{ transform: 'scale(0.6)' }}></div>
       
-      {/* Outer red/pink glow behind the orb */}
-      <div className="absolute w-2/3 h-2/3 bg-[#ff3c00]/30 rounded-full blur-[80px]"></div>
+      {/* Outer electric blue glow behind the orb */}
+      <div className="absolute w-2/3 h-2/3 bg-[#245ae2]/30 rounded-full blur-[80px]"></div>
 
       {/* Glass Orb */}
-      <div className="relative w-[320px] h-[320px] rounded-full overflow-hidden shadow-2xl backdrop-blur-xl border border-white/20 bg-gradient-to-br from-white/20 via-transparent to-black/50" 
-           style={{ boxShadow: 'inset 0 0 40px rgba(255, 60, 0, 0.4), 0 20px 40px rgba(0,0,0,0.5)' }}>
+      <div className="relative w-[320px] h-[320px] rounded-full overflow-hidden shadow-2xl backdrop-blur-xl border border-white/20 bg-gradient-to-br from-white/20 via-transparent to-black/60" 
+           style={{ boxShadow: 'inset 0 0 40px rgba(36, 90, 226, 0.4), 0 20px 40px rgba(0,0,0,0.6)' }}>
         
         {/* Top reflection highlight */}
         <div className="absolute top-0 left-[15%] right-[15%] h-[40%] bg-gradient-to-b from-white/40 to-transparent rounded-full blur-md opacity-70 transform -translate-y-1/3"></div>
 
-        {/* Center glowing core (red/orange) */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,60,0,0.6)_0%,_transparent_70%)] opacity-80"></div>
+        {/* Center glowing core (electric blue) */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(36,90,226,0.65)_0%,_transparent_75%)] opacity-90"></div>
 
         {/* Waveform Visualization */}
         <div className="absolute inset-0 flex items-center justify-center gap-[2px] z-10 px-12">
@@ -31,7 +31,7 @@ export default function Orb() {
             return (
               <div 
                 key={i} 
-                className="w-1.5 rounded-full bg-gradient-to-t from-[#ff9d00] via-[#ff3c00] to-[#5828dc] shadow-[0_0_10px_rgba(255,60,0,0.8)]"
+                className="w-1.5 rounded-full bg-gradient-to-t from-[#245ae2] via-[#60a5fa] to-[#d6f549] shadow-[0_0_10px_rgba(36,90,226,0.8)]"
                 style={{ 
                   height: `${maxHeight}%`,
                   animation: `waveform ${1 + Math.random()}s ease-in-out infinite alternate ${delay}`

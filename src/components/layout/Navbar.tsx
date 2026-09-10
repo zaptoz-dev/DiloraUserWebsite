@@ -30,17 +30,23 @@ export default function Navbar() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-6 px-4">
       <div 
-        className={`w-full max-w-7xl flex items-center justify-between px-6 py-3 transition-all duration-500 rounded-full ${
-          isScrolled ? 'bg-[#0d061c]/80 backdrop-blur-lg shadow-lg' : 'bg-transparent'
+        className={`w-full max-w-7xl flex items-center justify-between px-6 py-3 transition-all duration-500 rounded-full border ${
+          isScrolled ? 'bg-[#080b11]/90 border-white/10 backdrop-blur-xl shadow-2xl shadow-black/60' : 'bg-transparent border-transparent'
         }`}
       >
-        <Link to="/" className="flex items-center gap-3 font-body font-bold text-xl tracking-tight" onClick={closeMenu}>
-          <img src={logoImg} alt="Dialora Logo" className="h-9 w-9 object-contain bg-white/10 rounded-full p-1 hover-call-ring transition-transform" />
-          <span>Dialora</span>
+        <Link to="/" className="flex items-center gap-3 font-body font-bold text-xl tracking-tight text-white" onClick={closeMenu}>
+          <img src={logoImg} alt="Dialora Logo" className="h-9 w-9 object-contain bg-white/5 border border-white/10 rounded-full p-1 hover-call-ring transition-transform" />
+          <span className="flex items-center gap-2">
+            Dialora
+            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[10px] font-medium text-emerald-400">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              Live
+            </span>
+          </span>
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-1 bg-white/5 p-1 rounded-full border border-white/10">
+        <nav className="hidden md:flex items-center gap-1 bg-[#0f1422]/80 p-1.5 rounded-full border border-white/10 backdrop-blur-md">
           {navLinks.map((link) => {
             const isActive = location.pathname === link.path;
             return (
@@ -48,7 +54,9 @@ export default function Navbar() {
                 key={link.path}
                 to={link.path}
                 className={`px-5 py-2 rounded-full text-[13px] font-medium transition-all duration-300 ${
-                  isActive ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white hover:bg-white/5'
+                  isActive 
+                    ? 'bg-[#245ae2] text-white shadow-[0_0_20px_rgba(36,90,226,0.5)]' 
+                    : 'text-slate-300 hover:text-white hover:bg-white/5'
                 }`}
               >
                 {link.name}
@@ -58,7 +66,7 @@ export default function Navbar() {
         </nav>
 
         <div className="hidden md:block">
-          <Link to="/demo" className="flex items-center gap-2 bg-gradient-to-r from-[#5828dc] to-[#ff3c00] px-5 py-2.5 rounded-full text-[13px] font-semibold hover:scale-105 transition-transform hover:shadow-[0_0_20px_rgba(255,60,0,0.4)]">
+          <Link to="/demo" className="flex items-center gap-2 bg-[#245ae2] hover:bg-[#1d4ed8] text-white px-6 py-2.5 rounded-full text-[13px] font-semibold transition-all duration-300 shadow-[0_0_25px_rgba(36,90,226,0.35)] hover:shadow-[0_0_35px_rgba(36,90,226,0.6)] hover:-translate-y-0.5">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
             </svg>
