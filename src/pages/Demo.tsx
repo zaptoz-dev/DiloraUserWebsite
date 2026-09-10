@@ -1,10 +1,9 @@
 import { useMemo, useState } from 'react';
 import Badge from '../components/ui/Badge';
-import GlassCard from '../components/ui/GlassCard';
 import { toE164 } from '../../shared/phone.js';
 
 const INPUT_CLASS =
-  'bg-[var(--input)] border border-[var(--border)] rounded-xl px-4 py-3 text-white placeholder:text-[var(--muted-foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--ring)] transition-all disabled:opacity-50 disabled:cursor-not-allowed';
+  'bg-[#090d17] border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-slate-500 focus:outline-none focus:border-[#245ae2] focus:ring-2 focus:ring-[#245ae2]/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm';
 
 const COUNTRY_CODES = ['+91', '+971', '+65', '+44', '+1'];
 
@@ -102,173 +101,207 @@ export default function Demo() {
   }
 
   return (
-    <div className="pt-24 pb-24">
+    <div className="pt-28 pb-24 bg-[#080b11] text-slate-100 min-h-screen">
       {/* Hero Section */}
-      <section className="py-12 px-4 text-center">
-        <div className="max-w-3xl mx-auto">
-          <Badge className="mb-6">LIVE CALLBACK</Badge>
-          <h1 className="text-4xl md:text-5xl font-semibold leading-tight tracking-tight mb-6">
-            Hear Dialora on your <span className="text-gradient">own phone</span>.
+      <section className="py-16 px-4 text-center relative overflow-hidden">
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-[#245ae2]/15 blur-[140px] rounded-full pointer-events-none" />
+
+        <div className="max-w-3xl mx-auto relative z-10">
+          <Badge className="mb-6">REAL-TIME PHONE TEST</Badge>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-6 text-white leading-tight">
+            Hear Dialora on your <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#60a5fa] via-[#245ae2] to-[#93c5fd]">own phone</span>.
           </h1>
-          <p className="text-lg text-[var(--muted-foreground)] leading-relaxed max-w-2xl mx-auto">
-            Tell us where to call and Dialora will ring you straight away — a real
-            call from the live agent, not a recording.
+          <p className="text-base sm:text-lg text-slate-400 leading-relaxed max-w-2xl mx-auto">
+            Enter your mobile number and Dialora will dial you instantly—a live, autonomous AI call with sub-500ms conversational turn-taking.
           </p>
         </div>
       </section>
 
-      {/* Demo Form */}
-      <section className="px-4">
-        <div className="max-w-xl mx-auto">
-          <GlassCard className="p-8 md:p-10 relative overflow-hidden">
-             {/* Glow background */}
-             <div className="absolute -top-40 -right-40 w-80 h-80 bg-signature blur-[100px] opacity-20 pointer-events-none rounded-full"></div>
+      {/* Demo Form & Info Split */}
+      <section className="px-4 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          {/* Left Info Column */}
+          <div className="lg:col-span-5 bg-[#0d121f] border border-white/10 rounded-3xl p-8 space-y-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#245ae2]/10 border border-[#245ae2]/30 text-xs font-semibold text-[#93c5fd]">
+              <span className="w-2 h-2 rounded-full bg-[#d6f549] animate-pulse" />
+              Live Carrier Callback
+            </div>
 
-             <form className="flex flex-col gap-6 relative z-10" onSubmit={submit}>
+            <h3 className="text-2xl font-bold text-white tracking-tight">
+              What happens next:
+            </h3>
 
+            <div className="space-y-4 text-sm text-slate-300">
+              <div className="flex items-start gap-3">
+                <span className="w-6 h-6 rounded-full bg-[#245ae2]/20 border border-[#245ae2]/40 text-[#60a5fa] flex items-center justify-center font-mono text-xs font-bold shrink-0">1</span>
+                <span>You will receive an incoming phone call within 10 to 30 seconds.</span>
+              </div>
+              <div className="flex items-start gap-3">
+                <span className="w-6 h-6 rounded-full bg-[#245ae2]/20 border border-[#245ae2]/40 text-[#60a5fa] flex items-center justify-center font-mono text-xs font-bold shrink-0">2</span>
+                <span>Answer naturally. Try interrupting mid-sentence or switching between Hindi &amp; English.</span>
+              </div>
+              <div className="flex items-start gap-3">
+                <span className="w-6 h-6 rounded-full bg-[#245ae2]/20 border border-[#245ae2]/40 text-[#60a5fa] flex items-center justify-center font-mono text-xs font-bold shrink-0">3</span>
+                <span>Experience sub-500ms latency with zero IVR keypad menus or robotic pauses.</span>
+              </div>
+            </div>
+
+            <div className="pt-6 border-t border-white/5 text-xs text-slate-500 space-y-2 font-mono">
+              <div>• Powered by Carrier SIP Trunks</div>
+              <div>• TRAI compliant (9 AM - 9 PM IST)</div>
+              <div>• Zero sales reps or credit cards required</div>
+            </div>
+          </div>
+
+          {/* Right Form Card */}
+          <div className="lg:col-span-7 bg-[#0d121f] border border-white/10 rounded-3xl p-8 sm:p-10 shadow-2xl relative overflow-hidden">
+            <form className="flex flex-col gap-5 relative z-10" onSubmit={submit}>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="flex flex-col gap-2">
-                   <label htmlFor="name" className="text-sm font-medium">Full name</label>
-                   <input
-                      type="text"
-                      id="name"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      disabled={busy}
-                      placeholder="Aarav Sharma"
-                      className={INPUT_CLASS}
-                   />
-                </div>
-
-                <div className="flex flex-col gap-2">
-                   <label htmlFor="company" className="text-sm font-medium">Company name</label>
-                   <input
-                      type="text"
-                      id="company"
-                      value={company}
-                      onChange={(e) => setCompany(e.target.value)}
-                      disabled={busy}
-                      placeholder="Northline Growth"
-                      className={INPUT_CLASS}
-                   />
-                </div>
-
-                <div className="flex flex-col gap-2">
-                   <label htmlFor="mobile" className="text-sm font-medium">Mobile number</label>
-                   <div className="flex gap-2">
-                      <select
-                         value={countryCode}
-                         onChange={(e) => setCountryCode(e.target.value)}
-                         disabled={busy}
-                         aria-label="Country code"
-                         className={`${INPUT_CLASS} max-w-[100px] appearance-none cursor-pointer`}
-                      >
-                         {COUNTRY_CODES.map((code) => (
-                           <option key={code} value={code}>{code}</option>
-                         ))}
-                      </select>
-                      <input
-                         type="tel"
-                         id="mobile"
-                         inputMode="tel"
-                         value={phone}
-                         onChange={(e) => setPhone(e.target.value)}
-                         disabled={busy}
-                         placeholder="98765 43210"
-                         className={`${INPUT_CLASS} flex-1`}
-                      />
-                   </div>
-                   <p className="text-xs text-[var(--muted-foreground)] min-h-[1rem]">
-                      {phone.trim() === ''
-                        ? 'Dialora will call this number in the next few seconds.'
-                        : normalized
-                          ? `Will dial ${normalized}`
-                          : 'That number doesn’t look complete yet.'}
-                   </p>
+                  <label htmlFor="name" className="text-xs font-semibold uppercase tracking-wider text-slate-400">Full Name *</label>
+                  <input
+                    type="text"
+                    id="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    disabled={busy}
+                    placeholder="Aarav Sharma"
+                    className={INPUT_CLASS}
+                  />
                 </div>
 
                 <div className="flex flex-col gap-2">
-                   <label htmlFor="email" className="text-sm font-medium">Company email</label>
-                   <input
-                      type="email"
-                      id="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      disabled={busy}
-                      placeholder="you@company.com"
-                      className={INPUT_CLASS}
-                   />
+                  <label htmlFor="company" className="text-xs font-semibold uppercase tracking-wider text-slate-400">Company Name</label>
+                  <input
+                    type="text"
+                    id="company"
+                    value={company}
+                    onChange={(e) => setCompany(e.target.value)}
+                    disabled={busy}
+                    placeholder="Acme Growth Inc."
+                    className={INPUT_CLASS}
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label htmlFor="mobile" className="text-xs font-semibold uppercase tracking-wider text-slate-400">Mobile Number *</label>
+                <div className="flex gap-2">
+                  <select
+                    value={countryCode}
+                    onChange={(e) => setCountryCode(e.target.value)}
+                    disabled={busy}
+                    aria-label="Country code"
+                    className={`${INPUT_CLASS} max-w-[100px] cursor-pointer`}
+                  >
+                    {COUNTRY_CODES.map((code) => (
+                      <option key={code} value={code} className="bg-[#0d121f] text-white">{code}</option>
+                    ))}
+                  </select>
+                  <input
+                    type="tel"
+                    id="mobile"
+                    inputMode="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    disabled={busy}
+                    placeholder="98765 43210"
+                    className={`${INPUT_CLASS} flex-1`}
+                  />
+                </div>
+                <p className="text-xs text-slate-500 min-h-[1rem]">
+                  {phone.trim() === ''
+                    ? 'Dialora will call this number in the next few seconds.'
+                    : normalized
+                      ? `Will dial ${normalized}`
+                      : 'That number doesn’t look complete yet.'}
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="email" className="text-xs font-semibold uppercase tracking-wider text-slate-400">Work Email</label>
+                  <input
+                    type="email"
+                    id="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    disabled={busy}
+                    placeholder="aarav@company.com"
+                    className={INPUT_CLASS}
+                  />
                 </div>
 
                 <div className="flex flex-col gap-2">
-                   <label htmlFor="intent" className="text-sm font-medium">What do you want Dialora to do?</label>
-                   <select
-                      id="intent"
-                      value={intent}
-                      onChange={(e) => setIntent(e.target.value)}
-                      disabled={busy}
-                      className={`${INPUT_CLASS} appearance-none cursor-pointer`}
-                   >
-                      <option value="sales">Sales &amp; Lead Generation</option>
-                      <option value="support">Customer Support</option>
-                      <option value="booking">Appointment Booking</option>
-                      <option value="collections">Collections &amp; Recovery</option>
-                      <option value="other">Other</option>
-                   </select>
+                  <label htmlFor="intent" className="text-xs font-semibold uppercase tracking-wider text-slate-400">Call Workflow</label>
+                  <select
+                    id="intent"
+                    value={intent}
+                    onChange={(e) => setIntent(e.target.value)}
+                    disabled={busy}
+                    className={`${INPUT_CLASS} cursor-pointer`}
+                  >
+                    <option value="sales" className="bg-[#0d121f] text-white">Sales &amp; Lead Qualification</option>
+                    <option value="support" className="bg-[#0d121f] text-white">Customer Support FAQ</option>
+                    <option value="booking" className="bg-[#0d121f] text-white">Appointment &amp; Visit Booking</option>
+                    <option value="collections" className="bg-[#0d121f] text-white">Debt Recovery &amp; Reminders</option>
+                    <option value="other" className="bg-[#0d121f] text-white">Custom Workflow</option>
+                  </select>
                 </div>
+              </div>
 
-                <div className="flex flex-col gap-2">
-                   <label htmlFor="notes" className="text-sm font-medium">Anything else? <span className="text-[var(--muted-foreground)]">(Optional)</span></label>
-                   <textarea
-                      id="notes"
-                      value={notes}
-                      onChange={(e) => setNotes(e.target.value)}
-                      disabled={busy}
-                      placeholder="We run 1,200 outbound calls a day across Hindi and Marathi…"
-                      rows={4}
-                      className={`${INPUT_CLASS} resize-none`}
-                   ></textarea>
-                </div>
+              <div className="flex flex-col gap-2">
+                <label htmlFor="notes" className="text-xs font-semibold uppercase tracking-wider text-slate-400">Notes / Instructions <span className="text-slate-500 font-normal">(Optional)</span></label>
+                <textarea
+                  id="notes"
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                  disabled={busy}
+                  placeholder="Tell us what you want to test (e.g., test in Hindi, ask tricky questions)..."
+                  rows={3}
+                  className={`${INPUT_CLASS} resize-none`}
+                />
+              </div>
 
-                <button
-                   type="submit"
-                   disabled={!canSubmit}
-                   className="bg-signature w-full py-4 rounded-xl text-lg font-semibold mt-4 hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
-                >
-                   {busy && (
-                     <span
-                       aria-hidden
-                       className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white"
-                     />
-                   )}
-                   {busy ? 'Placing your call…' : 'Get a Call From Dialora'}
-                </button>
+              <button
+                type="submit"
+                disabled={!canSubmit}
+                className="bg-[#245ae2] hover:bg-[#1d4ed8] text-white w-full py-4 rounded-xl text-base font-semibold mt-3 transition-all shadow-[0_0_25px_rgba(36,90,226,0.4)] hover:shadow-[0_0_35px_rgba(36,90,226,0.6)] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+              >
+                {busy && (
+                  <span
+                    aria-hidden
+                    className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white"
+                  />
+                )}
+                {busy ? 'Connecting to Telecom Trunk…' : 'Trigger Live Demo Call'}
+              </button>
 
-                <div aria-live="polite">
-                  {status.kind === 'placed' && (
-                    <div className="rounded-xl border border-[var(--border)] bg-white/5 px-4 py-3 text-sm">
-                      <p className="font-semibold mb-1">Calling you now.</p>
-                      <p className="text-[var(--muted-foreground)]">{status.message}</p>
-                    </div>
-                  )}
-                  {status.kind === 'rescheduled' && (
-                    <div className="rounded-xl border border-[var(--ring)]/50 bg-white/5 px-4 py-3 text-sm">
-                      <p className="font-semibold mb-1">Call scheduled, not placed yet.</p>
-                      <p className="text-[var(--muted-foreground)]">{status.message}</p>
-                    </div>
-                  )}
-                  {status.kind === 'error' && (
-                    <div className="rounded-xl border border-[#ff3c00]/50 bg-[#ff3c00]/10 px-4 py-3 text-sm">
-                      <p className="font-semibold mb-1">Couldn’t place the call.</p>
-                      <p className="text-[var(--muted-foreground)]">{status.message}</p>
-                    </div>
-                  )}
-                </div>
-             </form>
-          </GlassCard>
+              <div aria-live="polite">
+                {status.kind === 'placed' && (
+                  <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-300">
+                    <p className="font-semibold mb-1">Calling you now!</p>
+                    <p className="text-emerald-400/80 text-xs">{status.message}</p>
+                  </div>
+                )}
+                {status.kind === 'rescheduled' && (
+                  <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-300">
+                    <p className="font-semibold mb-1">Call queued for compliant hours.</p>
+                    <p className="text-amber-400/80 text-xs">{status.message}</p>
+                  </div>
+                )}
+                {status.kind === 'error' && (
+                  <div className="rounded-xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-300">
+                    <p className="font-semibold mb-1">Could not place call.</p>
+                    <p className="text-rose-400/80 text-xs">{status.message}</p>
+                  </div>
+                )}
+              </div>
+            </form>
+          </div>
 
-          <p className="text-center text-[var(--muted-foreground)] text-sm mt-8">
-             No credit card, no sales script. One live call, in the language you choose.
-          </p>
         </div>
       </section>
     </div>

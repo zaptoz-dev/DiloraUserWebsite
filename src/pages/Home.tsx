@@ -1,11 +1,60 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Badge from '../components/ui/Badge';
-import Orb from '../components/Orb';
 import InteractiveUseCase from '../components/ui/InteractiveUseCase';
+import WorkflowComparison from '../components/WorkflowComparison';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<'support' | 'sales' | 'operations' | 'collections'>('support');
+  const [isVideoMuted, setIsVideoMuted] = useState(true);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(true);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Automatic scroll-based video play/pause
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          video.play().then(() => setIsVideoPlaying(true)).catch(() => {
+            // Autoplay policy might require mute
+            video.muted = true;
+            setIsVideoMuted(true);
+            video.play();
+          });
+        } else {
+          video.pause();
+          setIsVideoPlaying(false);
+        }
+      },
+      { threshold: 0.25 }
+    );
+
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, []);
+
+  const toggleVideoSound = () => {
+    if (videoRef.current) {
+      const nextMute = !isVideoMuted;
+      videoRef.current.muted = nextMute;
+      setIsVideoMuted(nextMute);
+    }
+  };
+
+  const toggleVideoPlayback = () => {
+    if (videoRef.current) {
+      if (videoRef.current.paused) {
+        videoRef.current.play();
+        setIsVideoPlaying(true);
+      } else {
+        videoRef.current.pause();
+        setIsVideoPlaying(false);
+      }
+    }
+  };
 
   const stats = [
     {
@@ -196,8 +245,106 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="flex-1 flex justify-center lg:justify-end mt-8 lg:mt-0 animate-in fade-in zoom-in duration-1000 delay-200 fill-mode-both">
-            <Orb />
+          <div className="flex-1 w-full max-w-xl lg:max-w-none flex justify-center lg:justify-end mt-8 lg:mt-0 animate-in fade-in zoom-in duration-1000 delay-200 fill-mode-both relative">
+            {/* Ambient glowing background */}
+            <div className="absolute -top-10 -right-10 w-72 h-72 bg-[#245ae2]/30 rounded-full blur-[90px] pointer-events-none -z-10" />
+            <div className="absolute -bottom-10 -left-10 w-64 h-64 bg-[#d6f549]/15 rounded-full blur-[90px] pointer-events-none -z-10" />
+
+            {/* High-Tech Terminal Video Card */}
+            <div className="w-full max-w-lg rounded-3xl bg-[#0d121f]/90 border border-[#245ae2]/40 shadow-[0_0_50px_rgba(36,90,226,0.25)] backdrop-blur-xl overflow-hidden group">
+              {/* Terminal Titlebar */}
+              <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/10 bg-[#090d17]/80">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-rose-500/80" />
+                  <div className="w-3 h-3 rounded-full bg-amber-500/80" />
+                  <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
+                  <span className="text-[11px] font-mono text-slate-400 ml-2 tracking-wider">
+                    dialora-live-stream // session#0491
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#d6f549] animate-pulse" />
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-[#93c5fd]">
+                    Active Stream
+                  </span>
+                </div>
+              </div>
+
+              {/* Video Player Container */}
+              <div className="relative aspect-[16/10] sm:aspect-[16/9] bg-black/80 overflow-hidden">
+                <video
+                  ref={videoRef}
+                  src={`${import.meta.env.BASE_URL}video/hero-demo.mp4`}
+                  autoPlay
+                  loop
+                  muted={isVideoMuted}
+                  playsInline
+                  className="w-full h-full object-cover object-center"
+                />
+
+                {/* Floating Sound & Playback Controls Overlay */}
+                <div className="absolute top-3 right-3 flex items-center gap-2 z-20">
+                  <button
+                    onClick={toggleVideoSound}
+                    title={isVideoMuted ? "Unmute Audio" : "Mute Audio"}
+                    className="p-2.5 rounded-full bg-black/60 hover:bg-black/90 border border-white/20 text-white backdrop-blur-md transition-all shadow-lg hover:scale-105"
+                  >
+                    {isVideoMuted ? (
+                      <svg className="w-4 h-4 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+                      </svg>
+                    ) : (
+                      <svg className="w-4 h-4 text-[#d6f549]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                      </svg>
+                    )}
+                  </button>
+
+                  <button
+                    onClick={toggleVideoPlayback}
+                    title={isVideoPlaying ? "Pause Video" : "Play Video"}
+                    className="p-2.5 rounded-full bg-black/60 hover:bg-black/90 border border-white/20 text-white backdrop-blur-md transition-all shadow-lg hover:scale-105"
+                  >
+                    {isVideoPlaying ? (
+                      <svg className="w-4 h-4 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    ) : (
+                      <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    )}
+                  </button>
+                </div>
+
+                {/* Bottom telemetry HUD */}
+                <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-[#080b11]/95 via-[#080b11]/60 to-transparent p-4 flex items-center justify-between text-xs font-mono">
+                  <div className="flex items-center gap-2">
+                    <span className="inline-block w-2 h-2 rounded-full bg-emerald-400" />
+                    <span className="text-slate-300 font-semibold">Sub-500ms Turn Latency</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-slate-400 text-[11px]">
+                    <span className="bg-[#245ae2]/20 text-[#93c5fd] px-2 py-0.5 rounded border border-[#245ae2]/30">Auto Scroll Sync</span>
+                    <span>1080p Neural Stream</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Console Info Footer */}
+              <div className="p-4 bg-[#0d121f] flex items-center justify-between text-xs border-t border-white/5">
+                <div className="flex items-center gap-2 text-slate-300 font-medium">
+                  <svg className="w-4 h-4 text-[#245ae2]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z" />
+                  </svg>
+                  <span>Autonomous Inbound/Outbound Engine</span>
+                </div>
+                <Link to="/demo" className="text-[#60a5fa] hover:text-white font-semibold flex items-center gap-1 transition-colors">
+                  Try On Your Phone &rarr;
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -230,6 +377,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Animated Workflow Evolution (Without Dialora vs With Dialora Infinity Loop) */}
+      <WorkflowComparison />
 
       {/* The Part That Makes Dialora Different (NuPlay Inspired Comparison) */}
       <section className="py-28 px-4 relative">
