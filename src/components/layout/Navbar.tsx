@@ -35,9 +35,9 @@ export default function Navbar() {
         }`}
       >
         <Link to="/" className="flex items-center gap-3 font-body font-bold text-xl tracking-tight text-white" onClick={closeMenu}>
-          <img src={logoImg} alt="Dialora Logo" className="h-9 w-9 object-contain bg-white/5 border border-white/10 rounded-full p-1 hover-call-ring transition-transform" />
+          <img src={logoImg} alt="Audeora Logo" className="h-9 w-9 object-contain bg-white/5 border border-white/10 rounded-full p-1 hover-call-ring transition-transform" />
           <span className="flex items-center gap-2">
-            Dialora
+            Audeora
             <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[10px] font-medium text-emerald-400">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
               Live

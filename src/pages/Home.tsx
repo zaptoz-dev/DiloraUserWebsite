@@ -88,7 +88,7 @@ export default function Home() {
       id: 'support',
       title: 'Customer Support',
       headline: 'Resolve customer inquiries with zero wait time',
-      description: 'Dialora handles inbound queries, order tracking, address verification, and common FAQs naturally in the caller’s preferred language.',
+      description: 'Audeora handles inbound queries, order tracking, address verification, and common FAQs naturally in the caller’s preferred language.',
       features: [
         'Instant answers without robotic IVR menus',
         'Automatic language detection in first 2 seconds',
@@ -153,7 +153,7 @@ export default function Home() {
     },
     { 
       title: "Zero queue capacity", 
-      desc: "Festival spikes or Monday morning surges—Dialora answers all calls simultaneously without putting customers on hold." 
+      desc: "Festival spikes or Monday morning surges—Audeora answers all calls simultaneously without putting customers on hold." 
     },
     { 
       title: "Actionable call summaries", 
@@ -188,7 +188,7 @@ export default function Home() {
     { 
       num: "04", 
       title: "Deploy & monitor live", 
-      desc: "Dialora starts handling inbound and outbound calls with real-time logs, recordings, and analytics on your dashboard." 
+      desc: "Audeora starts handling inbound and outbound calls with real-time logs, recordings, and analytics on your dashboard." 
     },
   ];
 
@@ -219,7 +219,7 @@ export default function Home() {
             </h1>
 
             <p className="text-lg md:text-xl text-slate-400 mb-10 max-w-xl leading-relaxed">
-              Dialora answers, qualifies, schedules, and resolves calls in 10+ Indian and global languages—with the natural pace and tone of your best tele-caller.
+              Audeora answers, qualifies, schedules, and resolves calls in 10+ Indian and global languages—with the natural pace and tone of your best tele-caller.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-start gap-4">
@@ -259,7 +259,7 @@ export default function Home() {
                   <div className="w-3 h-3 rounded-full bg-amber-500/80" />
                   <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
                   <span className="text-[11px] font-mono text-slate-400 ml-2 tracking-wider">
-                    dialora-live-stream // session#0491
+                    audeora-live-stream // session#0491
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -378,13 +378,13 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Animated Workflow Evolution (Without Dialora vs With Dialora Infinity Loop) */}
+      {/* Animated Workflow Evolution (Without Audeora vs With Audeora Infinity Loop) */}
       <WorkflowComparison />
 
-      {/* Interactive Use Case Demo (See Dialora in Your Industry) */}
+      {/* Interactive Use Case Demo (See Audeora in Your Industry) */}
       <InteractiveUseCase />
 
-      {/* The Part That Makes Dialora Different (NuPlay Inspired Comparison) */}
+      {/* The Part That Makes Audeora Different (NuPlay Inspired Comparison) */}
       <section className="py-28 px-4 relative">
         <div className="max-w-6xl mx-auto">
           <div className="text-center max-w-3xl mx-auto mb-16">
@@ -393,7 +393,7 @@ export default function Home() {
               Beyond traditional IVR & static chatbots
             </h2>
             <p className="text-slate-400 text-base sm:text-lg leading-relaxed">
-              Old voice trees force callers through repetitive keypad numbers. Dialora provides continuous, real-time voice intelligence that adapts to interruptions.
+              Old voice trees force callers through repetitive keypad numbers. Audeora provides continuous, real-time voice intelligence that adapts to interruptions.
             </p>
           </div>
 
@@ -429,13 +429,13 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Dialora Intelligent Voice Agents */}
+            {/* Audeora Intelligent Voice Agents */}
             <div className="bg-gradient-to-b from-[#131b2e] to-[#0f1422] border border-[#245ae2]/40 rounded-3xl p-8 flex flex-col justify-between shadow-[0_0_50px_rgba(36,90,226,0.15)] relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-[#245ae2]/20 rounded-full blur-3xl pointer-events-none"></div>
               <div>
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#245ae2]/20 border border-[#245ae2]/30 text-xs font-semibold text-[#93c5fd] uppercase tracking-wider mb-3">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#d6f549]"></span>
-                  Dialora Voice Engine
+                  Audeora Voice Engine
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-4">Natural, fluid human conversation</h3>
                 <ul className="flex flex-col gap-3 text-sm text-slate-200">
@@ -475,7 +475,7 @@ export default function Home() {
               Tailored voice agents for your workflow
             </h2>
             <p className="text-slate-400 text-base sm:text-lg">
-              Switch between key use cases to see how Dialora handles diverse call scenarios in production.
+              Switch between key use cases to see how Audeora handles diverse call scenarios in production.
             </p>
           </div>
 
@@ -527,7 +527,7 @@ export default function Home() {
                   <div className="text-xs text-slate-400 uppercase tracking-wider mb-2 font-medium">Ready to test?</div>
                   <h4 className="text-lg font-bold text-white mb-3">Experience {currentTab.title} live</h4>
                   <p className="text-xs text-slate-400 leading-relaxed mb-6">
-                    Enter your phone number to receive a live test call and hear Dialora run this workflow on your own phone.
+                    Enter your phone number to receive a live test call and hear Audeora run this workflow on your own phone.
                   </p>
                 </div>
                 <Link
@@ -553,7 +553,7 @@ export default function Home() {
             A complete call center, inside software
           </h2>
           <p className="text-slate-400 text-base sm:text-lg mb-16 max-w-2xl mx-auto">
-            From first hello to CRM disposition, Dialora runs the conversation end to end.
+            From first hello to CRM disposition, Audeora runs the conversation end to end.
           </p>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-left">
@@ -612,7 +612,7 @@ export default function Home() {
               Ready to see this on your own phone?
             </h2>
             <p className="text-slate-300 text-base sm:text-lg mb-10 leading-relaxed">
-              Test how Dialora handles language switching, interruptions, and questions in real time.
+              Test how Audeora handles language switching, interruptions, and questions in real time.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link 

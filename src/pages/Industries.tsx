@@ -166,7 +166,7 @@ export default function Industries() {
             Engineered for businesses that <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#60a5fa] via-[#245ae2] to-[#93c5fd]">live on the phone</span>.
           </h1>
           <p className="text-lg md:text-xl text-slate-400 leading-relaxed max-w-2xl mx-auto mb-10">
-            From 30-second speed-to-lead calls to compliant debt recovery and order confirmations, Dialora adapts to your exact operational playbook.
+            From 30-second speed-to-lead calls to compliant debt recovery and order confirmations, Audeora adapts to your exact operational playbook.
           </p>
 
           {/* Filter Pills */}
@@ -239,7 +239,7 @@ export default function Industries() {
                         "{item.sampleCall.caller}"
                       </div>
                       <div className="text-slate-200 bg-[#245ae2]/10 p-2 rounded-lg border border-[#245ae2]/20">
-                        <span className="text-[#60a5fa] font-semibold">Dialora: </span>
+                        <span className="text-[#60a5fa] font-semibold">Audeora: </span>
                         "{item.sampleCall.agent}"
                       </div>
                     </div>
@@ -271,7 +271,7 @@ export default function Industries() {
             Certified for Enterprise Telephony & CRM Workflows
           </h2>
           <p className="text-slate-400 text-sm sm:text-base max-w-2xl mx-auto mb-8">
-            Deploy Dialora on your existing carrier trunk (Exotel, Twilio, Plivo, Tata Tele) with bi-directional CRM integration into Salesforce, Zoho, LeadSquared, and HubSpot.
+            Deploy Audeora on your existing carrier trunk (Exotel, Twilio, Plivo, Tata Tele) with bi-directional CRM integration into Salesforce, Zoho, LeadSquared, and HubSpot.
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
             <div className="p-4 bg-black/40 rounded-2xl border border-white/5">

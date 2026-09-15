@@ -1,7 +1,7 @@
-# Dialora website
+# Audeora website
 
-Marketing site for Dialora, plus the live **demo-call** integration: a visitor
-fills in the form on `/demo` and Dialora rings their phone through
+Marketing site for Audeora, plus the live **demo-call** integration: a visitor
+fills in the form on `/demo` and Audeora rings their phone through
 [Bolna](https://bolna.ai).
 
 - **Frontend** — Vite + React 18 + TypeScript + Tailwind v4, routed with

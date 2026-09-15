@@ -66,15 +66,15 @@ export default function Pricing() {
   const faqs = [
     {
       q: "Can I bring my existing phone numbers and telecom carrier?",
-      a: "Yes. Dialora easily connects to your existing Exotel, Twilio, Plivo, or SIP trunk credentials. You don't have to change your publicized numbers or ported carriers."
+      a: "Yes. Audeora easily connects to your existing Exotel, Twilio, Plivo, or SIP trunk credentials. You don't have to change your publicized numbers or ported carriers."
     },
     {
-      q: "How does Dialora handle callers speaking Hinglish or regional dialects?",
-      a: "Our speech pipeline is purpose-built for Indian multilingual patterns. In the first 2 seconds, Dialora classifies whether the caller prefers Hindi, English, Hinglish, Tamil, Telugu, or Gujarati, and switches context seamlessly."
+      q: "How does Audeora handle callers speaking Hinglish or regional dialects?",
+      a: "Our speech pipeline is purpose-built for Indian multilingual patterns. In the first 2 seconds, Audeora classifies whether the caller prefers Hindi, English, Hinglish, Tamil, Telugu, or Gujarati, and switches context seamlessly."
     },
     {
       q: "What happens when a caller asks a complex edge-case question?",
-      a: "Dialora executes a graceful warm transfer. The caller is connected to your human agent while an instant live summary pop appears on the human agent's screen, so the customer never repeats themselves."
+      a: "Audeora executes a graceful warm transfer. The caller is connected to your human agent while an instant live summary pop appears on the human agent's screen, so the customer never repeats themselves."
     },
     {
       q: "How fast can we launch our first live production campaign?",

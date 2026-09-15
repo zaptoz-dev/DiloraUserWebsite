@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between gap-12">
         <div className="max-w-xs">
           <Link to="/" className="font-body font-bold text-2xl mb-4 block text-white tracking-tight">
-            Dialora
+            Audeora
           </Link>
           <p className="text-slate-400 text-sm mb-6 leading-relaxed">
             Enterprise AI voice agents that pick up, speak like people and get things done — in 10+ Indian and international voices, for modern businesses that run on the phone.

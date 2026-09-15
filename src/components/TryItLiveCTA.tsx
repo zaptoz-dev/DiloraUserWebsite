@@ -7,7 +7,7 @@ export default function TryItLiveCTA() {
       <div className="max-w-4xl mx-auto text-center flex flex-col items-center">
         <Badge className="mb-8">TRY IT LIVE</Badge>
         <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white tracking-tight">
-          Let Dialora call you.
+          Let Audeora call you.
         </h2>
         <p className="text-xl text-slate-400 mb-10 max-w-2xl leading-relaxed">
           Hear the voice, natural pace and real-time language switching on your own phone.

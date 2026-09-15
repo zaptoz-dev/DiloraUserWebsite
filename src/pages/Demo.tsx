@@ -83,7 +83,7 @@ export default function Demo() {
       } else {
         setStatus({
           kind: 'placed',
-          message: `Dialora is dialling ${normalized} now. Pick up — it usually rings within a few seconds.`,
+          message: `Audeora is dialling ${normalized} now. Pick up — it usually rings within a few seconds.`,
         });
       }
       // Clear the number so a stray second submit can't re-dial the same person.
@@ -109,10 +109,10 @@ export default function Demo() {
         <div className="max-w-3xl mx-auto relative z-10">
           <Badge className="mb-6">REAL-TIME PHONE TEST</Badge>
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-6 text-white leading-tight">
-            Hear Dialora on your <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#60a5fa] via-[#245ae2] to-[#93c5fd]">own phone</span>.
+            Hear Audeora on your <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#60a5fa] via-[#245ae2] to-[#93c5fd]">own phone</span>.
           </h1>
           <p className="text-base sm:text-lg text-slate-400 leading-relaxed max-w-2xl mx-auto">
-            Enter your mobile number and Dialora will dial you instantly—a live, autonomous AI call with sub-500ms conversational turn-taking.
+            Enter your mobile number and Audeora will dial you instantly—a live, autonomous AI call with sub-500ms conversational turn-taking.
           </p>
         </div>
       </section>
@@ -213,7 +213,7 @@ export default function Demo() {
                 </div>
                 <p className="text-xs text-slate-500 min-h-[1rem]">
                   {phone.trim() === ''
-                    ? 'Dialora will call this number in the next few seconds.'
+                    ? 'Audeora will call this number in the next few seconds.'
                     : normalized
                       ? `Will dial ${normalized}`
                       : 'That number doesn’t look complete yet.'}

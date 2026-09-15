@@ -38,7 +38,7 @@ export default function InteractiveUseCase() {
           </div>
           
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-6 text-white leading-tight">
-            See Dialora in <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#60a5fa] to-[#245ae2]">Your Industry</span>
+            See Audeora in <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#60a5fa] to-[#245ae2]">Your Industry</span>
           </h2>
           
           <p className="text-base sm:text-lg text-slate-400 mb-10 leading-relaxed">
@@ -88,7 +88,7 @@ export default function InteractiveUseCase() {
               </div>
               <h3 className="text-2xl font-bold text-white mb-2">{activeCase.label} AI Agent</h3>
               <p className="text-slate-400 text-sm mb-10 max-w-[260px]">
-                Test how Dialora handles {activeCase.label.toLowerCase()} customer conversations naturally.
+                Test how Audeora handles {activeCase.label.toLowerCase()} customer conversations naturally.
               </p>
               <button 
                 onClick={handleConnect}

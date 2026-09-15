@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
 export default function WorkflowComparison() {
-  // Requirement: Default to "Without Dialora" and let visitor toggle manually
-  const [withDialora, setWithDialora] = useState(false);
+  // Requirement: Default to "Without Audeora" and let visitor toggle manually
+  const [withAudeora, setWithAudeora] = useState(false);
 
   const stepsWithout = [
     {
@@ -59,7 +59,7 @@ export default function WorkflowComparison() {
     {
       step: '01',
       title: 'Instant Call Intake',
-      role: 'Dialora Voice Agent',
+      role: 'Audeora Voice Agent',
       badge: 'Agent',
       badgeColor: 'bg-[#d6f549] text-black font-bold',
       desc: 'Answers on Ring #1 in caller\'s native language. Zero queue hold time.',
@@ -77,7 +77,7 @@ export default function WorkflowComparison() {
     {
       step: '03',
       title: 'Identity & Memory',
-      role: 'Dialora Voice Agent',
+      role: 'Audeora Voice Agent',
       badge: 'Agent',
       badgeColor: 'bg-[#d6f549] text-black font-bold',
       desc: 'Pulls CRM history instantly; remembers previous caller promises & context.',
@@ -86,7 +86,7 @@ export default function WorkflowComparison() {
     {
       step: '04',
       title: 'Autonomous Resolution',
-      role: 'Dialora Voice Agent',
+      role: 'Audeora Voice Agent',
       badge: 'Agent',
       badgeColor: 'bg-[#d6f549] text-black font-bold',
       desc: 'Sub-500ms conversational turn-taking. Handles interruptions naturally.',
@@ -131,28 +131,28 @@ export default function WorkflowComparison() {
             How your operation evolves
           </h2>
           <p className="text-slate-400 text-sm sm:text-base">
-            Toggle below to compare traditional human-bottlenecked calling with Dialora’s autonomous continuous loop.
+            Toggle below to compare traditional human-bottlenecked calling with Audeora’s autonomous continuous loop.
           </p>
         </div>
 
         {/* Clean Interactive Toggle Switch */}
         <div className="flex items-center justify-center gap-4 sm:gap-6 mb-14 select-none">
           <button
-            onClick={() => setWithDialora(false)}
+            onClick={() => setWithAudeora(false)}
             className={`text-sm sm:text-base font-bold transition-all duration-300 cursor-pointer ${
-              !withDialora 
+              !withAudeora 
                 ? 'text-white border-b-2 border-amber-400 pb-1' 
                 : 'text-slate-500 hover:text-slate-300'
             }`}
           >
-            Without Dialora
+            Without Audeora
           </button>
 
           {/* Toggle Pill Button */}
           <button
-            onClick={() => setWithDialora(!withDialora)}
+            onClick={() => setWithAudeora(!withAudeora)}
             className={`relative w-16 h-9 rounded-full p-1 transition-colors duration-300 border ${
-              withDialora
+              withAudeora
                 ? 'bg-[#245ae2] border-[#60a5fa] shadow-[0_0_20px_rgba(36,90,226,0.6)]'
                 : 'bg-[#141a29] border-white/20'
             }`}
@@ -160,12 +160,12 @@ export default function WorkflowComparison() {
           >
             <div
               className={`w-7 h-7 rounded-full flex items-center justify-center transition-transform duration-300 shadow-md ${
-                withDialora
+                withAudeora
                   ? 'translate-x-7 bg-white text-[#245ae2]'
                   : 'translate-x-0 bg-slate-300 text-slate-800'
               }`}
             >
-              {withDialora ? (
+              {withAudeora ? (
                 <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z" />
                 </svg>
@@ -176,21 +176,21 @@ export default function WorkflowComparison() {
           </button>
 
           <button
-            onClick={() => setWithDialora(true)}
+            onClick={() => setWithAudeora(true)}
             className={`text-sm sm:text-base font-bold transition-all duration-300 cursor-pointer ${
-              withDialora 
+              withAudeora 
                 ? 'text-[#60a5fa] border-b-2 border-[#245ae2] pb-1' 
                 : 'text-slate-500 hover:text-slate-300'
             }`}
           >
-            With Dialora
+            With Audeora
           </button>
         </div>
 
         {/* ============================================================ */}
-        {/* VIEW 1: WITHOUT DIALORA (Clean Linear Bottleneck Architecture) */}
+        {/* VIEW 1: WITHOUT AUDEORA (Clean Linear Bottleneck Architecture) */}
         {/* ============================================================ */}
-        {!withDialora && (
+        {!withAudeora && (
           <div className="w-full flex flex-col items-center animate-in fade-in duration-300">
             
             {/* Warning Pill Banner */}
@@ -259,16 +259,16 @@ export default function WorkflowComparison() {
         )}
 
         {/* ============================================================ */}
-        {/* VIEW 2: WITH DIALORA (Clean, Uncluttered Autonomous Loop)     */}
+        {/* VIEW 2: WITH AUDEORA (Clean, Uncluttered Autonomous Loop)     */}
         {/* ============================================================ */}
-        {withDialora && (
+        {withAudeora && (
           <div className="w-full flex flex-col items-center animate-in fade-in duration-300">
             
             {/* Success Pill Banner */}
             <div className="w-full max-w-4xl mb-8 p-4 rounded-2xl bg-[#245ae2]/15 border border-[#245ae2]/40 flex items-center gap-3 text-xs sm:text-sm text-[#93c5fd]">
               <span className="text-lg">⚡</span>
               <div>
-                <strong className="text-white">Continuous Autonomous Loop:</strong> 85%+ calls resolved end-to-end by Dialora Voice Agents. Sub-500ms conversation latency, zero queue delays, and real-time CRM updates.
+                <strong className="text-white">Continuous Autonomous Loop:</strong> 85%+ calls resolved end-to-end by Audeora Voice Agents. Sub-500ms conversation latency, zero queue delays, and real-time CRM updates.
               </div>
             </div>
 

@@ -1,5 +1,5 @@
 /**
- * Dialora website server.
+ * Audeora website server.
  *
  * Serves the built Vite SPA out of dist/ and exposes the one endpoint that
  * needs a secret: POST /api/demo-call, which places a Bolna call on behalf of

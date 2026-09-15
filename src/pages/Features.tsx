@@ -8,7 +8,7 @@ export default function Features() {
       category: "Conversational Core",
       tag: "Neural Engine",
       title: "Full-Duplex Speech & Interruption Recovery",
-      desc: "Callers speak like real humans—they interrupt mid-sentence, change their minds, or clarify names. Dialora listens while speaking and seamlessly recovers without awkward pauses.",
+      desc: "Callers speak like real humans—they interrupt mid-sentence, change their minds, or clarify names. Audeora listens while speaking and seamlessly recovers without awkward pauses.",
       stat: "<480ms",
       statLabel: "Average Voice Latency",
       features: [

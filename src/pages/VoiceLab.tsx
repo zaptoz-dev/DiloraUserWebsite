@@ -24,8 +24,8 @@ const VOICES: VoiceItem[] = [
     nativeScript: 'हिन्दी',
     code: 'HI-IN',
     color: 'from-amber-500 to-rose-600',
-    greeting: 'नमस्ते! मैं डायलोरा बोल रही हूँ।',
-    translation: 'Namaste! This is Dialora speaking.',
+    greeting: 'नमस्ते! मैं ऑडिओरा बोल रही हूँ।',
+    translation: 'Namaste! This is Audeora speaking.',
     audio: {
       female: 'audio/Hindi_female.mp3',
       male: 'audio/Hindi_Male.mp3'
@@ -37,8 +37,8 @@ const VOICES: VoiceItem[] = [
     nativeScript: 'English (India)',
     code: 'EN-IN',
     color: 'from-blue-500 to-indigo-600',
-    greeting: 'Hi, this is Dialora calling.',
-    translation: 'Hi, this is Dialora calling.',
+    greeting: 'Hi, this is Audeora calling.',
+    translation: 'Hi, this is Audeora calling.',
     audio: {
       female: 'audio/English_female.mp3',
       male: 'audio/English_Male.mp3'
@@ -50,8 +50,8 @@ const VOICES: VoiceItem[] = [
     nativeScript: 'తెలుగు',
     code: 'TE-IN',
     color: 'from-emerald-500 to-teal-600',
-    greeting: 'నమస్కారం, నేను డయలోరా.',
-    translation: 'Namaskaram, this is Dialora.',
+    greeting: 'నమస్కారం, నేను ఆడియోరా.',
+    translation: 'Namaskaram, this is Audeora.',
     audio: {
       female: 'audio/Telugu_female.mp3',
       male: 'audio/Telugu_Male.mp3'
@@ -63,8 +63,8 @@ const VOICES: VoiceItem[] = [
     nativeScript: 'ગુજરાતી',
     code: 'GU-IN',
     color: 'from-orange-500 to-amber-600',
-    greeting: 'નમસ્તે, હું ડાયલોરા.',
-    translation: 'Namaste, this is Dialora.',
+    greeting: 'નમસ્તે, હું ઓડિયોરા.',
+    translation: 'Namaste, this is Audeora.',
     audio: {
       female: 'audio/Gujrati_female.mp3',
       male: 'audio/Gujrati_Male.mp3'
@@ -76,8 +76,8 @@ const VOICES: VoiceItem[] = [
     nativeScript: 'தமிழ்',
     code: 'TA-IN',
     color: 'from-red-500 to-orange-600',
-    greeting: 'வணக்கம், நான் டயலோரா.',
-    translation: 'Vanakkam, this is Dialora.',
+    greeting: 'வணக்கம், நான் ஆடியோரா.',
+    translation: 'Vanakkam, this is Audeora.',
     audio: {
       female: 'audio/Tamil_female.mp3',
       male: 'audio/Tamil_Male.mp3'
@@ -89,8 +89,8 @@ const VOICES: VoiceItem[] = [
     nativeScript: 'मराठी',
     code: 'MR-IN',
     color: 'from-purple-500 to-indigo-600',
-    greeting: 'नमस्कार, मी डायलोरा.',
-    translation: 'Namaskar, this is Dialora.',
+    greeting: 'नमस्कार, मी ऑडिओरा.',
+    translation: 'Namaskar, this is Audeora.',
     audio: {
       female: 'audio/Marathi_female.mp3',
       male: 'audio/Marathi_Male.mp3'
@@ -102,8 +102,8 @@ const VOICES: VoiceItem[] = [
     nativeScript: 'ಕನ್ನಡ',
     code: 'KN-IN',
     color: 'from-yellow-500 to-amber-600',
-    greeting: 'ನಮಸ್ಕಾರ, ನಾನು ಡಯಲೋರಾ.',
-    translation: 'Namaskara, this is Dialora.',
+    greeting: 'ನಮಸ್ಕಾರ, ನಾನು ಆಡಿಯೋರಾ.',
+    translation: 'Namaskara, this is Audeora.',
     audio: {
       female: 'audio/Kannada_female.mp3',
       male: 'audio/Kannada_Male.mp3'
@@ -115,8 +115,8 @@ const VOICES: VoiceItem[] = [
     nativeScript: 'മലയാളം',
     code: 'ML-IN',
     color: 'from-teal-500 to-emerald-600',
-    greeting: 'നമസ്കാരം, ഞാൻ ഡയലോറ.',
-    translation: 'Namaskaram, this is Dialora.',
+    greeting: 'നമസ്കാരം, ഞാൻ ഓഡിയോറ.',
+    translation: 'Namaskaram, this is Audeora.',
     audio: {
       female: 'audio/Malayalam_female.mp3',
       male: 'audio/Malayalam_Male.mp3'
@@ -128,8 +128,8 @@ const VOICES: VoiceItem[] = [
     nativeScript: 'বাংলা',
     code: 'BN-IN',
     color: 'from-pink-500 to-rose-600',
-    greeting: 'নমস্কার, আমি ডায়ালোরা।',
-    translation: 'Nomoshkar, this is Dialora.',
+    greeting: 'নমস্কার, আমি অডিওরা।',
+    translation: 'Nomoshkar, this is Audeora.',
     audio: {
       female: 'audio/Bengali_female.mp3',
       male: 'audio/Bengali_Male.mp3'
@@ -141,8 +141,8 @@ const VOICES: VoiceItem[] = [
     nativeScript: 'ଓଡ଼ିଆ',
     code: 'OR-IN',
     color: 'from-cyan-500 to-blue-600',
-    greeting: 'ନମସ୍କାର, ମୁଁ ଡାୟଲୋରା।',
-    translation: 'Namaskara, this is Dialora.',
+    greeting: 'ନମସ୍କାର, ମୁଁ ଅଡିଓରା।',
+    translation: 'Namaskara, this is Audeora.',
     audio: {
       female: 'audio/Odia_female.mp3',
       male: 'audio/Odia_Male.mp3'
@@ -376,7 +376,7 @@ export default function VoiceLab() {
                     {/* Disc Print Text */}
                     <div className="text-center px-2 pointer-events-none">
                       <div className="text-[10px] font-mono tracking-widest text-[#d6f549] font-bold uppercase">
-                        DIALORA DVD
+                        AUDEORA DVD
                       </div>
                       <div className="text-lg font-extrabold text-white tracking-tight leading-tight mt-0.5">
                         {activeVoice.name}
