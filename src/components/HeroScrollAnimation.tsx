@@ -9,7 +9,7 @@ export default function HeroScrollAnimation() {
   
   const [scrollProgress, setScrollProgress] = useState(0);
 
-  // Cached images
+  // Cached frames
   const imagesRef = useRef<HTMLImageElement[]>([]);
   const targetFrameRef = useRef(1);
   const currentFrameRef = useRef(1);
@@ -22,72 +22,7 @@ export default function HeroScrollAnimation() {
     return `${baseUrl}hero-frames/frame_${padNum}.jpg`;
   }, [baseUrl]);
 
-  // Preload frames progressively
-  useEffect(() => {
-    let isCancelled = false;
-    const images: HTMLImageElement[] = [];
-
-    // Step 1: Load the first frame immediately for instant display
-    const firstImg = new Image();
-    firstImg.src = getFrameUrl(1);
-    firstImg.onload = () => {
-      if (!isCancelled) {
-        images[1] = firstImg;
-        drawFrame(1);
-      }
-    };
-
-    // Step 2: Load keyframes first (every 4th frame) for instant scrubbing feedback
-    const keyframeIndices: number[] = [];
-    for (let i = 2; i <= TOTAL_FRAMES; i += 4) {
-      keyframeIndices.push(i);
-    }
-
-    const remainingIndices: number[] = [];
-    for (let i = 2; i <= TOTAL_FRAMES; i++) {
-      if (!keyframeIndices.includes(i)) {
-        remainingIndices.push(i);
-      }
-    }
-
-    const loadBatch = (indices: number[], onFinish?: () => void) => {
-      let loadedInBatch = 0;
-      indices.forEach((frameIdx) => {
-        const img = new Image();
-        img.src = getFrameUrl(frameIdx);
-        img.onload = () => {
-          if (!isCancelled) {
-            images[frameIdx] = img;
-            loadedInBatch++;
-            if (loadedInBatch === indices.length && onFinish) {
-              onFinish();
-            }
-          }
-        };
-        img.onerror = () => {
-          loadedInBatch++;
-          if (loadedInBatch === indices.length && onFinish) {
-            onFinish();
-          }
-        };
-      });
-    };
-
-    // Load keyframes first, then remaining
-    loadBatch(keyframeIndices, () => {
-      if (!isCancelled) {
-        loadBatch(remainingIndices);
-      }
-    });
-
-    imagesRef.current = images;
-
-    return () => {
-      isCancelled = true;
-    };
-  }, [getFrameUrl]);
-
-  // Draw specific frame to canvas
+  // Draw specific frame with TRUE full-screen COVER fit
   const drawFrame = useCallback((frameNumber: number) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -96,22 +31,26 @@ export default function HeroScrollAnimation() {
 
     // Find requested frame, or closest available loaded frame
     let img = imagesRef.current[frameNumber];
-    if (!img || !img.complete) {
-      for (let offset = 1; offset <= 30; offset++) {
-        const lower = imagesRef.current[frameNumber - offset];
-        if (lower && lower.complete) {
-          img = lower;
+    if (!img || !img.complete || img.naturalWidth === 0) {
+      // Search backwards first to find the latest loaded frame
+      for (let i = frameNumber; i >= 1; i--) {
+        if (imagesRef.current[i] && imagesRef.current[i].complete && imagesRef.current[i].naturalWidth > 0) {
+          img = imagesRef.current[i];
           break;
         }
-        const higher = imagesRef.current[frameNumber + offset];
-        if (higher && higher.complete) {
-          img = higher;
-          break;
+      }
+      // If not found backwards, search forwards
+      if (!img || !img.complete || img.naturalWidth === 0) {
+        for (let i = frameNumber + 1; i <= TOTAL_FRAMES; i++) {
+          if (imagesRef.current[i] && imagesRef.current[i].complete && imagesRef.current[i].naturalWidth > 0) {
+            img = imagesRef.current[i];
+            break;
+          }
         }
       }
     }
 
-    if (!img || !img.complete) return;
+    if (!img || !img.complete || img.naturalWidth === 0) return;
 
     const width = canvas.width;
     const height = canvas.height;
@@ -120,35 +59,81 @@ export default function HeroScrollAnimation() {
     ctx.fillStyle = '#080b11';
     ctx.fillRect(0, 0, width, height);
 
-    // Calculate aspect ratio fit
-    const imgRatio = (img.naturalWidth || 1920) / (img.naturalHeight || 1080);
-    const canvasRatio = width / height;
-
-    let renderW: number;
-    let renderH: number;
-    let offsetX: number;
-    let offsetY: number;
-
-    if (canvasRatio > imgRatio) {
-      // Screen is wider than 16:9
-      renderH = height;
-      renderW = height * imgRatio;
-      offsetX = (width - renderW) / 2;
-      offsetY = 0;
-    } else {
-      // Screen is narrower/taller (mobile/tablet portrait)
-      // Scale slightly so device visual remains prominent
-      const scale = Math.min(1.35, Math.max(1.0, (height / (width / imgRatio)) * 0.8));
-      renderW = width * scale;
-      renderH = (width / imgRatio) * scale;
-      offsetX = (width - renderW) / 2;
-      offsetY = (height - renderH) / 2;
-    }
+    // TRUE FULL-SCREEN COVER FIT:
+    // Scale image so both width and height are completely filled, eliminating black bars/gaps
+    const imgW = img.naturalWidth || 1920;
+    const imgH = img.naturalHeight || 1080;
+    const scale = Math.max(width / imgW, height / imgH);
+    const renderW = imgW * scale;
+    const renderH = imgH * scale;
+    const offsetX = (width - renderW) / 2;
+    const offsetY = (height - renderH) / 2;
 
     ctx.drawImage(img, offsetX, offsetY, renderW, renderH);
   }, []);
 
-  // Update canvas size on resize
+  // Preload frames aggressively with high concurrency
+  useEffect(() => {
+    let isCancelled = false;
+    const images: HTMLImageElement[] = new Array(TOTAL_FRAMES + 1);
+
+    const loadSingle = (index: number): Promise<HTMLImageElement | null> => {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.src = getFrameUrl(index);
+        img.onload = () => {
+          if (!isCancelled) {
+            images[index] = img;
+            resolve(img);
+          } else {
+            resolve(null);
+          }
+        };
+        img.onerror = () => {
+          resolve(null);
+        };
+      });
+    };
+
+    // Priority 1: Load frame 1 and frame 251 immediately
+    Promise.all([loadSingle(1), loadSingle(TOTAL_FRAMES)]).then(([firstImg]) => {
+      if (!isCancelled && firstImg) {
+        drawFrame(1);
+      }
+    });
+
+    // Priority 2: Keyframes first (every 2nd frame) for instant scrubbing feedback
+    const keyframes: number[] = [];
+    for (let i = 2; i < TOTAL_FRAMES; i += 2) {
+      keyframes.push(i);
+    }
+    // Priority 3: Remaining in-between odd frames
+    for (let i = 3; i < TOTAL_FRAMES; i += 2) {
+      keyframes.push(i);
+    }
+
+    // Launch with 12 concurrent workers
+    let queueIdx = 0;
+    const worker = async () => {
+      while (queueIdx < keyframes.length && !isCancelled) {
+        const frameIdx = keyframes[queueIdx++];
+        await loadSingle(frameIdx);
+      }
+    };
+
+    const CONCURRENCY = 12;
+    for (let c = 0; c < CONCURRENCY; c++) {
+      worker();
+    }
+
+    imagesRef.current = images;
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [getFrameUrl, drawFrame]);
+
+  // Update canvas pixel buffer on resize
   useEffect(() => {
     const handleResize = () => {
       const canvas = canvasRef.current;
@@ -167,7 +152,7 @@ export default function HeroScrollAnimation() {
     return () => window.removeEventListener('resize', handleResize);
   }, [drawFrame]);
 
-  // Smooth lerp loop for fluid 60fps / 120fps transitions
+  // Smooth fluid lerp loop
   useEffect(() => {
     let isRunning = true;
 
@@ -179,7 +164,16 @@ export default function HeroScrollAnimation() {
       const diff = target - current;
 
       if (Math.abs(diff) > 0.05) {
-        currentFrameRef.current += diff * 0.18;
+        // Snappy responsive lerp tracking
+        currentFrameRef.current += diff * 0.28;
+        
+        // Snap to bounds when very close
+        if (target === TOTAL_FRAMES && Math.abs(diff) < 0.8) {
+          currentFrameRef.current = TOTAL_FRAMES;
+        } else if (target === 1 && Math.abs(diff) < 0.8) {
+          currentFrameRef.current = 1;
+        }
+
         const rounded = Math.round(currentFrameRef.current);
         drawFrame(Math.max(1, Math.min(TOTAL_FRAMES, rounded)));
       }
@@ -214,8 +208,10 @@ export default function HeroScrollAnimation() {
 
       setScrollProgress(progress);
 
-      // Map progress [0, 1] to frames [1, 251]
-      const frame = Math.max(1, Math.min(TOTAL_FRAMES, Math.round(1 + progress * (TOTAL_FRAMES - 1))));
+      // Complete all 251 frames comfortably by 82% scroll!
+      // Leaves 82%-100% as a hold/transition buffer so the user fully sees the completed animation
+      const animProgress = Math.min(1, Math.max(0, progress / 0.82));
+      const frame = Math.max(1, Math.min(TOTAL_FRAMES, Math.round(1 + animProgress * (TOTAL_FRAMES - 1))));
       targetFrameRef.current = frame;
     };
 
@@ -226,40 +222,49 @@ export default function HeroScrollAnimation() {
   }, []);
 
   // Compute text fade and motion based on scroll progress
-  // Fades out between 0% and 32% scroll progress so caller enjoys the 3D animation unobscured
-  const textOpacity = Math.max(0, 1 - scrollProgress * 3.4);
-  const textTranslateY = -scrollProgress * 70;
+  // Fades out between 0% and 24% scroll progress so user enjoys 3D animation unobscured
+  const textOpacity = Math.max(0, 1 - scrollProgress * 4.2);
+  const textTranslateY = -scrollProgress * 80;
   const textScale = Math.max(0.92, 1 - scrollProgress * 0.15);
   const isInteractive = textOpacity > 0.15;
+
+  // Cinematic smooth dissolve into the next section as user scrolls past 88%
+  const exitOverlayOpacity = Math.min(1, Math.max(0, (scrollProgress - 0.88) / 0.12));
 
   return (
     <div 
       ref={containerRef}
-      className="relative w-full h-[250vh]"
+      className="relative w-full h-[360vh]"
     >
-      {/* Sticky Viewport Container */}
+      {/* Sticky Viewport Container - True 100vw x 100vh Full Screen */}
       <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-center pt-20 sm:pt-24 pb-10 px-4 overflow-hidden">
         
         {/* Ambient Radial Glow Behind Canvas */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] sm:w-[1200px] h-[550px] bg-[#245ae2]/15 blur-[160px] rounded-full pointer-events-none -z-10" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] sm:w-[1300px] h-[600px] bg-[#245ae2]/15 blur-[160px] rounded-full pointer-events-none -z-10" />
 
-        {/* 3D Canvas Background Layer */}
-        <div className="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none z-0">
+        {/* 100% FULL SCREEN Canvas Background Layer */}
+        <div className="absolute inset-0 w-full h-full pointer-events-none z-0">
           <canvas
             ref={canvasRef}
-            className="w-full h-full object-cover select-none"
+            className="w-full h-full block select-none"
           />
 
-          {/* Seamless Edge Gradient Vignettes to blend canvas 100% invisibly into #080b11 */}
-          <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-[#080b11] via-[#080b11]/80 to-transparent pointer-events-none" />
-          <div className="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-[#080b11] via-[#080b11]/80 to-transparent pointer-events-none" />
-          <div className="absolute inset-y-0 left-0 w-28 bg-gradient-to-r from-[#080b11] via-[#080b11]/60 to-transparent pointer-events-none" />
-          <div className="absolute inset-y-0 right-0 w-28 bg-gradient-to-l from-[#080b11] via-[#080b11]/60 to-transparent pointer-events-none" />
+          {/* Minimal top gradient for navbar legibility only (no side or heavy bottom cutoffs) */}
+          <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#080b11]/90 via-[#080b11]/40 to-transparent pointer-events-none" />
 
-          {/* Soft readability backdrop tint that fades away as user scrolls */}
+          {/* Soft central contrast backdrop that fades out smoothly as caller scrolls */}
           <div 
-            className="absolute inset-0 bg-[#080b11]/45 transition-opacity duration-200 pointer-events-none"
-            style={{ opacity: textOpacity }}
+            className="absolute inset-0 transition-opacity duration-200 pointer-events-none"
+            style={{ 
+              background: 'radial-gradient(circle at 50% 50%, rgba(8, 11, 17, 0.55) 0%, rgba(8, 11, 17, 0.2) 65%, transparent 100%)',
+              opacity: textOpacity 
+            }}
+          />
+
+          {/* Smooth cinematic transition fade to the next section after hero ends */}
+          <div 
+            className="absolute inset-0 bg-[#080b11] transition-opacity duration-100 pointer-events-none"
+            style={{ opacity: exitOverlayOpacity * 0.85 }}
           />
         </div>
 
@@ -274,7 +279,7 @@ export default function HeroScrollAnimation() {
           }}
         >
           {/* Top Pill Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#080b11]/80 border border-[#245ae2]/40 backdrop-blur-md mb-6 sm:mb-8 shadow-[0_0_25px_rgba(36,90,226,0.3)]">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#080b11]/85 border border-[#245ae2]/40 backdrop-blur-md mb-6 sm:mb-8 shadow-[0_0_30px_rgba(36,90,226,0.3)]">
             <span className="w-2 h-2 rounded-full bg-[#d6f549] animate-pulse" />
             <span className="text-xs font-semibold text-[#93c5fd] tracking-wide uppercase">
               Enterprise AI Voice Platform
@@ -306,7 +311,7 @@ export default function HeroScrollAnimation() {
             
             <Link 
               to="/voice-lab" 
-              className="flex items-center justify-center gap-2 w-full sm:w-auto bg-[#080b11]/80 backdrop-blur-md border border-white/20 hover:border-white/40 px-8 py-4 rounded-full text-[15px] font-semibold text-white transition-all duration-300 hover:-translate-y-0.5"
+              className="flex items-center justify-center gap-2 w-full sm:w-auto bg-[#080b11]/85 backdrop-blur-md border border-white/20 hover:border-white/40 px-8 py-4 rounded-full text-[15px] font-semibold text-white transition-all duration-300 hover:-translate-y-0.5"
             >
               Explore Voice Lab
               <svg className="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -315,7 +320,7 @@ export default function HeroScrollAnimation() {
             </Link>
           </div>
 
-          {/* Clean Scroll Cue */}
+          {/* Clean Minimal Scroll Cue */}
           <div className="mt-12 sm:mt-14 flex flex-col items-center gap-2 text-slate-400/80 text-xs font-medium animate-bounce">
             <span className="tracking-wider uppercase text-[11px] text-slate-400 font-mono">Scroll to explore</span>
             <svg className="w-4 h-4 text-[#60a5fa]" fill="none" viewBox="0 0 24 24" stroke="currentColor">

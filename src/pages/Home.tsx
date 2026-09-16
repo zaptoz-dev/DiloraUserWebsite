@@ -147,7 +147,7 @@ export default function Home() {
   const currentTab = functionalTabs.find(t => t.id === activeTab) || functionalTabs[0];
 
   return (
-    <div className="bg-[#080b11] text-slate-100 overflow-hidden">
+    <div className="bg-[#080b11] text-slate-100 overflow-x-clip">
       
       {/* Unified Hero Section with 3D Canvas Scroll in Background */}
       <HeroScrollAnimation />
