@@ -149,55 +149,7 @@ export default function Home() {
   return (
     <div className="bg-[#080b11] text-slate-100 overflow-hidden">
       
-      {/* Hero Section Header */}
-      <section className="pt-32 sm:pt-36 px-4 pb-8 sm:pb-12 text-center relative overflow-hidden">
-        {/* Subtle background electric glow */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[#245ae2]/15 blur-[150px] rounded-full pointer-events-none -z-10" />
-
-        <div className="max-w-4xl mx-auto flex flex-col items-center relative z-10 animate-in fade-in slide-in-from-bottom-8 duration-700">
-          
-          {/* Top pill badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#245ae2]/10 border border-[#245ae2]/30 mb-6 sm:mb-8">
-            <span className="w-2 h-2 rounded-full bg-[#d6f549] animate-pulse"></span>
-            <span className="text-xs font-semibold text-[#93c5fd] tracking-wide uppercase">
-              Enterprise AI Voice Platform
-            </span>
-          </div>
-
-          <h1 className="text-4xl sm:text-6xl md:text-[76px] font-bold leading-[1.08] mb-6 sm:mb-8 text-white tracking-tight">
-            Calls that sound <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#60a5fa] via-[#245ae2] to-[#93c5fd]">human</span>.<br />
-            Outcomes that <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400">scale</span>.
-          </h1>
-
-          <p className="text-base sm:text-xl text-slate-400 mb-8 sm:mb-10 max-w-2xl leading-relaxed">
-            Audeora answers, qualifies, schedules, and resolves calls in 10+ Indian and global languages—with the natural pace and tone of your best tele-caller.
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
-            <Link 
-              to="/demo" 
-              className="flex items-center justify-center gap-2 w-full sm:w-auto bg-[#245ae2] hover:bg-[#1d4ed8] px-8 py-4 rounded-full text-[15px] font-semibold text-white transition-all duration-300 shadow-[0_0_30px_rgba(36,90,226,0.4)] hover:shadow-[0_0_40px_rgba(36,90,226,0.6)] hover:-translate-y-0.5"
-            >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-              </svg>
-              Get a demo call
-            </Link>
-            
-            <Link 
-              to="/voice-lab" 
-              className="flex items-center justify-center gap-2 w-full sm:w-auto bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 px-8 py-4 rounded-full text-[15px] font-semibold text-white transition-all duration-300 hover:-translate-y-0.5"
-            >
-              Explore Voice Lab
-              <svg className="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-              </svg>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* 3D Phone Scroll Cinema Animation */}
+      {/* Unified Hero Section with 3D Canvas Scroll in Background */}
       <HeroScrollAnimation />
 
       {/* Metrics / Impact Bento Grid */}
