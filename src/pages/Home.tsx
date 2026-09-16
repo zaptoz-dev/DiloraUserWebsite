@@ -1,60 +1,12 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Badge from '../components/ui/Badge';
 import InteractiveUseCase from '../components/ui/InteractiveUseCase';
 import WorkflowComparison from '../components/WorkflowComparison';
+import HeroScrollAnimation from '../components/HeroScrollAnimation';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<'support' | 'sales' | 'operations' | 'collections'>('support');
-  const [isVideoMuted, setIsVideoMuted] = useState(true);
-  const [isVideoPlaying, setIsVideoPlaying] = useState(true);
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  // Automatic scroll-based video play/pause
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          video.play().then(() => setIsVideoPlaying(true)).catch(() => {
-            // Autoplay policy might require mute
-            video.muted = true;
-            setIsVideoMuted(true);
-            video.play();
-          });
-        } else {
-          video.pause();
-          setIsVideoPlaying(false);
-        }
-      },
-      { threshold: 0.25 }
-    );
-
-    observer.observe(video);
-    return () => observer.disconnect();
-  }, []);
-
-  const toggleVideoSound = () => {
-    if (videoRef.current) {
-      const nextMute = !isVideoMuted;
-      videoRef.current.muted = nextMute;
-      setIsVideoMuted(nextMute);
-    }
-  };
-
-  const toggleVideoPlayback = () => {
-    if (videoRef.current) {
-      if (videoRef.current.paused) {
-        videoRef.current.play();
-        setIsVideoPlaying(true);
-      } else {
-        videoRef.current.pause();
-        setIsVideoPlaying(false);
-      }
-    }
-  };
 
   const stats = [
     {
@@ -197,157 +149,56 @@ export default function Home() {
   return (
     <div className="bg-[#080b11] text-slate-100 overflow-hidden">
       
-      {/* Hero Section */}
-      <section className="min-h-[92vh] flex items-center justify-center pt-32 px-4 pb-20 relative">
+      {/* Hero Section Header */}
+      <section className="pt-32 sm:pt-36 px-4 pb-8 sm:pb-12 text-center relative overflow-hidden">
         {/* Subtle background electric glow */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[#245ae2]/15 blur-[140px] rounded-full pointer-events-none" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[#245ae2]/15 blur-[150px] rounded-full pointer-events-none -z-10" />
 
-        <div className="max-w-7xl mx-auto w-full flex flex-col lg:flex-row items-center justify-between gap-12 relative z-10">
-          <div className="flex-1 text-left max-w-2xl animate-in fade-in slide-in-from-bottom-8 duration-700">
-            
-            {/* Top pill badge */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#245ae2]/10 border border-[#245ae2]/30 mb-8">
-              <span className="w-2 h-2 rounded-full bg-[#d6f549] animate-pulse"></span>
-              <span className="text-xs font-semibold text-[#93c5fd] tracking-wide uppercase">
-                Enterprise AI Voice Platform
-              </span>
-            </div>
-
-            <h1 className="text-5xl sm:text-6xl md:text-[76px] font-bold leading-[1.08] mb-8 text-white tracking-tight">
-              Calls that sound <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#60a5fa] via-[#245ae2] to-[#93c5fd]">human</span>.<br />
-              Outcomes that <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400">scale</span>.
-            </h1>
-
-            <p className="text-lg md:text-xl text-slate-400 mb-10 max-w-xl leading-relaxed">
-              Audeora answers, qualifies, schedules, and resolves calls in 10+ Indian and global languages—with the natural pace and tone of your best tele-caller.
-            </p>
-
-            <div className="flex flex-col sm:flex-row items-center justify-start gap-4">
-              <Link 
-                to="/demo" 
-                className="flex items-center justify-center gap-2 w-full sm:w-auto bg-[#245ae2] hover:bg-[#1d4ed8] px-8 py-4 rounded-full text-[15px] font-semibold text-white transition-all duration-300 shadow-[0_0_30px_rgba(36,90,226,0.4)] hover:shadow-[0_0_40px_rgba(36,90,226,0.6)] hover:-translate-y-0.5"
-              >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                </svg>
-                Get a demo call
-              </Link>
-              
-              <Link 
-                to="/voice-lab" 
-                className="flex items-center justify-center gap-2 w-full sm:w-auto bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 px-8 py-4 rounded-full text-[15px] font-semibold text-white transition-all duration-300 hover:-translate-y-0.5"
-              >
-                Explore Voice Lab
-                <svg className="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                </svg>
-              </Link>
-            </div>
+        <div className="max-w-4xl mx-auto flex flex-col items-center relative z-10 animate-in fade-in slide-in-from-bottom-8 duration-700">
+          
+          {/* Top pill badge */}
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#245ae2]/10 border border-[#245ae2]/30 mb-6 sm:mb-8">
+            <span className="w-2 h-2 rounded-full bg-[#d6f549] animate-pulse"></span>
+            <span className="text-xs font-semibold text-[#93c5fd] tracking-wide uppercase">
+              Enterprise AI Voice Platform
+            </span>
           </div>
 
-          <div className="flex-1 w-full max-w-xl lg:max-w-none flex justify-center lg:justify-end mt-8 lg:mt-0 animate-in fade-in zoom-in duration-1000 delay-200 fill-mode-both relative">
-            {/* Ambient glowing background */}
-            <div className="absolute -top-10 -right-10 w-72 h-72 bg-[#245ae2]/30 rounded-full blur-[90px] pointer-events-none -z-10" />
-            <div className="absolute -bottom-10 -left-10 w-64 h-64 bg-[#d6f549]/15 rounded-full blur-[90px] pointer-events-none -z-10" />
+          <h1 className="text-4xl sm:text-6xl md:text-[76px] font-bold leading-[1.08] mb-6 sm:mb-8 text-white tracking-tight">
+            Calls that sound <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#60a5fa] via-[#245ae2] to-[#93c5fd]">human</span>.<br />
+            Outcomes that <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400">scale</span>.
+          </h1>
 
-            {/* High-Tech Terminal Video Card */}
-            <div className="w-full max-w-lg rounded-3xl bg-[#0d121f]/90 border border-[#245ae2]/40 shadow-[0_0_50px_rgba(36,90,226,0.25)] backdrop-blur-xl overflow-hidden group">
-              {/* Terminal Titlebar */}
-              <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/10 bg-[#090d17]/80">
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-rose-500/80" />
-                  <div className="w-3 h-3 rounded-full bg-amber-500/80" />
-                  <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
-                  <span className="text-[11px] font-mono text-slate-400 ml-2 tracking-wider">
-                    audeora-live-stream // session#0491
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#d6f549] animate-pulse" />
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-[#93c5fd]">
-                    Active Stream
-                  </span>
-                </div>
-              </div>
+          <p className="text-base sm:text-xl text-slate-400 mb-8 sm:mb-10 max-w-2xl leading-relaxed">
+            Audeora answers, qualifies, schedules, and resolves calls in 10+ Indian and global languages—with the natural pace and tone of your best tele-caller.
+          </p>
 
-              {/* Video Player Container */}
-              <div className="relative aspect-[16/10] sm:aspect-[16/9] bg-black/80 overflow-hidden">
-                <video
-                  ref={videoRef}
-                  src={`${import.meta.env.BASE_URL}video/hero-demo.mp4`}
-                  autoPlay
-                  loop
-                  muted={isVideoMuted}
-                  playsInline
-                  className="w-full h-full object-cover object-center"
-                />
-
-                {/* Floating Sound & Playback Controls Overlay */}
-                <div className="absolute top-3 right-3 flex items-center gap-2 z-20">
-                  <button
-                    onClick={toggleVideoSound}
-                    title={isVideoMuted ? "Unmute Audio" : "Mute Audio"}
-                    className="p-2.5 rounded-full bg-black/60 hover:bg-black/90 border border-white/20 text-white backdrop-blur-md transition-all shadow-lg hover:scale-105"
-                  >
-                    {isVideoMuted ? (
-                      <svg className="w-4 h-4 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
-                      </svg>
-                    ) : (
-                      <svg className="w-4 h-4 text-[#d6f549]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-                      </svg>
-                    )}
-                  </button>
-
-                  <button
-                    onClick={toggleVideoPlayback}
-                    title={isVideoPlaying ? "Pause Video" : "Play Video"}
-                    className="p-2.5 rounded-full bg-black/60 hover:bg-black/90 border border-white/20 text-white backdrop-blur-md transition-all shadow-lg hover:scale-105"
-                  >
-                    {isVideoPlaying ? (
-                      <svg className="w-4 h-4 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    ) : (
-                      <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    )}
-                  </button>
-                </div>
-
-                {/* Bottom telemetry HUD */}
-                <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-[#080b11]/95 via-[#080b11]/60 to-transparent p-4 flex items-center justify-between text-xs font-mono">
-                  <div className="flex items-center gap-2">
-                    <span className="inline-block w-2 h-2 rounded-full bg-emerald-400" />
-                    <span className="text-slate-300 font-semibold">Sub-500ms Turn Latency</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-slate-400 text-[11px]">
-                    <span className="bg-[#245ae2]/20 text-[#93c5fd] px-2 py-0.5 rounded border border-[#245ae2]/30">Auto Scroll Sync</span>
-                    <span>1080p Neural Stream</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Console Info Footer */}
-              <div className="p-4 bg-[#0d121f] flex items-center justify-between text-xs border-t border-white/5">
-                <div className="flex items-center gap-2 text-slate-300 font-medium">
-                  <svg className="w-4 h-4 text-[#245ae2]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z" />
-                  </svg>
-                  <span>Autonomous Inbound/Outbound Engine</span>
-                </div>
-                <Link to="/demo" className="text-[#60a5fa] hover:text-white font-semibold flex items-center gap-1 transition-colors">
-                  Try On Your Phone &rarr;
-                </Link>
-              </div>
-            </div>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
+            <Link 
+              to="/demo" 
+              className="flex items-center justify-center gap-2 w-full sm:w-auto bg-[#245ae2] hover:bg-[#1d4ed8] px-8 py-4 rounded-full text-[15px] font-semibold text-white transition-all duration-300 shadow-[0_0_30px_rgba(36,90,226,0.4)] hover:shadow-[0_0_40px_rgba(36,90,226,0.6)] hover:-translate-y-0.5"
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+              </svg>
+              Get a demo call
+            </Link>
+            
+            <Link 
+              to="/voice-lab" 
+              className="flex items-center justify-center gap-2 w-full sm:w-auto bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 px-8 py-4 rounded-full text-[15px] font-semibold text-white transition-all duration-300 hover:-translate-y-0.5"
+            >
+              Explore Voice Lab
+              <svg className="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </Link>
           </div>
         </div>
       </section>
+
+      {/* 3D Phone Scroll Cinema Animation */}
+      <HeroScrollAnimation />
 
       {/* Metrics / Impact Bento Grid */}
       <section className="py-20 px-4 border-y border-white/5 bg-[#0b0f19]">
