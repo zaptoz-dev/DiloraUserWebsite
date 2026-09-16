@@ -345,8 +345,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Interactive Use Cases Component */}
-      <InteractiveUseCase />
 
       {/* Features Grid */}
       <section className="py-24 px-4">
