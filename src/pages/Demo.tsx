@@ -112,7 +112,7 @@ export default function Demo() {
             Hear Audeora on your <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#60a5fa] via-[#245ae2] to-[#93c5fd]">own phone</span>.
           </h1>
           <p className="text-base sm:text-lg text-slate-400 leading-relaxed max-w-2xl mx-auto">
-            Enter your mobile number and Audeora will dial you instantly—a live, autonomous AI call with sub-500ms conversational turn-taking.
+            Enter your mobile number and Audeora will dial you instantly—a live, autonomous AI call with sub-300ms conversational turn-taking.
           </p>
         </div>
       </section>
@@ -143,7 +143,7 @@ export default function Demo() {
               </div>
               <div className="flex items-start gap-3">
                 <span className="w-6 h-6 rounded-full bg-[#245ae2]/20 border border-[#245ae2]/40 text-[#60a5fa] flex items-center justify-center font-mono text-xs font-bold shrink-0">3</span>
-                <span>Experience sub-500ms latency with zero IVR keypad menus or robotic pauses.</span>
+                <span>Experience sub-300ms latency with zero IVR keypad menus or robotic pauses.</span>
               </div>
             </div>
 

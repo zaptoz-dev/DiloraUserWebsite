@@ -542,7 +542,7 @@ export default function VoiceLab() {
 
               {/* Bottom Direct Callback Link */}
               <div className="flex items-center justify-between text-xs pt-1 px-1">
-                <span className="text-slate-400">Sub-500ms Audio Turnaround</span>
+                <span className="text-slate-400">Sub-300ms Audio Turnaround</span>
                 <Link to="/demo" className="text-[#60a5fa] hover:text-white font-semibold transition-colors flex items-center gap-1">
                   Test On Your Phone &rarr;
                 </Link>

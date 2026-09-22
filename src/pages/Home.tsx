@@ -16,7 +16,7 @@ export default function Home() {
       badge: "Multilingual"
     },
     {
-      metric: "<500ms",
+      metric: "<300ms",
       label: "Voice Response Latency",
       detail: "Natural turn-taking with zero awkward pauses",
       badge: "Real-time"
@@ -97,7 +97,7 @@ export default function Home() {
     },
     { 
       title: "Human-like conversation flow", 
-      desc: "Sub-500ms turn-taking, natural fillers, barge-in support, and intelligent interruption handling." 
+      desc: "Sub-300ms turn-taking, natural fillers, barge-in support, and intelligent interruption handling." 
     },
     { 
       title: "10+ Indian & Global Voices", 
@@ -252,7 +252,7 @@ export default function Home() {
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="text-emerald-400 font-bold mt-0.5">✓</span>
-                    Instant answers in under 500ms without robotic pauses
+                    Instant answers in under 300ms without robotic pauses
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="text-emerald-400 font-bold mt-0.5">✓</span>

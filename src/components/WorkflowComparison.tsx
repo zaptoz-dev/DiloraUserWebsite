@@ -89,7 +89,7 @@ export default function WorkflowComparison() {
       role: 'Audeora Voice Agent',
       badge: 'Agent',
       badgeColor: 'bg-[#d6f549] text-black font-bold',
-      desc: 'Sub-500ms conversational turn-taking. Handles interruptions naturally.',
+      desc: 'Sub-300ms conversational turn-taking. Handles interruptions naturally.',
       icon: '🎯'
     },
     {
@@ -268,7 +268,7 @@ export default function WorkflowComparison() {
             <div className="w-full max-w-4xl mb-8 p-4 rounded-2xl bg-[#245ae2]/15 border border-[#245ae2]/40 flex items-center gap-3 text-xs sm:text-sm text-[#93c5fd]">
               <span className="text-lg">⚡</span>
               <div>
-                <strong className="text-white">Continuous Autonomous Loop:</strong> 85%+ calls resolved end-to-end by Audeora Voice Agents. Sub-500ms conversation latency, zero queue delays, and real-time CRM updates.
+                <strong className="text-white">Continuous Autonomous Loop:</strong> 85%+ calls resolved end-to-end by Audeora Voice Agents. Sub-300ms conversation latency, zero queue delays, and real-time CRM updates.
               </div>
             </div>
 
@@ -312,7 +312,7 @@ export default function WorkflowComparison() {
             {/* Performance Outcomes Bar */}
             <div className="w-full grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
               <div className="p-4 rounded-2xl bg-black/40 border border-[#245ae2]/30 shadow-md">
-                <div className="text-xl font-bold text-[#d6f549] mb-1">&lt;500ms</div>
+                <div className="text-xl font-bold text-[#d6f549] mb-1">&lt;300ms</div>
                 <div className="text-xs text-slate-300">Voice Response Turnaround</div>
               </div>
               <div className="p-4 rounded-2xl bg-black/40 border border-[#245ae2]/30 shadow-md">

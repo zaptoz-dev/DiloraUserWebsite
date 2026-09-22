@@ -17,7 +17,7 @@ export default function Pricing() {
         "1 Production Voice Agent",
         "Up to 50 concurrent calls",
         "10+ Indian & Global accents",
-        "Sub-500ms conversation latency",
+        "Sub-300ms conversation latency",
         "Full call transcripts & recordings",
         "CRM Webhook integrations (Zapier, Make)",
         "Standard Email & Chat Support"
