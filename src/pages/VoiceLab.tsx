@@ -28,7 +28,7 @@ const VOICES: VoiceItem[] = [
     translation: 'Namaste! This is Audeora speaking.',
     audio: {
       female: 'audio/Hindi_female.mp3',
-      male: 'audio/Hindi_Male.mp3'
+      male: 'audio/Hindi_male.mp3'
     }
   },
   {
@@ -40,8 +40,8 @@ const VOICES: VoiceItem[] = [
     greeting: 'Hi, this is Audeora calling.',
     translation: 'Hi, this is Audeora calling.',
     audio: {
-      female: 'audio/English_female.mp3',
-      male: 'audio/English_Male.mp3'
+      female: 'audio/English_female.m4a',
+      male: 'audio/English_male.mp3'
     }
   },
   {
@@ -54,7 +54,7 @@ const VOICES: VoiceItem[] = [
     translation: 'Namaskaram, this is Audeora.',
     audio: {
       female: 'audio/Telugu_female.mp3',
-      male: 'audio/Telugu_Male.mp3'
+      male: 'audio/Telugu_male.mp3'
     }
   },
   {
@@ -66,8 +66,8 @@ const VOICES: VoiceItem[] = [
     greeting: 'નમસ્તે, હું ઓડિયોરા.',
     translation: 'Namaste, this is Audeora.',
     audio: {
-      female: 'audio/Gujrati_female.mp3',
-      male: 'audio/Gujrati_Male.mp3'
+      female: 'audio/Gujarati_female.mp3',
+      male: 'audio/Gujarati_male.mp3'
     }
   },
   {
@@ -80,7 +80,7 @@ const VOICES: VoiceItem[] = [
     translation: 'Vanakkam, this is Audeora.',
     audio: {
       female: 'audio/Tamil_female.mp3',
-      male: 'audio/Tamil_Male.mp3'
+      male: 'audio/Tamil_male.mp3'
     }
   },
   {
@@ -93,7 +93,7 @@ const VOICES: VoiceItem[] = [
     translation: 'Namaskar, this is Audeora.',
     audio: {
       female: 'audio/Marathi_female.mp3',
-      male: 'audio/Marathi_Male.mp3'
+      male: 'audio/Marathi_male.mp3'
     }
   },
   {
@@ -106,7 +106,7 @@ const VOICES: VoiceItem[] = [
     translation: 'Namaskara, this is Audeora.',
     audio: {
       female: 'audio/Kannada_female.mp3',
-      male: 'audio/Kannada_Male.mp3'
+      male: 'audio/Kannada_male.mp3'
     }
   },
   {
@@ -119,7 +119,7 @@ const VOICES: VoiceItem[] = [
     translation: 'Namaskaram, this is Audeora.',
     audio: {
       female: 'audio/Malayalam_female.mp3',
-      male: 'audio/Malayalam_Male.mp3'
+      male: 'audio/Malayalam_male.mp3'
     }
   },
   {
@@ -132,7 +132,7 @@ const VOICES: VoiceItem[] = [
     translation: 'Nomoshkar, this is Audeora.',
     audio: {
       female: 'audio/Bengali_female.mp3',
-      male: 'audio/Bengali_Male.mp3'
+      male: 'audio/Bengali_male.mp3'
     }
   },
   {
@@ -145,7 +145,7 @@ const VOICES: VoiceItem[] = [
     translation: 'Namaskara, this is Audeora.',
     audio: {
       female: 'audio/Odia_female.mp3',
-      male: 'audio/Odia_Male.mp3'
+      male: 'audio/Odia_male.mp3'
     }
   }
 ];
