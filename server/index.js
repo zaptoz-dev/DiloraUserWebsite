@@ -1,9 +1,16 @@
 /**
  * Audeora website server.
  *
- * Serves the built Vite SPA out of dist/ and exposes the one endpoint that
- * needs a secret: POST /api/demo-call, which places a Bolna call on behalf of
- * a visitor who filled in the Demo form.
+ * Serves the built Vite SPA out of dist/ and exposes the two features that need
+ * a secret:
+ *
+ *   POST /api/demo-call     places a Bolna call to a visitor who filled in the
+ *                           Demo form (an outbound phone call)
+ *   WS   /api/voice/stream  holds a live in-browser conversation for the
+ *                           Interactive Demo section (Deepgram + Bedrock + TTS)
+ *
+ * The two are independent: different vendors, different failure modes, no shared
+ * state. A Bolna outage does not affect the in-browser demo and vice versa.
  *
  * The site and the API share an origin on purpose — the browser calls
  * /api/demo-call with a relative path, so there is no CORS setup and no API
@@ -11,11 +18,14 @@
  */
 
 import express from "express";
+import http from "node:http";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { placeInstantCall, getExecution } from "./bolna.js";
 import { toE164 } from "../shared/phone.js";
 import { checkAllowance, getLimits } from "./rateLimit.js";
+import { attachVoiceWebSocket, voiceStatus } from "./voice/ws.js";
+import { warmUpVoiceProviders } from "./voice/warmup.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DIST_DIR = path.resolve(__dirname, "..", "dist");
@@ -214,6 +224,21 @@ app.post("/api/demo-call", async (req, res) => {
   }
 });
 
+// ---------------------------------------------------------------------------
+// Interactive voice demo
+// ---------------------------------------------------------------------------
+
+/**
+ * Capacity and configuration snapshot for the in-browser voice demo. Reports
+ * which providers are reachable and how many concurrent slots are free, without
+ * ever echoing a credential. The frontend checks this before offering the
+ * "Start Live Simulation" button, so a visitor gets a clear message instead of a
+ * socket that opens and immediately dies.
+ */
+app.get("/api/voice/health", (_req, res) => {
+  res.json(voiceStatus());
+});
+
 app.get("/api/health", (req, res) => {
   res.json({
     ok: true,
@@ -252,11 +277,24 @@ app.get(/^(?!\/api\/).*/, (_req, res) => {
 const PORT = Number(process.env.PORT) || 3000;
 const HOST = process.env.HOST || "127.0.0.1";
 
-app.listen(PORT, HOST, () => {
+/**
+ * An explicit http.Server rather than app.listen(): the voice demo needs the
+ * raw `upgrade` event to hand sockets to the WebSocket server, and Express's
+ * convenience wrapper hides it.
+ */
+const server = http.createServer(app);
+attachVoiceWebSocket(server);
+
+server.listen(PORT, HOST, () => {
   console.log(`Dialora site listening on http://${HOST}:${PORT}`);
   if (!process.env.BOLNA_API_KEY || !process.env.BOLNA_AGENT_ID) {
     console.warn(
       "WARNING: BOLNA_API_KEY / BOLNA_AGENT_ID are not set — /api/demo-call will fail."
     );
   }
+  // Opens the TLS connections to Deepgram, Bedrock and the TTS provider now, so
+  // the first visitor doesn't pay for the handshakes. Deepgram measured ~5.0s
+  // cold against ~0.9s warm, which is the difference between a demo that feels
+  // broken and one that feels instant.
+  warmUpVoiceProviders();
 });

@@ -35,13 +35,26 @@ npm run build            # tsc -b && vite build
 npm run test:smoke       # exercises /api/demo-call with Bolna stubbed
 
 echo "==> Syncing source to $HOST:$APP_DIR"
-# .env is deliberately NOT synced: it holds the Bolna key and lives only on
-# the box. Syncing it would mean a missing/blank local copy could silently wipe
-# or overwrite the real credentials via --delete.
-rsync -az --delete \
+# .env is deliberately NOT synced: it holds the Bolna and voice-demo keys and
+# lives only on the box. Syncing it would mean a missing/blank local copy could
+# silently wipe or overwrite the real credentials via --delete.
+#
+# The extra flags are not cosmetic. Without them this sync reliably dies partway
+# through from macOS with:
+#   ssh_packet_write_poll: Result too large / unexpected end of file
+# because the tree carries ~16MB of hero frames and video. The deploy aborts
+# safely (the old build keeps serving) but looks like a real failure, so it used
+# to need a manual retry every time.
+#   --partial          keep what already transferred, so a retry resumes
+#   --timeout          fail a genuinely stalled transfer instead of hanging
+#   --bwlimit          stops the local uplink being saturated, which is what
+#                      triggers the write-poll error in the first place
+#   ServerAlive*       keeps the SSH channel alive through slow stretches
+#   IPQoS=throughput   avoids the interactive QoS marking some paths throttle
+rsync -az --delete --partial --timeout=180 --bwlimit=8000 \
   --exclude node_modules --exclude .git --exclude dist \
   --exclude '.env' --exclude '*.pem' --exclude '.DS_Store' --exclude '*.tsbuildinfo' \
-  -e "ssh -i $KEY -o StrictHostKeyChecking=no" \
+  -e "ssh -i $KEY -o StrictHostKeyChecking=no -o ServerAliveInterval=15 -o ServerAliveCountMax=8 -o IPQoS=throughput" \
   ./ "$HOST:$APP_DIR/"
 
 echo "==> Installing, building, restarting"
@@ -65,13 +78,35 @@ REMOTE
 
 if [[ -n "$URL" ]]; then
   echo "==> Smoke test"
-  for path in / /api/health; do
+  for path in / /api/health /api/voice/health; do
     code=$(curl -s -o /dev/null -w '%{http_code}' "$URL$path")
-    printf '  %-16s %s\n' "$path" "$code"
+    printf '  %-20s %s\n' "$path" "$code"
     [[ "$code" == "200" ]] || { echo "FAILED: $path returned $code" >&2; exit 1; }
   done
+
+  health=$(curl -s "$URL/api/health")
   # Confirms the box actually has the Bolna credentials, without printing them.
-  curl -s "$URL/api/health" | grep -q '"bolnaConfigured":true' \
+  grep -q '"bolnaConfigured":true' <<<"$health" \
     || { echo "FAILED: server is up but Bolna is not configured" >&2; exit 1; }
+  # If this reads 127.0.0.1 from out here, `trust proxy` is wrong and every
+  # visitor shares one rate-limit bucket.
+  grep -q '"clientIp":"127.0.0.1"' <<<"$health" \
+    && { echo "FAILED: /api/health reports clientIp 127.0.0.1 — reverse proxy is not passing X-Forwarded-For" >&2; exit 1; }
+
+  # The voice demo needs credentials that live only in .env on the box, and this
+  # script deliberately never syncs .env. A warning rather than a failure: the
+  # site is fine without the demo, and failing here would block an otherwise
+  # good deploy.
+  voice=$(curl -s "$URL/api/voice/health")
+  if grep -q '"configured":true' <<<"$voice"; then
+    provider=$(sed -n 's/.*"active":"\([a-z]*\)".*/\1/p' <<<"$voice")
+    echo "  voice demo:          configured (tts=${provider:-unknown})"
+  else
+    echo "  voice demo:          NOT CONFIGURED" >&2
+    echo "     Add DEEPGRAM_API_KEY, SARVAM_API_KEY, AWS_ACCESS_KEY_ID," >&2
+    echo "     AWS_SECRET_ACCESS_KEY, AWS_REGION and the POLLY_*/VOICE_* settings" >&2
+    echo "     to $APP_DIR/.env on the box, then: sudo systemctl restart dialora-site" >&2
+  fi
+
   echo "==> Live at $URL"
 fi
