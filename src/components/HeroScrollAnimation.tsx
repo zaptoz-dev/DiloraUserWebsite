@@ -188,143 +188,148 @@ export default function HeroScrollAnimation() {
   return (
     <section 
       ref={containerRef}
-      className="relative pt-24 sm:pt-28 pb-24 px-4 overflow-hidden min-h-screen"
+      className="relative isolate pt-20 sm:pt-28 pb-20 sm:pb-28 px-3 sm:px-4 overflow-hidden min-h-screen"
     >
       {/* ========================================================================= */}
-      {/* DORA-STYLE CELESTIAL GLOBE HORIZON EFFECT (BACKGROUND)                   */}
+      {/* DORA-STYLE HALF-PLANET HORIZON EFFECT (LIGHT, LUMINOUS & PROPERLY VISIBLE) */}
       {/* ========================================================================= */}
-      
-      {/* Top Center Warm Celestial Amber Nebula (Behind Apex Orb) */}
-      <div className="absolute top-8 sm:top-12 left-1/2 -translate-x-1/2 w-[480px] sm:w-[600px] h-[360px] bg-gradient-to-b from-[#ff5e3a]/25 via-[#ff3b30]/15 to-transparent blur-[110px] rounded-full pointer-events-none -z-20" />
-
-      {/* Top Left Cosmic Warm Nebula */}
-      <div className="absolute top-0 left-[-10%] w-[550px] h-[550px] bg-[#ff4500]/12 blur-[160px] rounded-full pointer-events-none -z-20" />
-      
-      {/* Top Right Deep Indigo/Violet Nebula */}
-      <div className="absolute top-0 right-[-10%] w-[600px] h-[600px] bg-[#7c3aed]/18 blur-[170px] rounded-full pointer-events-none -z-20" />
-
-      {/* Cosmic Twinkling Stars (✦) Scattered in Deep Space */}
-      <div className="absolute inset-0 pointer-events-none -z-15 overflow-hidden">
-        {COSMIC_STARS.map((star, idx) => (
-          <div
-            key={idx}
-            className="absolute animate-pulse"
-            style={{
-              top: star.top,
-              left: star.left,
-              animationDuration: `${star.duration}s`,
-              animationDelay: `${star.delay}s`,
-              opacity: star.opacity
-            }}
-          >
-            {star.isCross ? (
-              <svg 
-                className="text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.95)]" 
-                width={star.size} 
-                height={star.size} 
-                viewBox="0 0 24 24" 
-                fill="currentColor"
-              >
-                <path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10L12 0Z" />
-              </svg>
-            ) : (
-              <div 
-                className="rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.9)]" 
-                style={{ width: star.size, height: star.size }}
-              />
-            )}
-          </div>
-        ))}
-      </div>
-
-      {/* The Massive Glowing Celestial Globe Dome */}
-      <div 
-        className="absolute top-28 sm:top-32 left-1/2 -translate-x-1/2 w-[1100px] sm:w-[1600px] lg:w-[2200px] h-[1100px] sm:h-[1600px] lg:h-[2200px] rounded-[100%] pointer-events-none -z-10"
-        style={{
-          transform: `translateX(-50%) scale(${1 + scrollProgress * 0.05})`,
-          transition: 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)'
-        }}
-      >
-        {/* Outer Atmospheric Corona Glow (Cyan / Electric Blue) */}
-        <div className="absolute inset-0 rounded-[100%] bg-gradient-to-b from-[#38bdf8]/25 via-[#245ae2]/15 to-transparent blur-[65px] -top-10" />
-
-        {/* Luminous Rim Highlight (Smooth 360-degree curved planetary horizon with radial fade) */}
-        <div 
-          className="absolute inset-0 rounded-[100%] border-[2px] border-white/85"
-          style={{
-            maskImage: 'radial-gradient(ellipse 85% 45% at 50% 0%, black 25%, rgba(0,0,0,0.6) 55%, transparent 80%)',
-            WebkitMaskImage: 'radial-gradient(ellipse 85% 45% at 50% 0%, black 25%, rgba(0,0,0,0.6) 55%, transparent 80%)',
-            boxShadow: `
-              0 -25px 70px rgba(96, 165, 250, 0.75),
-              0 -6px 20px rgba(255, 255, 255, 0.95),
-              inset 0 40px 100px rgba(56, 189, 248, 0.35)
-            `
-          }}
-        />
-
-        {/* Internal Planet Spherical Atmosphere Volume */}
-        <div 
-          className="absolute inset-0 rounded-[100%]"
-          style={{
-            background: 'radial-gradient(ellipse at 50% 0%, rgba(56, 189, 248, 0.22) 0%, rgba(36, 90, 226, 0.35) 20%, rgba(18, 30, 65, 0.6) 40%, rgba(10, 15, 26, 0.9) 65%, #080b11 100%)'
-          }}
-        />
-
-        {/* Faint Internal Latitude Rings */}
-        <div className="absolute inset-x-16 top-20 h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-        <div className="absolute inset-x-28 top-44 h-[1px] bg-gradient-to-r from-transparent via-white/5 to-transparent" />
-        <div className="absolute inset-x-40 top-72 h-[1px] bg-gradient-to-r from-transparent via-[#60a5fa]/10 to-transparent" />
-      </div>
-
-      {/* ========================================================================= */}
-      {/* HERO FOREGROUND CONTENT                                                   */}
-      {/* ========================================================================= */}
-      <div className="max-w-4xl mx-auto flex flex-col items-center text-center relative z-10 mb-12 sm:mb-16">
+      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden flex justify-center">
         
-        {/* Top Apex Glowing Emblem (Dora AI Style) */}
-        <div className="relative mb-6 flex flex-col items-center">
-          <div className="relative w-15 h-15 rounded-full p-[2.5px] bg-gradient-to-tr from-[#ff4500] via-[#c026d3] to-[#2563eb] shadow-[0_0_35px_rgba(255,69,0,0.6),0_0_20px_rgba(192,38,211,0.5)]">
-            <div className="w-full h-full rounded-full bg-[#0b0f1a] flex items-center justify-center relative overflow-hidden">
-              {/* Internal Glass Sheen */}
-              <div className="absolute top-0 inset-x-2 h-4.5 bg-gradient-to-b from-white/45 to-transparent rounded-full blur-[1px] pointer-events-none" />
+        {/* Soft Electric Sky-Blue Atmospheric Haze (Zero Pink/Magenta) */}
+        <div className="absolute top-[80px] sm:top-[110px] w-[500px] sm:w-[900px] lg:w-[1300px] h-[320px] sm:h-[450px] bg-gradient-to-b from-[#38bdf8]/20 via-[#2563eb]/10 to-transparent blur-[85px] rounded-full" />
+        
+        {/* Deep Flank Cosmic Blue Glow */}
+        <div className="absolute top-0 left-[-5%] w-[450px] h-[450px] bg-[#1d4ed8]/12 blur-[150px] rounded-full" />
+        <div className="absolute top-0 right-[-5%] w-[450px] h-[450px] bg-[#0284c7]/12 blur-[150px] rounded-full" />
+
+        {/* Cosmic Twinkling Stars (✦) in Deep Space */}
+        <div className="absolute inset-0 overflow-hidden">
+          {COSMIC_STARS.map((star, idx) => (
+            <div
+              key={idx}
+              className="absolute animate-pulse"
+              style={{
+                top: star.top,
+                left: star.left,
+                animationDuration: `${star.duration}s`,
+                animationDelay: `${star.delay}s`,
+                opacity: star.opacity
+              }}
+            >
+              {star.isCross ? (
+                <svg 
+                  className="text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.95)]" 
+                  width={star.size} 
+                  height={star.size} 
+                  viewBox="0 0 24 24" 
+                  fill="currentColor"
+                >
+                  <path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10L12 0Z" />
+                </svg>
+              ) : (
+                <div 
+                  className="rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.9)]" 
+                  style={{ width: star.size, height: star.size }}
+                />
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* The Half-Planet Spherical Horizon Dome */}
+        <div 
+          className="absolute top-[95px] sm:top-[125px] md:top-[140px] w-[160vw] min-w-[560px] max-w-[950px] md:max-w-[1500px] lg:max-w-[2100px] h-[160vw] min-w-[560px] max-w-[950px] md:max-w-[1500px] lg:max-w-[2100px] rounded-full"
+          style={{
+            transform: `scale(${1 + scrollProgress * 0.04})`,
+            transition: 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)'
+          }}
+        >
+          {/* 1. Luminous Curved Planet Rim Line (Crisp white + cyan horizon arc) */}
+          <div 
+            className="absolute inset-0 rounded-full border-t-[2px] sm:border-t-[2.5px] border-x-[1px] border-white/90"
+            style={{
+              maskImage: 'radial-gradient(ellipse 90% 48% at 50% 0%, black 35%, rgba(0,0,0,0.6) 65%, transparent 88%)',
+              WebkitMaskImage: 'radial-gradient(ellipse 90% 48% at 50% 0%, black 35%, rgba(0,0,0,0.6) 65%, transparent 88%)',
+              boxShadow: `
+                0 -12px 35px rgba(56, 189, 248, 0.8),
+                0 -3px 12px rgba(255, 255, 255, 1),
+                0 -30px 80px rgba(37, 99, 235, 0.45)
+              `
+            }}
+          />
+
+          {/* 2. Light, Frosted Horizon Atmospheric Sheen (Visible under the rim) */}
+          <div 
+            className="absolute inset-0 rounded-full"
+            style={{
+              background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.28) 0%, rgba(186, 230, 253, 0.22) 6%, rgba(56, 189, 248, 0.16) 16%, rgba(37, 99, 235, 0.10) 32%, transparent 55%)'
+            }}
+          />
+
+          {/* 3. Planet Atmospheric Volume (Light and clearly visible against black space) */}
+          <div 
+            className="absolute inset-0 rounded-full"
+            style={{
+              background: 'radial-gradient(ellipse 70% 50% at 50% 0%, rgba(186, 230, 253, 0.24) 0%, rgba(56, 189, 248, 0.17) 20%, rgba(30, 58, 138, 0.22) 42%, rgba(12, 18, 32, 0.75) 68%, rgba(8, 11, 17, 0.96) 90%)'
+            }}
+          />
+
+          {/* 4. Fine Latitude Rings */}
+          <div className="absolute inset-x-16 sm:inset-x-24 top-20 sm:top-24 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+          <div className="absolute inset-x-28 sm:inset-x-40 top-44 sm:top-52 h-[1px] bg-gradient-to-r from-transparent via-sky-300/15 to-transparent" />
+          <div className="absolute inset-x-40 sm:inset-x-60 top-72 sm:top-84 h-[1px] bg-gradient-to-r from-transparent via-[#2563eb]/15 to-transparent" />
+        </div>
+      </div>
+
+      {/* ========================================================================= */}
+      {/* HERO FOREGROUND CONTENT (ELEGANT & COMPACT ON MOBILE)                     */}
+      {/* ========================================================================= */}
+      <div className="max-w-4xl mx-auto flex flex-col items-center text-center relative z-10 mb-10 sm:mb-16">
+        
+        {/* Top Apex Emblem (Cool Blue & Cyan Orb - Zero Pink/Magenta) */}
+        <div className="relative mb-4 sm:mb-6 flex flex-col items-center">
+          <div className="relative w-11 h-11 sm:w-13 sm:h-13 rounded-full p-[2px] bg-gradient-to-b from-[#38bdf8] via-[#2563eb] to-[#0f172a] shadow-[0_0_25px_rgba(56,189,248,0.5),0_0_12px_rgba(37,99,235,0.4)]">
+            <div className="w-full h-full rounded-full bg-[#070b14] flex items-center justify-center relative overflow-hidden">
+              {/* Internal Glass Highlight */}
+              <div className="absolute top-0 inset-x-1.5 h-3.5 bg-gradient-to-b from-white/40 to-transparent rounded-full blur-[0.5px] pointer-events-none" />
               {/* 4-Point Celestial Sparkle Star */}
-              <svg className="w-7 h-7 text-white drop-shadow-[0_0_12px_rgba(255,255,255,1)] animate-pulse" viewBox="0 0 24 24" fill="currentColor">
+              <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white drop-shadow-[0_0_10px_rgba(255,255,255,1)] animate-pulse" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5L12 0Z" />
               </svg>
             </div>
           </div>
 
-          <div className="mt-2.5 flex items-center gap-1.5 text-sm font-semibold tracking-wide text-white drop-shadow-md">
+          <div className="mt-2 flex items-center gap-1.5 text-xs sm:text-sm font-semibold tracking-wide text-white drop-shadow-md">
             <span>Audeora AI</span>
-            <span className="px-1.5 py-0.5 rounded text-[10px] bg-white/15 text-slate-300 font-mono font-normal">Enterprise</span>
+            <span className="px-1.5 py-0.5 rounded text-[9px] sm:text-[10px] bg-white/15 text-slate-300 font-mono font-normal">Enterprise</span>
           </div>
         </div>
 
-        {/* Main Headline with Dora-style sparkle */}
-        <h1 className="text-4xl sm:text-6xl md:text-[72px] font-bold leading-[1.08] mb-6 sm:mb-8 text-white tracking-tight drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]">
+        {/* Main Headline (Optimized sizing for mobile: text-[30px] sm:text-5xl md:text-6xl lg:text-[70px]) */}
+        <h1 className="text-[30px] sm:text-5xl md:text-6xl lg:text-[70px] font-bold leading-[1.15] sm:leading-[1.08] mb-4 sm:mb-6 text-white tracking-tight drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]">
           Calls that sound <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#60a5fa] via-[#245ae2] to-[#93c5fd]">human</span>.<br />
           Outcomes that <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400">scale</span>.
-          <span className="inline-block text-[#60a5fa] text-2xl sm:text-4xl ml-2 animate-pulse align-middle">✦</span>
+          <span className="inline-block text-[#38bdf8] text-xl sm:text-3xl ml-1.5 animate-pulse align-middle">✦</span>
         </h1>
 
         {/* Subtitle */}
-        <p className="text-base sm:text-xl text-slate-300 mb-8 max-w-2xl leading-relaxed drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
+        <p className="text-xs sm:text-base md:text-lg text-slate-300 mb-6 sm:mb-8 max-w-xl px-2 leading-relaxed drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
           Audeora sits between your callers and your systems, turning real-time spoken conversations into completed business workflows in under 300ms.
         </p>
 
-        {/* Dora-style Interactive Voice Prompt Input Bar */}
-        <div className="w-full max-w-xl mb-8">
-          <div className="relative flex items-center bg-[#101728]/85 backdrop-blur-xl border border-white/20 rounded-full p-2 pl-4 sm:pl-5 shadow-[0_15px_40px_rgba(0,0,0,0.7),0_0_30px_rgba(36,90,226,0.25)] transition-all hover:border-white/35">
-            <span className="text-[#60a5fa] text-base mr-2.5 shrink-0">✦</span>
+        {/* Dora-style Interactive Voice Prompt Input Bar (Compact on mobile) */}
+        <div className="w-full max-w-[340px] sm:max-w-lg md:max-w-xl mb-6 sm:mb-8 px-1">
+          <div className="relative flex items-center bg-[#0d1424]/90 backdrop-blur-xl border border-white/20 rounded-full p-1.5 sm:p-2 pl-3.5 sm:pl-5 shadow-[0_15px_40px_rgba(0,0,0,0.7),0_0_25px_rgba(36,90,226,0.25)] transition-all hover:border-white/35">
+            <span className="text-[#38bdf8] text-sm sm:text-base mr-2 shrink-0">✦</span>
             <input 
               type="text"
               readOnly
               value={scenario.leftPhone.userQuery}
-              className="bg-transparent text-xs sm:text-sm text-slate-200 placeholder-slate-400 outline-none w-full cursor-default truncate pr-2"
+              className="bg-transparent text-[11px] sm:text-xs md:text-sm text-slate-200 placeholder-slate-400 outline-none w-full cursor-default truncate pr-2"
             />
             <Link
               to="/voice-lab"
-              className="shrink-0 bg-[#245ae2] hover:bg-[#1d4ed8] text-white text-xs font-semibold px-4 sm:px-5 py-2 sm:py-2.5 rounded-full transition-all flex items-center gap-1.5 shadow-[0_0_20px_rgba(36,90,226,0.5)]"
+              className="shrink-0 bg-[#245ae2] hover:bg-[#1d4ed8] text-white text-[10px] sm:text-xs font-semibold px-3 sm:px-4 py-1.5 sm:py-2 rounded-full transition-all flex items-center gap-1 shadow-[0_0_15px_rgba(36,90,226,0.5)]"
             >
               <span>Test Voice</span>
               <span>→</span>
@@ -332,13 +337,13 @@ export default function HeroScrollAnimation() {
           </div>
         </div>
 
-        {/* Primary Action Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
+        {/* Primary Action Buttons (Responsive on mobile) */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-2.5 sm:gap-4 w-full sm:w-auto px-4 sm:px-0">
           <Link 
             to="/demo" 
-            className="flex items-center justify-center gap-2 w-full sm:w-auto bg-[#245ae2] hover:bg-[#1d4ed8] px-8 py-3.5 rounded-full text-[15px] font-semibold text-white transition-all duration-300 shadow-[0_0_35px_rgba(36,90,226,0.5)] hover:shadow-[0_0_55px_rgba(36,90,226,0.75)] hover:-translate-y-0.5"
+            className="flex items-center justify-center gap-2 w-full sm:w-auto bg-[#245ae2] hover:bg-[#1d4ed8] px-6 sm:px-8 py-2.5 sm:py-3.5 rounded-full text-xs sm:text-[15px] font-semibold text-white transition-all duration-300 shadow-[0_0_30px_rgba(36,90,226,0.5)] hover:shadow-[0_0_50px_rgba(36,90,226,0.75)] hover:-translate-y-0.5"
           >
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
             </svg>
             Get a demo call
@@ -346,10 +351,10 @@ export default function HeroScrollAnimation() {
           
           <Link 
             to="/voice-lab" 
-            className="flex items-center justify-center gap-2 w-full sm:w-auto bg-[#0d1220]/80 backdrop-blur-md border border-white/20 hover:border-white/40 px-8 py-3.5 rounded-full text-[15px] font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 shadow-lg"
+            className="flex items-center justify-center gap-2 w-full sm:w-auto bg-[#0d1220]/80 backdrop-blur-md border border-white/20 hover:border-white/40 px-6 sm:px-8 py-2.5 sm:py-3.5 rounded-full text-xs sm:text-[15px] font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 shadow-lg"
           >
             Explore Voice Lab
-            <svg className="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
             </svg>
           </Link>
@@ -406,7 +411,7 @@ export default function HeroScrollAnimation() {
             }}
           >
             {/* Phone Bezel Frame */}
-            <div className="relative w-[280px] sm:w-[310px] h-[520px] rounded-[42px] bg-[#0c121e] border-4 border-slate-700/60 shadow-[0_20px_60px_rgba(0,0,0,0.8),0_0_40px_rgba(36,90,226,0.2)] p-3.5 flex flex-col justify-between overflow-hidden">
+            <div className="relative w-full max-w-[275px] sm:max-w-[310px] h-[480px] sm:h-[520px] rounded-[36px] sm:rounded-[42px] bg-[#0c121e] border-4 border-slate-700/60 shadow-[0_20px_60px_rgba(0,0,0,0.8),0_0_40px_rgba(36,90,226,0.2)] p-3.5 flex flex-col justify-between overflow-hidden">
               
               {/* Dynamic Island Notch */}
               <div className="absolute top-4 left-1/2 -translate-x-1/2 w-28 h-6 bg-black rounded-full flex items-center justify-between px-3 z-30">
@@ -519,33 +524,33 @@ export default function HeroScrollAnimation() {
             </div>
 
             {/* Steps Checklist Card */}
-            <div className="w-full bg-[#0d1424] border border-[#245ae2]/40 rounded-3xl p-5 sm:p-6 shadow-[0_0_50px_rgba(36,90,226,0.25)] backdrop-blur-xl relative overflow-hidden">
+            <div className="w-full max-w-[295px] sm:max-w-md bg-[#0d1424] border border-[#245ae2]/40 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-[0_0_50px_rgba(36,90,226,0.25)] backdrop-blur-xl relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-[#245ae2]/10 rounded-full blur-2xl pointer-events-none" />
 
               <div className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-4 text-left">
                 Autonomous Action Pipeline
               </div>
 
-              <div className="space-y-3 text-left">
+              <div className="space-y-2.5 sm:space-y-3 text-left">
                 {scenario.centerSteps.map((step, idx) => (
                   <div 
                     key={idx}
-                    className="bg-[#121a2e] border border-white/5 rounded-xl px-3.5 py-2.5 flex items-center justify-between text-xs transition-all hover:border-[#245ae2]/40"
+                    className="bg-[#121a2e] border border-white/5 rounded-xl px-3 py-2 sm:px-3.5 sm:py-2.5 flex items-center justify-between text-xs transition-all hover:border-[#245ae2]/40"
                   >
                     <div className="flex items-center gap-2.5">
-                      <span className="text-base">{step.icon}</span>
-                      <span className="text-slate-200 font-medium">
+                      <span className="text-sm sm:text-base">{step.icon}</span>
+                      <span className="text-slate-200 font-medium text-[11px] sm:text-xs">
                         {step.title}
                       </span>
                     </div>
-                    <span className="w-4 h-4 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-[10px]">
+                    <span className="w-4 h-4 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-[10px] shrink-0">
                       ✓
                     </span>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-5 pt-4 border-t border-white/5 flex items-center justify-between text-[11px] font-mono text-slate-400">
+              <div className="mt-4 sm:mt-5 pt-3 sm:pt-4 border-t border-white/5 flex items-center justify-between text-[10px] sm:text-[11px] font-mono text-slate-400">
                 <span>Latency</span>
                 <span className="text-emerald-400 font-bold">&lt;300ms Turnaround</span>
               </div>
@@ -561,7 +566,7 @@ export default function HeroScrollAnimation() {
             }}
           >
             {/* Phone Bezel Frame */}
-            <div className="relative w-[280px] sm:w-[310px] h-[520px] rounded-[42px] bg-[#0c121e] border-4 border-slate-700/60 shadow-[0_20px_60px_rgba(0,0,0,0.8),0_0_40px_rgba(36,90,226,0.2)] p-3.5 flex flex-col justify-between overflow-hidden">
+            <div className="relative w-full max-w-[275px] sm:max-w-[310px] h-[480px] sm:h-[520px] rounded-[36px] sm:rounded-[42px] bg-[#0c121e] border-4 border-slate-700/60 shadow-[0_20px_60px_rgba(0,0,0,0.8),0_0_40px_rgba(36,90,226,0.2)] p-3.5 flex flex-col justify-between overflow-hidden">
               
               {/* Dynamic Island Notch */}
               <div className="absolute top-4 left-1/2 -translate-x-1/2 w-28 h-6 bg-black rounded-full flex items-center justify-between px-3 z-30">
@@ -633,20 +638,20 @@ export default function HeroScrollAnimation() {
                 </div>
 
                 {/* Destination Confirmation Card */}
-                <div className="bg-[#12192c] border border-white/5 rounded-2xl p-3.5 my-auto">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider">
+                <div className="bg-[#12192c] border border-white/5 rounded-2xl p-3 sm:p-3.5 my-auto">
+                  <div className="flex items-center justify-between mb-1.5 sm:mb-2">
+                    <span className="text-[9px] sm:text-[10px] font-mono text-slate-400 uppercase tracking-wider">
                       Webhook Status
                     </span>
-                    <span className="text-[10px] font-mono text-[#d6f549] font-bold">200 OK</span>
+                    <span className="text-[9px] sm:text-[10px] font-mono text-[#d6f549] font-bold">200 OK</span>
                   </div>
-                  <div className="text-xs text-slate-200 leading-relaxed">
+                  <div className="text-[11px] sm:text-xs text-slate-200 leading-relaxed">
                     Data recorded automatically with full audio transcript and caller intent tags.
                   </div>
                 </div>
 
                 {/* Connected Telephony Footnote */}
-                <div className="pt-2 border-t border-white/5 flex items-center justify-between text-[10px] font-mono text-slate-400">
+                <div className="pt-2 border-t border-white/5 flex items-center justify-between text-[9px] sm:text-[10px] font-mono text-slate-400">
                   <span>Carrier SIP: Exotel</span>
                   <span className="text-emerald-400">Zero Queue Time</span>
                 </div>
@@ -661,7 +666,7 @@ export default function HeroScrollAnimation() {
               {scenario.rightBadges.map((badge, bIdx) => (
                 <div 
                   key={bIdx}
-                  className={`w-12 h-12 rounded-2xl ${badge.bg} flex items-center justify-center text-xl shadow-lg border`}
+                  className={`w-11 h-11 sm:w-12 sm:h-12 rounded-2xl ${badge.bg} flex items-center justify-center text-lg sm:text-xl shadow-lg border`}
                   title={badge.name}
                 >
                   {badge.icon}
@@ -673,20 +678,20 @@ export default function HeroScrollAnimation() {
         </div>
 
         {/* Bottom Interactive Workflow Selector */}
-        <div className="mt-12 sm:mt-16 flex flex-col items-center justify-center gap-4">
+        <div className="mt-10 sm:mt-16 flex flex-col items-center justify-center gap-3 sm:gap-4 px-2">
           
-          <div className="bg-[#0c1220]/90 backdrop-blur-2xl border border-white/10 rounded-full p-1.5 sm:p-2 flex items-center gap-2 shadow-2xl overflow-x-auto max-w-full">
+          <div className="bg-[#0c1220]/90 backdrop-blur-2xl border border-white/10 rounded-full p-1 sm:p-1.5 flex items-center gap-1.5 sm:gap-2 shadow-2xl overflow-x-auto max-w-full">
             
             {/* Play/Pause Auto-cycle Toggle */}
             <button
               onClick={() => setIsPlaying(!isPlaying)}
-              className="w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 text-slate-300 flex items-center justify-center transition-colors shrink-0"
+              className="w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-white/5 hover:bg-white/10 text-slate-300 flex items-center justify-center transition-colors shrink-0"
               title={isPlaying ? 'Pause Auto-cycle' : 'Resume Auto-cycle'}
             >
               {isPlaying ? (
-                <span className="font-mono text-xs font-bold">||</span>
+                <span className="font-mono text-[10px] sm:text-xs font-bold">||</span>
               ) : (
-                <span className="font-mono text-xs font-bold">▶</span>
+                <span className="font-mono text-[10px] sm:text-xs font-bold">▶</span>
               )}
             </button>
 
@@ -700,7 +705,7 @@ export default function HeroScrollAnimation() {
                     setActiveScenarioIdx(idx);
                     setIsPlaying(false);
                   }}
-                  className={`px-4 py-2 rounded-full text-xs font-semibold transition-all flex items-center gap-2 shrink-0 ${
+                  className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-[11px] sm:text-xs font-semibold transition-all flex items-center gap-1.5 sm:gap-2 shrink-0 ${
                     isSelected
                       ? 'bg-[#245ae2] text-white shadow-[0_0_20px_rgba(36,90,226,0.6)]'
                       : 'bg-transparent text-slate-400 hover:text-white hover:bg-white/5'
@@ -714,7 +719,7 @@ export default function HeroScrollAnimation() {
           </div>
 
           {/* Bottom helper text */}
-          <div className="text-xs text-slate-400 text-center font-medium max-w-md">
+          <div className="text-[11px] sm:text-xs text-slate-400 text-center font-medium max-w-md px-2">
             You choose which workflows your AI executes. Connect your telephony and CRM in minutes.
           </div>
 
