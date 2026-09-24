@@ -133,6 +133,24 @@ const SCENARIOS: WorkflowScenario[] = [
   }
 ];
 
+// Twinkling cosmic stars data for Dora AI background effect
+const COSMIC_STARS = [
+  { top: '8%', left: '12%', size: 14, isCross: true, duration: 4, delay: 0.2, opacity: 0.85 },
+  { top: '14%', left: '88%', size: 16, isCross: true, duration: 5, delay: 1.1, opacity: 0.9 },
+  { top: '22%', left: '6%', size: 12, isCross: true, duration: 3.5, delay: 0.7, opacity: 0.7 },
+  { top: '26%', left: '94%', size: 10, isCross: false, duration: 4.2, delay: 2.0, opacity: 0.8 },
+  { top: '35%', left: '15%', size: 14, isCross: true, duration: 4.8, delay: 1.5, opacity: 0.75 },
+  { top: '38%', left: '82%', size: 12, isCross: true, duration: 3.2, delay: 0.4, opacity: 0.8 },
+  { top: '48%', left: '4%', size: 8, isCross: false, duration: 4.0, delay: 1.8, opacity: 0.6 },
+  { top: '52%', left: '96%', size: 14, isCross: true, duration: 5.5, delay: 0.9, opacity: 0.85 },
+  { top: '65%', left: '10%', size: 10, isCross: false, duration: 3.8, delay: 2.2, opacity: 0.7 },
+  { top: '70%', left: '90%', size: 12, isCross: true, duration: 4.5, delay: 1.3, opacity: 0.75 },
+  { top: '10%', left: '28%', size: 6, isCross: false, duration: 3.0, delay: 0.5, opacity: 0.6 },
+  { top: '12%', left: '72%', size: 7, isCross: false, duration: 4.2, delay: 1.7, opacity: 0.65 },
+  { top: '18%', left: '42%', size: 10, isCross: true, duration: 4.7, delay: 2.5, opacity: 0.7 },
+  { top: '16%', left: '58%', size: 8, isCross: false, duration: 3.6, delay: 0.8, opacity: 0.6 }
+];
+
 export default function HeroScrollAnimation() {
   const [activeScenarioIdx, setActiveScenarioIdx] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -170,36 +188,155 @@ export default function HeroScrollAnimation() {
   return (
     <section 
       ref={containerRef}
-      className="relative pt-32 sm:pt-36 pb-24 px-4 overflow-hidden"
+      className="relative pt-24 sm:pt-28 pb-24 px-4 overflow-hidden min-h-screen"
     >
-      {/* Background Ambient Glows */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] sm:w-[1200px] h-[500px] bg-[#245ae2]/15 blur-[160px] rounded-full pointer-events-none -z-10" />
-      <div className="absolute top-1/2 right-1/4 w-[400px] h-[400px] bg-[#60a5fa]/10 blur-[140px] rounded-full pointer-events-none -z-10" />
+      {/* ========================================================================= */}
+      {/* DORA-STYLE CELESTIAL GLOBE HORIZON EFFECT (BACKGROUND)                   */}
+      {/* ========================================================================= */}
+      
+      {/* Top Center Warm Celestial Amber Nebula (Behind Apex Orb) */}
+      <div className="absolute top-8 sm:top-12 left-1/2 -translate-x-1/2 w-[480px] sm:w-[600px] h-[360px] bg-gradient-to-b from-[#ff5e3a]/25 via-[#ff3b30]/15 to-transparent blur-[110px] rounded-full pointer-events-none -z-20" />
 
-      {/* Hero Header Section */}
+      {/* Top Left Cosmic Warm Nebula */}
+      <div className="absolute top-0 left-[-10%] w-[550px] h-[550px] bg-[#ff4500]/12 blur-[160px] rounded-full pointer-events-none -z-20" />
+      
+      {/* Top Right Deep Indigo/Violet Nebula */}
+      <div className="absolute top-0 right-[-10%] w-[600px] h-[600px] bg-[#7c3aed]/18 blur-[170px] rounded-full pointer-events-none -z-20" />
+
+      {/* Cosmic Twinkling Stars (✦) Scattered in Deep Space */}
+      <div className="absolute inset-0 pointer-events-none -z-15 overflow-hidden">
+        {COSMIC_STARS.map((star, idx) => (
+          <div
+            key={idx}
+            className="absolute animate-pulse"
+            style={{
+              top: star.top,
+              left: star.left,
+              animationDuration: `${star.duration}s`,
+              animationDelay: `${star.delay}s`,
+              opacity: star.opacity
+            }}
+          >
+            {star.isCross ? (
+              <svg 
+                className="text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.95)]" 
+                width={star.size} 
+                height={star.size} 
+                viewBox="0 0 24 24" 
+                fill="currentColor"
+              >
+                <path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10L12 0Z" />
+              </svg>
+            ) : (
+              <div 
+                className="rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.9)]" 
+                style={{ width: star.size, height: star.size }}
+              />
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* The Massive Glowing Celestial Globe Dome */}
+      <div 
+        className="absolute top-28 sm:top-32 left-1/2 -translate-x-1/2 w-[1100px] sm:w-[1600px] lg:w-[2200px] h-[1100px] sm:h-[1600px] lg:h-[2200px] rounded-[100%] pointer-events-none -z-10"
+        style={{
+          transform: `translateX(-50%) scale(${1 + scrollProgress * 0.05})`,
+          transition: 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)'
+        }}
+      >
+        {/* Outer Atmospheric Corona Glow (Cyan / Electric Blue) */}
+        <div className="absolute inset-0 rounded-[100%] bg-gradient-to-b from-[#38bdf8]/25 via-[#245ae2]/15 to-transparent blur-[65px] -top-10" />
+
+        {/* Luminous Rim Highlight (Smooth 360-degree curved planetary horizon with radial fade) */}
+        <div 
+          className="absolute inset-0 rounded-[100%] border-[2px] border-white/85"
+          style={{
+            maskImage: 'radial-gradient(ellipse 85% 45% at 50% 0%, black 25%, rgba(0,0,0,0.6) 55%, transparent 80%)',
+            WebkitMaskImage: 'radial-gradient(ellipse 85% 45% at 50% 0%, black 25%, rgba(0,0,0,0.6) 55%, transparent 80%)',
+            boxShadow: `
+              0 -25px 70px rgba(96, 165, 250, 0.75),
+              0 -6px 20px rgba(255, 255, 255, 0.95),
+              inset 0 40px 100px rgba(56, 189, 248, 0.35)
+            `
+          }}
+        />
+
+        {/* Internal Planet Spherical Atmosphere Volume */}
+        <div 
+          className="absolute inset-0 rounded-[100%]"
+          style={{
+            background: 'radial-gradient(ellipse at 50% 0%, rgba(56, 189, 248, 0.22) 0%, rgba(36, 90, 226, 0.35) 20%, rgba(18, 30, 65, 0.6) 40%, rgba(10, 15, 26, 0.9) 65%, #080b11 100%)'
+          }}
+        />
+
+        {/* Faint Internal Latitude Rings */}
+        <div className="absolute inset-x-16 top-20 h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+        <div className="absolute inset-x-28 top-44 h-[1px] bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+        <div className="absolute inset-x-40 top-72 h-[1px] bg-gradient-to-r from-transparent via-[#60a5fa]/10 to-transparent" />
+      </div>
+
+      {/* ========================================================================= */}
+      {/* HERO FOREGROUND CONTENT                                                   */}
+      {/* ========================================================================= */}
       <div className="max-w-4xl mx-auto flex flex-col items-center text-center relative z-10 mb-12 sm:mb-16">
         
-        {/* Top Composio-style pill badge */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-mono font-medium text-slate-300 tracking-wider uppercase mb-6 sm:mb-8">
-          <span className="w-2 h-2 rounded-full bg-[#d6f549] animate-pulse" />
-          <span>HOW IT WORKS</span>
+        {/* Top Apex Glowing Emblem (Dora AI Style) */}
+        <div className="relative mb-6 flex flex-col items-center">
+          <div className="relative w-15 h-15 rounded-full p-[2.5px] bg-gradient-to-tr from-[#ff4500] via-[#c026d3] to-[#2563eb] shadow-[0_0_35px_rgba(255,69,0,0.6),0_0_20px_rgba(192,38,211,0.5)]">
+            <div className="w-full h-full rounded-full bg-[#0b0f1a] flex items-center justify-center relative overflow-hidden">
+              {/* Internal Glass Sheen */}
+              <div className="absolute top-0 inset-x-2 h-4.5 bg-gradient-to-b from-white/45 to-transparent rounded-full blur-[1px] pointer-events-none" />
+              {/* 4-Point Celestial Sparkle Star */}
+              <svg className="w-7 h-7 text-white drop-shadow-[0_0_12px_rgba(255,255,255,1)] animate-pulse" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5L12 0Z" />
+              </svg>
+            </div>
+          </div>
+
+          <div className="mt-2.5 flex items-center gap-1.5 text-sm font-semibold tracking-wide text-white drop-shadow-md">
+            <span>Audeora AI</span>
+            <span className="px-1.5 py-0.5 rounded text-[10px] bg-white/15 text-slate-300 font-mono font-normal">Enterprise</span>
+          </div>
         </div>
 
-        {/* Main Headline */}
-        <h1 className="text-4xl sm:text-6xl md:text-[72px] font-bold leading-[1.08] mb-6 sm:mb-8 text-white tracking-tight">
-          Audeora turns voice calls into <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#60a5fa] via-[#245ae2] to-[#93c5fd]">actions</span>
+        {/* Main Headline with Dora-style sparkle */}
+        <h1 className="text-4xl sm:text-6xl md:text-[72px] font-bold leading-[1.08] mb-6 sm:mb-8 text-white tracking-tight drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]">
+          Calls that sound <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#60a5fa] via-[#245ae2] to-[#93c5fd]">human</span>.<br />
+          Outcomes that <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400">scale</span>.
+          <span className="inline-block text-[#60a5fa] text-2xl sm:text-4xl ml-2 animate-pulse align-middle">✦</span>
         </h1>
 
         {/* Subtitle */}
-        <p className="text-base sm:text-xl text-slate-300 mb-8 sm:mb-10 max-w-2xl leading-relaxed">
-          Audeora sits between your callers and your apps, turning real-time spoken conversations into completed business workflows in under 300ms.
+        <p className="text-base sm:text-xl text-slate-300 mb-8 max-w-2xl leading-relaxed drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
+          Audeora sits between your callers and your systems, turning real-time spoken conversations into completed business workflows in under 300ms.
         </p>
+
+        {/* Dora-style Interactive Voice Prompt Input Bar */}
+        <div className="w-full max-w-xl mb-8">
+          <div className="relative flex items-center bg-[#101728]/85 backdrop-blur-xl border border-white/20 rounded-full p-2 pl-4 sm:pl-5 shadow-[0_15px_40px_rgba(0,0,0,0.7),0_0_30px_rgba(36,90,226,0.25)] transition-all hover:border-white/35">
+            <span className="text-[#60a5fa] text-base mr-2.5 shrink-0">✦</span>
+            <input 
+              type="text"
+              readOnly
+              value={scenario.leftPhone.userQuery}
+              className="bg-transparent text-xs sm:text-sm text-slate-200 placeholder-slate-400 outline-none w-full cursor-default truncate pr-2"
+            />
+            <Link
+              to="/voice-lab"
+              className="shrink-0 bg-[#245ae2] hover:bg-[#1d4ed8] text-white text-xs font-semibold px-4 sm:px-5 py-2 sm:py-2.5 rounded-full transition-all flex items-center gap-1.5 shadow-[0_0_20px_rgba(36,90,226,0.5)]"
+            >
+              <span>Test Voice</span>
+              <span>→</span>
+            </Link>
+          </div>
+        </div>
 
         {/* Primary Action Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
           <Link 
             to="/demo" 
-            className="flex items-center justify-center gap-2 w-full sm:w-auto bg-[#245ae2] hover:bg-[#1d4ed8] px-8 py-3.5 rounded-full text-[15px] font-semibold text-white transition-all duration-300 shadow-[0_0_35px_rgba(36,90,226,0.5)] hover:shadow-[0_0_50px_rgba(36,90,226,0.7)] hover:-translate-y-0.5"
+            className="flex items-center justify-center gap-2 w-full sm:w-auto bg-[#245ae2] hover:bg-[#1d4ed8] px-8 py-3.5 rounded-full text-[15px] font-semibold text-white transition-all duration-300 shadow-[0_0_35px_rgba(36,90,226,0.5)] hover:shadow-[0_0_55px_rgba(36,90,226,0.75)] hover:-translate-y-0.5"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
@@ -209,7 +346,7 @@ export default function HeroScrollAnimation() {
           
           <Link 
             to="/voice-lab" 
-            className="flex items-center justify-center gap-2 w-full sm:w-auto bg-[#0d1220]/80 backdrop-blur-md border border-white/15 hover:border-white/30 px-8 py-3.5 rounded-full text-[15px] font-semibold text-white transition-all duration-300 hover:-translate-y-0.5"
+            className="flex items-center justify-center gap-2 w-full sm:w-auto bg-[#0d1220]/80 backdrop-blur-md border border-white/20 hover:border-white/40 px-8 py-3.5 rounded-full text-[15px] font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 shadow-lg"
           >
             Explore Voice Lab
             <svg className="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -219,7 +356,9 @@ export default function HeroScrollAnimation() {
         </div>
       </div>
 
-      {/* Main Dual-Phone & Central Engine Visual (Composio Style) */}
+      {/* ========================================================================= */}
+      {/* DUAL-PHONE & CENTRAL ACTION ENGINE (FRAMED INSIDE THE GLOBE)             */}
+      {/* ========================================================================= */}
       <div className="max-w-6xl mx-auto relative">
         
         {/* Animated Curved Connecting Lines (Desktop Only) */}
@@ -331,7 +470,7 @@ export default function HeroScrollAnimation() {
                     "{scenario.leftPhone.aiResponse}"
                   </div>
 
-                  {/* Composio-style "Using Audeora" Status Tag */}
+                  {/* Status Tag */}
                   <div className="bg-[#0b101c] border border-white/10 rounded-xl px-3 py-2 flex items-center justify-between text-[11px]">
                     <div className="flex items-center gap-1.5 text-slate-300 font-medium">
                       <span className="text-[#60a5fa]">⚡</span>
@@ -379,7 +518,7 @@ export default function HeroScrollAnimation() {
               </span>
             </div>
 
-            {/* Steps Checklist Card (Composio Style) */}
+            {/* Steps Checklist Card */}
             <div className="w-full bg-[#0d1424] border border-[#245ae2]/40 rounded-3xl p-5 sm:p-6 shadow-[0_0_50px_rgba(36,90,226,0.25)] backdrop-blur-xl relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-[#245ae2]/10 rounded-full blur-2xl pointer-events-none" />
 
@@ -533,7 +672,7 @@ export default function HeroScrollAnimation() {
 
         </div>
 
-        {/* Bottom Interactive Workflow Selector (Composio Style) */}
+        {/* Bottom Interactive Workflow Selector */}
         <div className="mt-12 sm:mt-16 flex flex-col items-center justify-center gap-4">
           
           <div className="bg-[#0c1220]/90 backdrop-blur-2xl border border-white/10 rounded-full p-1.5 sm:p-2 flex items-center gap-2 shadow-2xl overflow-x-auto max-w-full">
@@ -574,7 +713,7 @@ export default function HeroScrollAnimation() {
             })}
           </div>
 
-          {/* Composio-style bottom helper text */}
+          {/* Bottom helper text */}
           <div className="text-xs text-slate-400 text-center font-medium max-w-md">
             You choose which workflows your AI executes. Connect your telephony and CRM in minutes.
           </div>
