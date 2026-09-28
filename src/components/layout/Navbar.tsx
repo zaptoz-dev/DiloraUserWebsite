@@ -28,17 +28,17 @@ export default function Navbar() {
   const closeMenu = () => setMobileMenuOpen(false);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-6 px-4">
+    <header className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-3 sm:pt-6 px-3 sm:px-4">
       <div 
-        className={`w-full max-w-7xl flex items-center justify-between px-6 py-3 transition-all duration-500 rounded-full border ${
+        className={`w-full max-w-7xl flex items-center justify-between px-3.5 sm:px-6 py-2 sm:py-3 transition-all duration-500 rounded-full border ${
           isScrolled ? 'bg-[#080b11]/90 border-white/10 backdrop-blur-xl shadow-2xl shadow-black/60' : 'bg-transparent border-transparent'
         }`}
       >
-        <Link to="/" className="flex items-center gap-3 font-body font-bold text-xl tracking-tight text-white" onClick={closeMenu}>
-          <img src={logoImg} alt="Audeora Logo" className="h-9 w-9 object-contain bg-white/5 border border-white/10 rounded-full p-1 hover-call-ring transition-transform" />
-          <span className="flex items-center gap-2">
+        <Link to="/" className="flex items-center gap-2 sm:gap-3 font-body font-bold text-base sm:text-xl tracking-tight text-white" onClick={closeMenu}>
+          <img src={logoImg} alt="Audeora Logo" className="h-7 w-7 sm:h-9 sm:w-9 object-contain bg-white/5 border border-white/10 rounded-full p-0.5 sm:p-1 hover-call-ring transition-transform" />
+          <span className="flex items-center gap-1.5 sm:gap-2">
             Audeora
-            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[10px] font-medium text-emerald-400">
+            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[9px] sm:text-[10px] font-medium text-emerald-400">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
               Live
             </span>

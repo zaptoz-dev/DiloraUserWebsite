@@ -149,7 +149,7 @@ export default function Home() {
   return (
     <div className="bg-[#080b11] text-slate-100 overflow-x-clip">
       
-      {/* Unified Hero Section with 3D Canvas Scroll in Background */}
+      {/* Hero Section with Linear-Style 3D Perspective Voice Console */}
       <HeroScrollAnimation />
 
       {/* Metrics / Impact Bento Grid */}

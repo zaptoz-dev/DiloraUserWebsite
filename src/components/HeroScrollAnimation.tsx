@@ -1,335 +1,731 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
-const TOTAL_FRAMES = 251;
+interface WorkflowScenario {
+  id: string;
+  tabLabel: string;
+  icon: string;
+  leftPhone: {
+    callerName: string;
+    callerNumber: string;
+    callerAvatar: string;
+    userQuery: string;
+    aiResponse: string;
+    statusTag: string;
+    actionNote: string;
+  };
+  centerSteps: {
+    icon: string;
+    title: string;
+    color: string;
+  }[];
+  rightPhone: {
+    title: string;
+    columns: string[];
+    rows: string[][];
+  };
+  leftBadgeIcon: string;
+  rightBadges: { name: string; icon: string; bg: string }[];
+}
+
+const SCENARIOS: WorkflowScenario[] = [
+  {
+    id: 'appointment',
+    tabLabel: 'Doctor Consultation & Clinic',
+    icon: '🩺',
+    leftPhone: {
+      callerName: 'Rahul Verma',
+      callerNumber: '+91 98201 •••••',
+      callerAvatar: 'RV',
+      userQuery: 'Namaste, mujhe Dr. Sharma ke saath kal shaam 4 baje consultation book karna hai.',
+      aiResponse: 'Haanji Rahul ji! Kal 4:00 PM Dr. Sharma ke saath slot confirm kar diya hai. WhatsApp confirmation bhej diya hai.',
+      statusTag: 'Using Audeora Voice',
+      actionNote: 'Appointment scheduled and confirmed in clinic calendar.'
+    },
+    centerSteps: [
+      { icon: '📞', title: 'Answer in 240ms (Hindi)', color: 'text-blue-400' },
+      { icon: '🗣️', title: 'Extract intent: Dental Checkup', color: 'text-emerald-400' },
+      { icon: '📅', title: 'Check Google Calendar slot', color: 'text-amber-400' },
+      { icon: '💬', title: 'Sync to CRM & send WhatsApp', color: 'text-teal-400' }
+    ],
+    rightPhone: {
+      title: 'Clinic Bookings (Live)',
+      columns: ['Patient', 'Slot', 'Doctor', 'Status'],
+      rows: [
+        ['Rahul V.', 'Tomorrow 4 PM', 'Dr. Sharma', 'Confirmed ✓'],
+        ['Ananya S.', 'Tomorrow 5 PM', 'Dr. Sharma', 'Confirmed ✓'],
+        ['Kunal M.', 'Tomorrow 6 PM', 'Dr. Patel', 'Confirmed ✓']
+      ]
+    },
+    leftBadgeIcon: '📞',
+    rightBadges: [
+      { name: 'Calendar', icon: '📅', bg: 'bg-blue-500/20 border-blue-500/40 text-blue-300' },
+      { name: 'WhatsApp', icon: '💬', bg: 'bg-emerald-500/20 border-emerald-500/40 text-emerald-300' }
+    ]
+  },
+  {
+    id: 'ecommerce',
+    tabLabel: 'COD Order Confirmation',
+    icon: '📦',
+    leftPhone: {
+      callerName: 'Priya Sundaram',
+      callerNumber: '+91 94450 •••••',
+      callerAvatar: 'PS',
+      userQuery: 'Yes, I placed the order #4892 of ₹2,499. Please deliver post 3 PM tomorrow.',
+      aiResponse: 'Thank you Priya! Your address & preferred slot (post 3 PM) are verified. Package is marked for dispatch.',
+      statusTag: 'Using Audeora Voice',
+      actionNote: 'Order verified and tagged as ready-to-ship.'
+    },
+    centerSteps: [
+      { icon: '📞', title: 'Outbound trigger on fresh order', color: 'text-blue-400' },
+      { icon: '📦', title: 'Verify address & landmark', color: 'text-emerald-400' },
+      { icon: '✅', title: 'Customer confirmed COD order', color: 'text-amber-400' },
+      { icon: '⚡', title: 'Update Shopify & Shiprocket', color: 'text-teal-400' }
+    ],
+    rightPhone: {
+      title: 'Orders & Dispatch Queue',
+      columns: ['Order ID', 'Amount', 'Slot Pref', 'Dispatch'],
+      rows: [
+        ['#4892 (Priya)', '₹2,499', 'Post 3 PM', 'Ready ✓'],
+        ['#4891 (Amit)', '₹1,850', 'Morning', 'Ready ✓'],
+        ['#4890 (Karan)', '₹3,200', 'Anytime', 'Ready ✓']
+      ]
+    },
+    leftBadgeIcon: '📦',
+    rightBadges: [
+      { name: 'Shopify', icon: '🛍️', bg: 'bg-emerald-500/20 border-emerald-500/40 text-emerald-300' },
+      { name: 'Shiprocket', icon: '🚚', bg: 'bg-purple-500/20 border-purple-500/40 text-purple-300' }
+    ]
+  },
+  {
+    id: 'banking',
+    tabLabel: 'EMI & Payment Reminder',
+    icon: '💳',
+    leftPhone: {
+      callerName: 'Amitabh Joshi',
+      callerNumber: '+91 98112 •••••',
+      callerAvatar: 'AJ',
+      userQuery: 'Main aaj shaam tak UPI se ₹8,500 pay kar doonga, WhatsApp pe payment link bhej dijiye.',
+      aiResponse: 'Bilkul Amitabh ji! Razorpay UPI payment link aapke WhatsApp par bhej diya gaya hai. Thank you!',
+      statusTag: 'Using Audeora Voice',
+      actionNote: 'Promise-to-pay captured and ledger updated.'
+    },
+    centerSteps: [
+      { icon: '📞', title: 'Compliant polite reminder (Hindi)', color: 'text-blue-400' },
+      { icon: '💳', title: 'Capture promise-to-pay date', color: 'text-emerald-400' },
+      { icon: '📲', title: 'Generate & send instant UPI link', color: 'text-amber-400' },
+      { icon: '📊', title: 'Update loan ledger in Salesforce', color: 'text-teal-400' }
+    ],
+    rightPhone: {
+      title: 'Collections Ledger (Real-time)',
+      columns: ['Account', 'EMI Due', 'Disposition', 'Status'],
+      rows: [
+        ['Amitabh J.', '₹8,500', 'PTP Today', 'UPI Sent ✓'],
+        ['Sunita R.', '₹12,400', 'Paid Online', 'Cleared ✓'],
+        ['Deepak S.', '₹6,200', 'Callback 6PM', 'Pending']
+      ]
+    },
+    leftBadgeIcon: '💳',
+    rightBadges: [
+      { name: 'Salesforce', icon: '☁️', bg: 'bg-blue-500/20 border-blue-500/40 text-blue-300' },
+      { name: 'Razorpay', icon: '⚡', bg: 'bg-amber-500/20 border-amber-500/40 text-amber-300' }
+    ]
+  }
+];
+
+// Twinkling cosmic stars data for Dora AI background effect
+const COSMIC_STARS = [
+  { top: '8%', left: '12%', size: 14, isCross: true, duration: 4, delay: 0.2, opacity: 0.85 },
+  { top: '14%', left: '88%', size: 16, isCross: true, duration: 5, delay: 1.1, opacity: 0.9 },
+  { top: '22%', left: '6%', size: 12, isCross: true, duration: 3.5, delay: 0.7, opacity: 0.7 },
+  { top: '26%', left: '94%', size: 10, isCross: false, duration: 4.2, delay: 2.0, opacity: 0.8 },
+  { top: '35%', left: '15%', size: 14, isCross: true, duration: 4.8, delay: 1.5, opacity: 0.75 },
+  { top: '38%', left: '82%', size: 12, isCross: true, duration: 3.2, delay: 0.4, opacity: 0.8 },
+  { top: '48%', left: '4%', size: 8, isCross: false, duration: 4.0, delay: 1.8, opacity: 0.6 },
+  { top: '52%', left: '96%', size: 14, isCross: true, duration: 5.5, delay: 0.9, opacity: 0.85 },
+  { top: '65%', left: '10%', size: 10, isCross: false, duration: 3.8, delay: 2.2, opacity: 0.7 },
+  { top: '70%', left: '90%', size: 12, isCross: true, duration: 4.5, delay: 1.3, opacity: 0.75 },
+  { top: '10%', left: '28%', size: 6, isCross: false, duration: 3.0, delay: 0.5, opacity: 0.6 },
+  { top: '12%', left: '72%', size: 7, isCross: false, duration: 4.2, delay: 1.7, opacity: 0.65 },
+  { top: '18%', left: '42%', size: 10, isCross: true, duration: 4.7, delay: 2.5, opacity: 0.7 },
+  { top: '16%', left: '58%', size: 8, isCross: false, duration: 3.6, delay: 0.8, opacity: 0.6 }
+];
 
 export default function HeroScrollAnimation() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  
+  const [activeScenarioIdx, setActiveScenarioIdx] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  // Cached frames
-  const imagesRef = useRef<HTMLImageElement[]>([]);
-  const targetFrameRef = useRef(1);
-  const currentFrameRef = useRef(1);
-  const animationFrameId = useRef<number | null>(null);
+  const scenario = SCENARIOS[activeScenarioIdx];
 
-  const baseUrl = import.meta.env.BASE_URL || '/';
-
-  const getFrameUrl = useCallback((index: number) => {
-    const padNum = String(index).padStart(3, '0');
-    return `${baseUrl}hero-frames/frame_${padNum}.jpg`;
-  }, [baseUrl]);
-
-  // Draw specific frame with TRUE full-screen COVER fit
-  const drawFrame = useCallback((frameNumber: number) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    // Find requested frame, or closest available loaded frame
-    let img = imagesRef.current[frameNumber];
-    if (!img || !img.complete || img.naturalWidth === 0) {
-      // Search backwards first to find the latest loaded frame
-      for (let i = frameNumber; i >= 1; i--) {
-        if (imagesRef.current[i] && imagesRef.current[i].complete && imagesRef.current[i].naturalWidth > 0) {
-          img = imagesRef.current[i];
-          break;
-        }
-      }
-      // If not found backwards, search forwards
-      if (!img || !img.complete || img.naturalWidth === 0) {
-        for (let i = frameNumber + 1; i <= TOTAL_FRAMES; i++) {
-          if (imagesRef.current[i] && imagesRef.current[i].complete && imagesRef.current[i].naturalWidth > 0) {
-            img = imagesRef.current[i];
-            break;
-          }
-        }
-      }
-    }
-
-    if (!img || !img.complete || img.naturalWidth === 0) return;
-
-    const width = canvas.width;
-    const height = canvas.height;
-
-    // Clear canvas
-    ctx.fillStyle = '#080b11';
-    ctx.fillRect(0, 0, width, height);
-
-    // TRUE FULL-SCREEN COVER FIT:
-    // Scale image so both width and height are completely filled, eliminating black bars/gaps
-    const imgW = img.naturalWidth || 1920;
-    const imgH = img.naturalHeight || 1080;
-    const scale = Math.max(width / imgW, height / imgH);
-    const renderW = imgW * scale;
-    const renderH = imgH * scale;
-    const offsetX = (width - renderW) / 2;
-    const offsetY = (height - renderH) / 2;
-
-    ctx.drawImage(img, offsetX, offsetY, renderW, renderH);
-  }, []);
-
-  // Preload frames aggressively with high concurrency
+  // Auto-cycle through scenarios if playing
   useEffect(() => {
-    let isCancelled = false;
-    const images: HTMLImageElement[] = new Array(TOTAL_FRAMES + 1);
+    if (!isPlaying) return;
+    const interval = setInterval(() => {
+      setActiveScenarioIdx((prev) => (prev + 1) % SCENARIOS.length);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, [isPlaying]);
 
-    const loadSingle = (index: number): Promise<HTMLImageElement | null> => {
-      return new Promise((resolve) => {
-        const img = new Image();
-        img.src = getFrameUrl(index);
-        img.onload = () => {
-          if (!isCancelled) {
-            images[index] = img;
-            resolve(img);
-          } else {
-            resolve(null);
-          }
-        };
-        img.onerror = () => {
-          resolve(null);
-        };
-      });
-    };
-
-    // Priority 1: Load frame 1 and frame 251 immediately
-    Promise.all([loadSingle(1), loadSingle(TOTAL_FRAMES)]).then(([firstImg]) => {
-      if (!isCancelled && firstImg) {
-        drawFrame(1);
-      }
-    });
-
-    // Priority 2: Keyframes first (every 2nd frame) for instant scrubbing feedback
-    const keyframes: number[] = [];
-    for (let i = 2; i < TOTAL_FRAMES; i += 2) {
-      keyframes.push(i);
-    }
-    // Priority 3: Remaining in-between odd frames
-    for (let i = 3; i < TOTAL_FRAMES; i += 2) {
-      keyframes.push(i);
-    }
-
-    // Launch with 12 concurrent workers
-    let queueIdx = 0;
-    const worker = async () => {
-      while (queueIdx < keyframes.length && !isCancelled) {
-        const frameIdx = keyframes[queueIdx++];
-        await loadSingle(frameIdx);
-      }
-    };
-
-    const CONCURRENCY = 12;
-    for (let c = 0; c < CONCURRENCY; c++) {
-      worker();
-    }
-
-    imagesRef.current = images;
-
-    return () => {
-      isCancelled = true;
-    };
-  }, [getFrameUrl, drawFrame]);
-
-  // Update canvas pixel buffer on resize
-  useEffect(() => {
-    const handleResize = () => {
-      const canvas = canvasRef.current;
-      if (!canvas) return;
-      const rect = canvas.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      
-      canvas.width = Math.round(rect.width * dpr);
-      canvas.height = Math.round(rect.height * dpr);
-
-      drawFrame(Math.round(currentFrameRef.current));
-    };
-
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [drawFrame]);
-
-  // Smooth fluid lerp loop
-  useEffect(() => {
-    let isRunning = true;
-
-    const tick = () => {
-      if (!isRunning) return;
-
-      const target = targetFrameRef.current;
-      const current = currentFrameRef.current;
-      const diff = target - current;
-
-      if (Math.abs(diff) > 0.05) {
-        // Snappy responsive lerp tracking
-        currentFrameRef.current += diff * 0.28;
-        
-        // Snap to bounds when very close
-        if (target === TOTAL_FRAMES && Math.abs(diff) < 0.8) {
-          currentFrameRef.current = TOTAL_FRAMES;
-        } else if (target === 1 && Math.abs(diff) < 0.8) {
-          currentFrameRef.current = 1;
-        }
-
-        const rounded = Math.round(currentFrameRef.current);
-        drawFrame(Math.max(1, Math.min(TOTAL_FRAMES, rounded)));
-      }
-
-      animationFrameId.current = requestAnimationFrame(tick);
-    };
-
-    animationFrameId.current = requestAnimationFrame(tick);
-
-    return () => {
-      isRunning = false;
-      if (animationFrameId.current) {
-        cancelAnimationFrame(animationFrameId.current);
-      }
-    };
-  }, [drawFrame]);
-
-  // Scroll handler calculating progress through sticky container
+  // Scroll listener for subtle parallax floating effect
   useEffect(() => {
     const handleScroll = () => {
       const container = containerRef.current;
       if (!container) return;
-
       const rect = container.getBoundingClientRect();
       const windowHeight = window.innerHeight;
-
-      const totalScrollableDistance = rect.height - windowHeight;
-      if (totalScrollableDistance <= 0) return;
-
       const scrolled = -rect.top;
-      const progress = Math.max(0, Math.min(1, scrolled / totalScrollableDistance));
-
+      const progress = Math.max(0, Math.min(1, scrolled / (windowHeight * 0.8)));
       setScrollProgress(progress);
-
-      // Complete all 251 frames comfortably by 82% scroll!
-      // Leaves 82%-100% as a hold/transition buffer so the user fully sees the completed animation
-      const animProgress = Math.min(1, Math.max(0, progress / 0.82));
-      const frame = Math.max(1, Math.min(TOTAL_FRAMES, Math.round(1 + animProgress * (TOTAL_FRAMES - 1))));
-      targetFrameRef.current = frame;
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
-
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Compute text fade and motion based on scroll progress
-  // Fades out between 0% and 24% scroll progress so user enjoys 3D animation unobscured
-  const textOpacity = Math.max(0, 1 - scrollProgress * 4.2);
-  const textTranslateY = -scrollProgress * 80;
-  const textScale = Math.max(0.92, 1 - scrollProgress * 0.15);
-  const isInteractive = textOpacity > 0.15;
-
-  // Cinematic smooth dissolve into the next section as user scrolls past 88%
-  const exitOverlayOpacity = Math.min(1, Math.max(0, (scrollProgress - 0.88) / 0.12));
-
   return (
-    <div 
+    <section 
       ref={containerRef}
-      className="relative w-full h-[360vh]"
+      className="relative isolate pt-20 sm:pt-28 pb-20 sm:pb-28 px-3 sm:px-4 overflow-hidden min-h-screen"
     >
-      {/* Sticky Viewport Container - True 100vw x 100vh Full Screen */}
-      <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-center pt-20 sm:pt-24 pb-10 px-4 overflow-hidden">
+      {/* ========================================================================= */}
+      {/* DORA-STYLE HALF-PLANET HORIZON EFFECT (LIGHT, LUMINOUS & PROPERLY VISIBLE) */}
+      {/* ========================================================================= */}
+      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden flex justify-center">
         
-        {/* Ambient Radial Glow Behind Canvas */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] sm:w-[1300px] h-[600px] bg-[#245ae2]/15 blur-[160px] rounded-full pointer-events-none -z-10" />
+        {/* Soft Electric Sky-Blue Atmospheric Haze (Zero Pink/Magenta) */}
+        <div className="absolute top-[80px] sm:top-[110px] w-[500px] sm:w-[900px] lg:w-[1300px] h-[320px] sm:h-[450px] bg-gradient-to-b from-[#38bdf8]/20 via-[#2563eb]/10 to-transparent blur-[85px] rounded-full" />
+        
+        {/* Deep Flank Cosmic Blue Glow */}
+        <div className="absolute top-0 left-[-5%] w-[450px] h-[450px] bg-[#1d4ed8]/12 blur-[150px] rounded-full" />
+        <div className="absolute top-0 right-[-5%] w-[450px] h-[450px] bg-[#0284c7]/12 blur-[150px] rounded-full" />
 
-        {/* 100% FULL SCREEN Canvas Background Layer */}
-        <div className="absolute inset-0 w-full h-full pointer-events-none z-0">
-          <canvas
-            ref={canvasRef}
-            className="w-full h-full block select-none"
-          />
+        {/* Cosmic Twinkling Stars (✦) in Deep Space */}
+        <div className="absolute inset-0 overflow-hidden">
+          {COSMIC_STARS.map((star, idx) => (
+            <div
+              key={idx}
+              className="absolute animate-pulse"
+              style={{
+                top: star.top,
+                left: star.left,
+                animationDuration: `${star.duration}s`,
+                animationDelay: `${star.delay}s`,
+                opacity: star.opacity
+              }}
+            >
+              {star.isCross ? (
+                <svg 
+                  className="text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.95)]" 
+                  width={star.size} 
+                  height={star.size} 
+                  viewBox="0 0 24 24" 
+                  fill="currentColor"
+                >
+                  <path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10L12 0Z" />
+                </svg>
+              ) : (
+                <div 
+                  className="rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.9)]" 
+                  style={{ width: star.size, height: star.size }}
+                />
+              )}
+            </div>
+          ))}
+        </div>
 
-          {/* Minimal top gradient for navbar legibility only (no side or heavy bottom cutoffs) */}
-          <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#080b11]/90 via-[#080b11]/40 to-transparent pointer-events-none" />
-
-          {/* Soft central contrast backdrop that fades out smoothly as caller scrolls */}
+        {/* The Half-Planet Spherical Horizon Dome */}
+        <div 
+          className="absolute top-[95px] sm:top-[125px] md:top-[140px] w-[160vw] min-w-[560px] max-w-[950px] md:max-w-[1500px] lg:max-w-[2100px] h-[160vw] min-w-[560px] max-w-[950px] md:max-w-[1500px] lg:max-w-[2100px] rounded-full"
+          style={{
+            transform: `scale(${1 + scrollProgress * 0.04})`,
+            transition: 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)'
+          }}
+        >
+          {/* 1. Luminous Curved Planet Rim Line (Crisp white + cyan horizon arc) */}
           <div 
-            className="absolute inset-0 transition-opacity duration-200 pointer-events-none"
-            style={{ 
-              background: 'radial-gradient(circle at 50% 50%, rgba(8, 11, 17, 0.55) 0%, rgba(8, 11, 17, 0.2) 65%, transparent 100%)',
-              opacity: textOpacity 
+            className="absolute inset-0 rounded-full border-t-[2px] sm:border-t-[2.5px] border-x-[1px] border-white/90"
+            style={{
+              maskImage: 'radial-gradient(ellipse 90% 48% at 50% 0%, black 35%, rgba(0,0,0,0.6) 65%, transparent 88%)',
+              WebkitMaskImage: 'radial-gradient(ellipse 90% 48% at 50% 0%, black 35%, rgba(0,0,0,0.6) 65%, transparent 88%)',
+              boxShadow: `
+                0 -12px 35px rgba(56, 189, 248, 0.8),
+                0 -3px 12px rgba(255, 255, 255, 1),
+                0 -30px 80px rgba(37, 99, 235, 0.45)
+              `
             }}
           />
 
-          {/* Smooth cinematic transition fade to the next section after hero ends */}
+          {/* 2. Light, Frosted Horizon Atmospheric Sheen (Visible under the rim) */}
           <div 
-            className="absolute inset-0 bg-[#080b11] transition-opacity duration-100 pointer-events-none"
-            style={{ opacity: exitOverlayOpacity * 0.85 }}
+            className="absolute inset-0 rounded-full"
+            style={{
+              background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.28) 0%, rgba(186, 230, 253, 0.22) 6%, rgba(56, 189, 248, 0.16) 16%, rgba(37, 99, 235, 0.10) 32%, transparent 55%)'
+            }}
           />
+
+          {/* 3. Planet Atmospheric Volume (Light and clearly visible against black space) */}
+          <div 
+            className="absolute inset-0 rounded-full"
+            style={{
+              background: 'radial-gradient(ellipse 70% 50% at 50% 0%, rgba(186, 230, 253, 0.24) 0%, rgba(56, 189, 248, 0.17) 20%, rgba(30, 58, 138, 0.22) 42%, rgba(12, 18, 32, 0.75) 68%, rgba(8, 11, 17, 0.96) 90%)'
+            }}
+          />
+
+          {/* 4. Fine Latitude Rings */}
+          <div className="absolute inset-x-16 sm:inset-x-24 top-20 sm:top-24 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+          <div className="absolute inset-x-28 sm:inset-x-40 top-44 sm:top-52 h-[1px] bg-gradient-to-r from-transparent via-sky-300/15 to-transparent" />
+          <div className="absolute inset-x-40 sm:inset-x-60 top-72 sm:top-84 h-[1px] bg-gradient-to-r from-transparent via-[#2563eb]/15 to-transparent" />
+        </div>
+      </div>
+
+      {/* ========================================================================= */}
+      {/* HERO FOREGROUND CONTENT (ELEGANT & COMPACT ON MOBILE)                     */}
+      {/* ========================================================================= */}
+      <div className="max-w-4xl mx-auto flex flex-col items-center text-center relative z-10 mb-10 sm:mb-16">
+        
+        {/* Top Apex Emblem (Cool Blue & Cyan Orb - Zero Pink/Magenta) */}
+        <div className="relative mb-4 sm:mb-6 flex flex-col items-center">
+          <div className="relative w-11 h-11 sm:w-13 sm:h-13 rounded-full p-[2px] bg-gradient-to-b from-[#38bdf8] via-[#2563eb] to-[#0f172a] shadow-[0_0_25px_rgba(56,189,248,0.5),0_0_12px_rgba(37,99,235,0.4)]">
+            <div className="w-full h-full rounded-full bg-[#070b14] flex items-center justify-center relative overflow-hidden">
+              {/* Internal Glass Highlight */}
+              <div className="absolute top-0 inset-x-1.5 h-3.5 bg-gradient-to-b from-white/40 to-transparent rounded-full blur-[0.5px] pointer-events-none" />
+              {/* 4-Point Celestial Sparkle Star */}
+              <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white drop-shadow-[0_0_10px_rgba(255,255,255,1)] animate-pulse" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5L12 0Z" />
+              </svg>
+            </div>
+          </div>
+
+          <div className="mt-2 flex items-center gap-1.5 text-xs sm:text-sm font-semibold tracking-wide text-white drop-shadow-md">
+            <span>Audeora AI</span>
+            <span className="px-1.5 py-0.5 rounded text-[9px] sm:text-[10px] bg-white/15 text-slate-300 font-mono font-normal">Enterprise</span>
+          </div>
         </div>
 
-        {/* Hero Foreground Content Layer */}
-        <div 
-          className={`relative z-10 max-w-4xl mx-auto text-center flex flex-col items-center transition-all duration-150 ${
-            isInteractive ? 'pointer-events-auto' : 'pointer-events-none'
-          }`}
-          style={{
-            opacity: textOpacity,
-            transform: `translateY(${textTranslateY}px) scale(${textScale})`
-          }}
-        >
-          {/* Top Pill Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#080b11]/85 border border-[#245ae2]/40 backdrop-blur-md mb-6 sm:mb-8 shadow-[0_0_30px_rgba(36,90,226,0.3)]">
-            <span className="w-2 h-2 rounded-full bg-[#d6f549] animate-pulse" />
-            <span className="text-xs font-semibold text-[#93c5fd] tracking-wide uppercase">
-              Enterprise AI Voice Platform
-            </span>
-          </div>
+        {/* Main Headline (Optimized sizing for mobile: text-[30px] sm:text-5xl md:text-6xl lg:text-[70px]) */}
+        <h1 className="text-[30px] sm:text-5xl md:text-6xl lg:text-[70px] font-bold leading-[1.15] sm:leading-[1.08] mb-4 sm:mb-6 text-white tracking-tight drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]">
+          Calls that sound <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#60a5fa] via-[#245ae2] to-[#93c5fd]">human</span>.<br />
+          Outcomes that <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400">scale</span>.
+          <span className="inline-block text-[#38bdf8] text-xl sm:text-3xl ml-1.5 animate-pulse align-middle">✦</span>
+        </h1>
 
-          {/* Main Headline */}
-          <h1 className="text-4xl sm:text-6xl md:text-[76px] font-bold leading-[1.08] mb-6 sm:mb-8 text-white tracking-tight drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]">
-            Calls that sound <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#60a5fa] via-[#245ae2] to-[#93c5fd]">human</span>.<br />
-            Outcomes that <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400">scale</span>.
-          </h1>
+        {/* Subtitle */}
+        <p className="text-xs sm:text-base md:text-lg text-slate-300 mb-6 sm:mb-8 max-w-xl px-2 leading-relaxed drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
+          Audeora sits between your callers and your systems, turning real-time spoken conversations into completed business workflows in under 300ms.
+        </p>
 
-          {/* Subtitle */}
-          <p className="text-base sm:text-xl text-slate-300 mb-8 sm:mb-10 max-w-2xl leading-relaxed drop-shadow-[0_2px_16px_rgba(0,0,0,0.95)]">
-            Audeora answers, qualifies, schedules, and resolves calls in 10+ Indian and global languages—with the natural pace and tone of your best tele-caller.
-          </p>
-
-          {/* Action CTAs */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
-            <Link 
-              to="/demo" 
-              className="flex items-center justify-center gap-2 w-full sm:w-auto bg-[#245ae2] hover:bg-[#1d4ed8] px-8 py-4 rounded-full text-[15px] font-semibold text-white transition-all duration-300 shadow-[0_0_35px_rgba(36,90,226,0.5)] hover:shadow-[0_0_55px_rgba(36,90,226,0.75)] hover:-translate-y-0.5"
+        {/* Dora-style Interactive Voice Prompt Input Bar (Compact on mobile) */}
+        <div className="w-full max-w-[340px] sm:max-w-lg md:max-w-xl mb-6 sm:mb-8 px-1">
+          <div className="relative flex items-center bg-[#0d1424]/90 backdrop-blur-xl border border-white/20 rounded-full p-1.5 sm:p-2 pl-3.5 sm:pl-5 shadow-[0_15px_40px_rgba(0,0,0,0.7),0_0_25px_rgba(36,90,226,0.25)] transition-all hover:border-white/35">
+            <span className="text-[#38bdf8] text-sm sm:text-base mr-2 shrink-0">✦</span>
+            <input 
+              type="text"
+              readOnly
+              value={scenario.leftPhone.userQuery}
+              className="bg-transparent text-[11px] sm:text-xs md:text-sm text-slate-200 placeholder-slate-400 outline-none w-full cursor-default truncate pr-2"
+            />
+            <Link
+              to="/voice-lab"
+              className="shrink-0 bg-[#245ae2] hover:bg-[#1d4ed8] text-white text-[10px] sm:text-xs font-semibold px-3 sm:px-4 py-1.5 sm:py-2 rounded-full transition-all flex items-center gap-1 shadow-[0_0_15px_rgba(36,90,226,0.5)]"
             >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-              </svg>
-              Get a demo call
-            </Link>
-            
-            <Link 
-              to="/voice-lab" 
-              className="flex items-center justify-center gap-2 w-full sm:w-auto bg-[#080b11]/85 backdrop-blur-md border border-white/20 hover:border-white/40 px-8 py-4 rounded-full text-[15px] font-semibold text-white transition-all duration-300 hover:-translate-y-0.5"
-            >
-              Explore Voice Lab
-              <svg className="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-              </svg>
+              <span>Test Voice</span>
+              <span>→</span>
             </Link>
           </div>
+        </div>
 
-          {/* Clean Minimal Scroll Cue */}
-          <div className="mt-12 sm:mt-14 flex flex-col items-center gap-2 text-slate-400/80 text-xs font-medium animate-bounce">
-            <span className="tracking-wider uppercase text-[11px] text-slate-400 font-mono">Scroll to explore</span>
-            <svg className="w-4 h-4 text-[#60a5fa]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+        {/* Primary Action Buttons (Responsive on mobile) */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-2.5 sm:gap-4 w-full sm:w-auto px-4 sm:px-0">
+          <Link 
+            to="/demo" 
+            className="flex items-center justify-center gap-2 w-full sm:w-auto bg-[#245ae2] hover:bg-[#1d4ed8] px-6 sm:px-8 py-2.5 sm:py-3.5 rounded-full text-xs sm:text-[15px] font-semibold text-white transition-all duration-300 shadow-[0_0_30px_rgba(36,90,226,0.5)] hover:shadow-[0_0_50px_rgba(36,90,226,0.75)] hover:-translate-y-0.5"
+          >
+            <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
             </svg>
+            Get a demo call
+          </Link>
+          
+          <Link 
+            to="/voice-lab" 
+            className="flex items-center justify-center gap-2 w-full sm:w-auto bg-[#0d1220]/80 backdrop-blur-md border border-white/20 hover:border-white/40 px-6 sm:px-8 py-2.5 sm:py-3.5 rounded-full text-xs sm:text-[15px] font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 shadow-lg"
+          >
+            Explore Voice Lab
+            <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </Link>
+        </div>
+      </div>
+
+      {/* ========================================================================= */}
+      {/* DUAL-PHONE & CENTRAL ACTION ENGINE (FRAMED INSIDE THE GLOBE)             */}
+      {/* ========================================================================= */}
+      <div className="max-w-6xl mx-auto relative">
+        
+        {/* Animated Curved Connecting Lines (Desktop Only) */}
+        <div className="hidden lg:block absolute inset-0 pointer-events-none z-10">
+          <svg className="w-full h-full" viewBox="0 0 1152 480" fill="none" preserveAspectRatio="none">
+            {/* Left Phone -> Center Hub Path */}
+            <path
+              d="M 330 220 C 420 220, 430 160, 520 160"
+              stroke="url(#lineGradientLeft)"
+              strokeWidth="2.5"
+              strokeDasharray="6 6"
+              className="animate-dash-flow"
+            />
+            {/* Center Hub -> Right Phone Path */}
+            <path
+              d="M 632 160 C 720 160, 730 220, 822 220"
+              stroke="url(#lineGradientRight)"
+              strokeWidth="2.5"
+              strokeDasharray="6 6"
+              className="animate-dash-flow"
+            />
+
+            <defs>
+              <linearGradient id="lineGradientLeft" x1="330" y1="220" x2="520" y2="160" gradientUnits="userSpaceOnUse">
+                <stop stopColor="#60a5fa" stopOpacity="0.8" />
+                <stop offset="1" stopColor="#245ae2" stopOpacity="0.9" />
+              </linearGradient>
+              <linearGradient id="lineGradientRight" x1="632" y1="160" x2="822" y2="220" gradientUnits="userSpaceOnUse">
+                <stop stopColor="#245ae2" stopOpacity="0.9" />
+                <stop offset="1" stopColor="#d6f549" stopOpacity="0.9" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+
+        {/* 3-Column Grid: Left Phone, Center Audeora Engine, Right Phone */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-20">
+          
+          {/* ================= LEFT PHONE: CALLER / VOICE INPUT ================= */}
+          <div 
+            className="lg:col-span-4 flex flex-col items-center"
+            style={{
+              transform: `translateY(${scrollProgress * -15}px)`,
+              transition: 'transform 0.2s ease-out'
+            }}
+          >
+            {/* Phone Bezel Frame */}
+            <div className="relative w-full max-w-[275px] sm:max-w-[310px] h-[480px] sm:h-[520px] rounded-[36px] sm:rounded-[42px] bg-[#0c121e] border-4 border-slate-700/60 shadow-[0_20px_60px_rgba(0,0,0,0.8),0_0_40px_rgba(36,90,226,0.2)] p-3.5 flex flex-col justify-between overflow-hidden">
+              
+              {/* Dynamic Island Notch */}
+              <div className="absolute top-4 left-1/2 -translate-x-1/2 w-28 h-6 bg-black rounded-full flex items-center justify-between px-3 z-30">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80 animate-pulse" />
+                <span className="w-3 h-3 rounded-full bg-slate-900 border border-slate-700" />
+              </div>
+
+              {/* Status Header */}
+              <div className="pt-2 px-3 flex items-center justify-between text-[11px] font-mono text-slate-400 z-20">
+                <span>9:41</span>
+                <div className="flex items-center gap-1.5">
+                  <span>5G</span>
+                  <span className="w-4 h-2 rounded-sm border border-slate-400 inline-block p-0.5">
+                    <span className="w-full h-full bg-emerald-400 block rounded-2xs" />
+                  </span>
+                </div>
+              </div>
+
+              {/* Inner Phone Screen Content */}
+              <div className="flex-1 mt-7 flex flex-col justify-between py-2">
+                
+                {/* Caller Identification Bar */}
+                <div className="bg-[#141b2d] rounded-2xl p-3 border border-white/5 flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#245ae2] to-[#60a5fa] flex items-center justify-center font-bold text-white text-xs shadow-md">
+                      {scenario.leftPhone.callerAvatar}
+                    </div>
+                    <div>
+                      <div className="text-xs font-semibold text-white leading-tight">
+                        {scenario.leftPhone.callerName}
+                      </div>
+                      <div className="text-[10px] text-slate-400 font-mono">
+                        {scenario.leftPhone.callerNumber}
+                      </div>
+                    </div>
+                  </div>
+                  <span className="px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-[10px] font-mono">
+                    Live Call
+                  </span>
+                </div>
+
+                {/* Dialog Messages */}
+                <div className="space-y-3 my-auto">
+                  
+                  {/* Caller Query Bubble */}
+                  <div className="bg-[#1b2338] border border-white/10 rounded-2xl rounded-tl-sm p-3.5 text-xs text-slate-100 shadow-md">
+                    <div className="text-[10px] font-mono text-slate-400 uppercase tracking-wider mb-1">
+                      Spoken to AI:
+                    </div>
+                    "{scenario.leftPhone.userQuery}"
+                  </div>
+
+                  {/* Audeora Response Bubble */}
+                  <div className="bg-gradient-to-br from-[#1a3880]/70 to-[#0e1f4d]/90 border border-[#245ae2]/60 rounded-2xl rounded-tr-sm p-3.5 text-xs text-white shadow-[0_0_25px_rgba(36,90,226,0.3)]">
+                    <div className="flex items-center justify-between text-[10px] font-mono text-[#d6f549] font-bold mb-1">
+                      <span className="flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#d6f549] animate-pulse" />
+                        Audeora Response (&lt;300ms)
+                      </span>
+                    </div>
+                    "{scenario.leftPhone.aiResponse}"
+                  </div>
+
+                  {/* Status Tag */}
+                  <div className="bg-[#0b101c] border border-white/10 rounded-xl px-3 py-2 flex items-center justify-between text-[11px]">
+                    <div className="flex items-center gap-1.5 text-slate-300 font-medium">
+                      <span className="text-[#60a5fa]">⚡</span>
+                      <span>{scenario.leftPhone.statusTag}</span>
+                    </div>
+                    <span className="text-emerald-400 font-bold">✓</span>
+                  </div>
+
+                  {/* Action summary note */}
+                  <div className="text-[11px] text-slate-400 px-1 leading-relaxed">
+                    {scenario.leftPhone.actionNote}
+                  </div>
+                </div>
+
+                {/* Micro Audio Equalizer at bottom */}
+                <div className="pt-2 border-t border-white/5 flex items-center justify-between text-[10px] font-mono text-slate-400">
+                  <span className="flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#60a5fa] animate-ping" />
+                    Audio Connected
+                  </span>
+                  <span className="text-[#d6f549]">48kHz Opus</span>
+                </div>
+              </div>
+
+              {/* Bottom Home Indicator Bar */}
+              <div className="w-24 h-1 bg-slate-600 rounded-full mx-auto mt-1" />
+            </div>
+
+            {/* Left Floating App Icon Badge */}
+            <div className="mt-4 w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#245ae2] to-[#60a5fa] flex items-center justify-center text-xl shadow-[0_0_25px_rgba(36,90,226,0.5)] border border-white/20">
+              {scenario.leftBadgeIcon}
+            </div>
           </div>
+
+          {/* ================= CENTER: AUDEORA STEP PIPELINE ================= */}
+          <div className="lg:col-span-4 flex flex-col items-center text-center px-2">
+            
+            {/* Audeora Logo & Branding */}
+            <div className="flex items-center gap-2.5 mb-5">
+              <div className="w-9 h-9 rounded-xl bg-[#245ae2] flex items-center justify-center font-bold text-white shadow-[0_0_20px_rgba(36,90,226,0.6)]">
+                A
+              </div>
+              <span className="text-2xl font-bold tracking-tight text-white">
+                Audeora
+              </span>
+            </div>
+
+            {/* Steps Checklist Card */}
+            <div className="w-full max-w-[295px] sm:max-w-md bg-[#0d1424] border border-[#245ae2]/40 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-[0_0_50px_rgba(36,90,226,0.25)] backdrop-blur-xl relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#245ae2]/10 rounded-full blur-2xl pointer-events-none" />
+
+              <div className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-4 text-left">
+                Autonomous Action Pipeline
+              </div>
+
+              <div className="space-y-2.5 sm:space-y-3 text-left">
+                {scenario.centerSteps.map((step, idx) => (
+                  <div 
+                    key={idx}
+                    className="bg-[#121a2e] border border-white/5 rounded-xl px-3 py-2 sm:px-3.5 sm:py-2.5 flex items-center justify-between text-xs transition-all hover:border-[#245ae2]/40"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <span className="text-sm sm:text-base">{step.icon}</span>
+                      <span className="text-slate-200 font-medium text-[11px] sm:text-xs">
+                        {step.title}
+                      </span>
+                    </div>
+                    <span className="w-4 h-4 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-[10px] shrink-0">
+                      ✓
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-4 sm:mt-5 pt-3 sm:pt-4 border-t border-white/5 flex items-center justify-between text-[10px] sm:text-[11px] font-mono text-slate-400">
+                <span>Latency</span>
+                <span className="text-emerald-400 font-bold">&lt;300ms Turnaround</span>
+              </div>
+            </div>
+          </div>
+
+          {/* ================= RIGHT PHONE: ACTION / DESTINATION ================= */}
+          <div 
+            className="lg:col-span-4 flex flex-col items-center"
+            style={{
+              transform: `translateY(${scrollProgress * 15}px)`,
+              transition: 'transform 0.2s ease-out'
+            }}
+          >
+            {/* Phone Bezel Frame */}
+            <div className="relative w-full max-w-[275px] sm:max-w-[310px] h-[480px] sm:h-[520px] rounded-[36px] sm:rounded-[42px] bg-[#0c121e] border-4 border-slate-700/60 shadow-[0_20px_60px_rgba(0,0,0,0.8),0_0_40px_rgba(36,90,226,0.2)] p-3.5 flex flex-col justify-between overflow-hidden">
+              
+              {/* Dynamic Island Notch */}
+              <div className="absolute top-4 left-1/2 -translate-x-1/2 w-28 h-6 bg-black rounded-full flex items-center justify-between px-3 z-30">
+                <span className="w-2.5 h-2.5 rounded-full bg-blue-500/80 animate-pulse" />
+                <span className="w-3 h-3 rounded-full bg-slate-900 border border-slate-700" />
+              </div>
+
+              {/* Status Header */}
+              <div className="pt-2 px-3 flex items-center justify-between text-[11px] font-mono text-slate-400 z-20">
+                <span>9:41</span>
+                <div className="flex items-center gap-1.5">
+                  <span>5G</span>
+                  <span className="w-4 h-2 rounded-sm border border-slate-400 inline-block p-0.5">
+                    <span className="w-full h-full bg-emerald-400 block rounded-2xs" />
+                  </span>
+                </div>
+              </div>
+
+              {/* Inner Screen Content: Live CRM / Spreadsheet / Calendar Table */}
+              <div className="flex-1 mt-7 flex flex-col justify-between py-2">
+                
+                <div>
+                  {/* Screen Header Bar */}
+                  <div className="flex items-center justify-between pb-3 border-b border-white/5 mb-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-slate-400 text-xs">&lt;</span>
+                      <span className="text-xs font-semibold text-white truncate max-w-[170px]">
+                        {scenario.rightPhone.title}
+                      </span>
+                    </div>
+                    <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-[10px] font-mono">
+                      Synced ✓
+                    </span>
+                  </div>
+
+                  {/* Spreadsheet Grid / CRM Table */}
+                  <div className="border border-white/10 rounded-xl overflow-hidden bg-[#0e1424] text-[10px]">
+                    
+                    {/* Table Headers */}
+                    <div className="grid grid-cols-4 bg-[#141c30] p-2 border-b border-white/10 font-mono text-slate-400 font-semibold">
+                      {scenario.rightPhone.columns.map((col, idx) => (
+                        <div key={idx} className="truncate px-1">{col}</div>
+                      ))}
+                    </div>
+
+                    {/* Table Rows */}
+                    <div className="divide-y divide-white/5">
+                      {scenario.rightPhone.rows.map((row, rIdx) => (
+                        <div 
+                          key={rIdx} 
+                          className={`grid grid-cols-4 p-2 items-center ${
+                            rIdx === 0 ? 'bg-[#245ae2]/15 text-white font-medium' : 'text-slate-300'
+                          }`}
+                        >
+                          {row.map((cell, cIdx) => (
+                            <div 
+                              key={cIdx} 
+                              className={`truncate px-1 ${
+                                cIdx === 3 ? 'text-emerald-400 font-bold' : ''
+                              }`}
+                            >
+                              {cell}
+                            </div>
+                          ))}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Destination Confirmation Card */}
+                <div className="bg-[#12192c] border border-white/5 rounded-2xl p-3 sm:p-3.5 my-auto">
+                  <div className="flex items-center justify-between mb-1.5 sm:mb-2">
+                    <span className="text-[9px] sm:text-[10px] font-mono text-slate-400 uppercase tracking-wider">
+                      Webhook Status
+                    </span>
+                    <span className="text-[9px] sm:text-[10px] font-mono text-[#d6f549] font-bold">200 OK</span>
+                  </div>
+                  <div className="text-[11px] sm:text-xs text-slate-200 leading-relaxed">
+                    Data recorded automatically with full audio transcript and caller intent tags.
+                  </div>
+                </div>
+
+                {/* Connected Telephony Footnote */}
+                <div className="pt-2 border-t border-white/5 flex items-center justify-between text-[9px] sm:text-[10px] font-mono text-slate-400">
+                  <span>Carrier SIP: Exotel</span>
+                  <span className="text-emerald-400">Zero Queue Time</span>
+                </div>
+              </div>
+
+              {/* Bottom Home Indicator Bar */}
+              <div className="w-24 h-1 bg-slate-600 rounded-full mx-auto mt-1" />
+            </div>
+
+            {/* Right Floating App Icon Badges */}
+            <div className="mt-4 flex items-center gap-3">
+              {scenario.rightBadges.map((badge, bIdx) => (
+                <div 
+                  key={bIdx}
+                  className={`w-11 h-11 sm:w-12 sm:h-12 rounded-2xl ${badge.bg} flex items-center justify-center text-lg sm:text-xl shadow-lg border`}
+                  title={badge.name}
+                >
+                  {badge.icon}
+                </div>
+              ))}
+            </div>
+          </div>
+
+        </div>
+
+        {/* Bottom Interactive Workflow Selector */}
+        <div className="mt-10 sm:mt-16 flex flex-col items-center justify-center gap-3 sm:gap-4 px-2">
+          
+          <div className="bg-[#0c1220]/90 backdrop-blur-2xl border border-white/10 rounded-full p-1 sm:p-1.5 flex items-center gap-1.5 sm:gap-2 shadow-2xl overflow-x-auto max-w-full">
+            
+            {/* Play/Pause Auto-cycle Toggle */}
+            <button
+              onClick={() => setIsPlaying(!isPlaying)}
+              className="w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-white/5 hover:bg-white/10 text-slate-300 flex items-center justify-center transition-colors shrink-0"
+              title={isPlaying ? 'Pause Auto-cycle' : 'Resume Auto-cycle'}
+            >
+              {isPlaying ? (
+                <span className="font-mono text-[10px] sm:text-xs font-bold">||</span>
+              ) : (
+                <span className="font-mono text-[10px] sm:text-xs font-bold">▶</span>
+              )}
+            </button>
+
+            {/* Scenario Pills */}
+            {SCENARIOS.map((scen, idx) => {
+              const isSelected = activeScenarioIdx === idx;
+              return (
+                <button
+                  key={scen.id}
+                  onClick={() => {
+                    setActiveScenarioIdx(idx);
+                    setIsPlaying(false);
+                  }}
+                  className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-[11px] sm:text-xs font-semibold transition-all flex items-center gap-1.5 sm:gap-2 shrink-0 ${
+                    isSelected
+                      ? 'bg-[#245ae2] text-white shadow-[0_0_20px_rgba(36,90,226,0.6)]'
+                      : 'bg-transparent text-slate-400 hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  <span>{scen.icon}</span>
+                  <span>{scen.tabLabel}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Bottom helper text */}
+          <div className="text-[11px] sm:text-xs text-slate-400 text-center font-medium max-w-md px-2">
+            You choose which workflows your AI executes. Connect your telephony and CRM in minutes.
+          </div>
+
         </div>
 
       </div>
-    </div>
+    </section>
   );
 }
