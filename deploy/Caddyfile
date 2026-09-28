@@ -1,13 +1,14 @@
 # Installed to /etc/caddy/Caddyfile on the box; `sudo systemctl reload caddy`.
 #
-# Caddy obtains and renews Let's Encrypt certificates for every hostname below
-# automatically. A hostname whose DNS does not yet point here simply fails its
-# challenge and is retried with backoff — it does not affect the others, which is
-# why each name gets its own block rather than sharing one.
+# Caddy obtains and renews a Let's Encrypt certificate per hostname
+# automatically. Certificates are managed independently, so a hostname whose DNS
+# is not yet pointed here fails only its own challenge and is retried with
+# backoff — it cannot stop the others from serving.
 
 # Shared behaviour. Caddy sets X-Forwarded-For, which server/index.js reads via
-# `trust proxy: 1`, so the per-IP demo limits see real visitor addresses instead
-# of 127.0.0.1. /api/health echoes clientIp specifically so a deploy can prove it.
+# `trust proxy: 1`, so the per-IP demo limits see real visitor addresses rather
+# than 127.0.0.1. /api/health echoes clientIp specifically so a deploy can prove
+# this still works.
 #
 # WebSocket upgrades for /api/voice/stream need no special configuration —
 # reverse_proxy passes them through natively.
@@ -16,19 +17,19 @@
 	reverse_proxy 127.0.0.1:3000
 }
 
-# Both domains are served. audeora.in is the one currently pointed here;
-# audeora.ai is configured ahead of its DNS so it starts working the moment its
-# A record is updated, with no change needed on the box.
-audeora.in {
-	import app
-}
-
-audeora.ai {
+# All three registered domains serve the same site.
+#
+# NOTE: this is not canonicalised. Identical content on three domains splits SEO
+# authority and lets search engines index whichever they prefer. Once there is a
+# decision on the primary domain, the other two apexes should 301 to it the same
+# way the www hosts below do. Serving all three is the correct interim state —
+# every domain a visitor might try resolves and works.
+audeora.in, audeora.ai, audeora.com {
 	import app
 }
 
 # One canonical hostname per domain: www redirects rather than serving a
-# duplicate, so there is a single URL in links, analytics and search results.
+# duplicate, so links, analytics and search results converge on a single URL.
 www.audeora.in {
 	redir https://audeora.in{uri} permanent
 }
@@ -37,19 +38,20 @@ www.audeora.ai {
 	redir https://audeora.ai{uri} permanent
 }
 
+www.audeora.com {
+	redir https://audeora.com{uri} permanent
+}
+
 # Fallback hostname, kept deliberately.
 #
-# nip.io resolves <dashed-ip>.nip.io to that IP, which gives Caddy a real
-# hostname to certify without owning a domain. It stays here so there is always
-# a working HTTPS URL if the domain's DNS is mid-change or misconfigured — and so
-# a deploy can be verified before DNS has propagated.
+# nip.io resolves <dashed-ip>.nip.io to that IP, giving Caddy a real hostname to
+# certify without a domain. It stays so there is always a working HTTPS URL if a
+# domain's DNS is mid-change or misconfigured, and so a deploy can be verified
+# before propagation.
 #
-# IMPORTANT: this hostname encodes the public IP. If the instance's address ever
-# changes, update this line to match or the certificate will stop validating.
-#
-# The address is now the Elastic IP 18.60.197.184, so it is stable across
-# stop/start and this line should not need changing again. It previously read
-# 16-112-67-135.nip.io, against the ephemeral auto-assigned address.
+# The address is the Elastic IP 18.60.197.184 and so is stable across stop/start.
+# If the instance's address ever changes, this line must be updated to match or
+# its certificate will stop validating.
 18-60-197-184.nip.io {
 	import app
 }
