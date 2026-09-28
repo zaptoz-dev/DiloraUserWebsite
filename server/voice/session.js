@@ -138,7 +138,7 @@ export class VoiceSession extends EventEmitter {
 
     // The greeting is a constant, so the agent is talking within milliseconds
     // instead of after an LLM round trip.
-    await this.speak(this.persona.greeting, { isGreeting: true });
+    await this.speak(this.persona.greeting, { announce: true, remember: true });
   }
 
   async stop(reason = "closed") {
@@ -366,7 +366,9 @@ export class VoiceSession extends EventEmitter {
       if (this.closed) return;
 
       if (!reply.text) {
-        await this.speak("Sorry, could you say that again?");
+        // Usually the Bedrock deadline firing. The caller has already waited,
+        // so recover audibly *and* visibly rather than leaving a silent gap.
+        await this.speak("Sorry, could you say that again?", { announce: true });
         return;
       }
 
@@ -416,7 +418,8 @@ export class VoiceSession extends EventEmitter {
       await this.speak(
         this.unheardCount === 1
           ? "Sorry, I didn't catch that."
-          : "I'm still not getting that — could you speak a little louder?"
+          : "I'm still not getting that — could you speak a little louder?",
+        { announce: true }
       );
       return;
     }
@@ -436,7 +439,19 @@ export class VoiceSession extends EventEmitter {
    * once and the browser holds the whole reply — cancelling then means fighting
    * a buffer the server no longer controls.
    */
-  async speak(text, { isGreeting = false } = {}) {
+  /**
+   * @param {string} text
+   * @param {object} [options]
+   * @param {boolean} [options.announce] Emit a transcript for this utterance.
+   *   Normal replies pass false because processUtterance already sent one before
+   *   synthesis began. Anything spoken from inside this class — the greeting, and
+   *   the canned recovery lines — must pass true, or the caller hears the agent
+   *   say something that never appears on screen.
+   * @param {boolean} [options.remember] Add it to the LLM history. Recovery lines
+   *   deliberately do not: "sorry, say that again" is a transport artifact, not a
+   *   conversational turn, and feeding it back skews the next reply.
+   */
+  async speak(text, { announce = false, remember = false } = {}) {
     if (this.closed || !text) return;
 
     const generation = this.playbackGeneration;
@@ -447,10 +462,8 @@ export class VoiceSession extends EventEmitter {
     this.loudFrames = 0;
     this.setState(STATE.SPEAKING);
 
-    if (isGreeting) {
-      this.history.push({ role: "assistant", content: text });
-      this.sendJson({ type: "transcript", role: "agent", text });
-    }
+    if (remember) this.history.push({ role: "assistant", content: text });
+    if (announce) this.sendJson({ type: "transcript", role: "agent", text });
 
     let totalBytes = 0;
     let firstChunkAt = null;

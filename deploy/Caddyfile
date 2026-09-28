@@ -16,13 +16,23 @@
 	reverse_proxy 127.0.0.1:3000
 }
 
-# The real domain.
+# Both domains are served. audeora.in is the one currently pointed here;
+# audeora.ai is configured ahead of its DNS so it starts working the moment its
+# A record is updated, with no change needed on the box.
+audeora.in {
+	import app
+}
+
 audeora.ai {
 	import app
 }
 
-# One canonical hostname: www redirects rather than serving a duplicate, so
-# there is a single URL in links, analytics and search results.
+# One canonical hostname per domain: www redirects rather than serving a
+# duplicate, so there is a single URL in links, analytics and search results.
+www.audeora.in {
+	redir https://audeora.in{uri} permanent
+}
+
 www.audeora.ai {
 	redir https://audeora.ai{uri} permanent
 }
