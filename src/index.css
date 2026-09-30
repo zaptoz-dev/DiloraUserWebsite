@@ -283,3 +283,51 @@ h1, h2, h3, h4, h5, h6 {
   animation: orbit-counter 80s linear infinite;
 }
 
+/* Indian Script Holographic Watermarks & Flank Typography (Reference Image 3) */
+.text-stroke-sky {
+  -webkit-text-stroke: 1.2px rgba(56, 189, 248, 0.45);
+  color: transparent;
+}
+
+.text-stroke-white {
+  -webkit-text-stroke: 1.2px rgba(255, 255, 255, 0.28);
+  color: transparent;
+}
+
+.text-stroke-glow {
+  -webkit-text-stroke: 1.5px rgba(186, 230, 253, 0.55);
+  color: transparent;
+  filter: drop-shadow(0 0 16px rgba(56, 189, 248, 0.35));
+}
+
+.text-ghost-glow {
+  color: rgba(147, 197, 253, 0.26);
+  text-shadow: 0 0 20px rgba(56, 189, 248, 0.32);
+}
+
+@keyframes drift-up {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-16px);
+  }
+}
+
+@keyframes drift-down {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(16px);
+  }
+}
+
+.animate-drift-up {
+  animation: drift-up 9s ease-in-out infinite;
+}
+
+.animate-drift-down {
+  animation: drift-down 11s ease-in-out infinite;
+}
+

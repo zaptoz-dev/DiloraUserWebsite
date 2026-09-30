@@ -151,57 +151,61 @@ const COSMIC_STARS = [
   { top: '16%', left: '58%', size: 8, isCross: false, duration: 3.6, delay: 0.8, opacity: 0.6 }
 ];
 
-// Indian languages floating in the celestial semicircle dome background
-interface IndianLanguageScript {
+// Indian Language Flank Watermark Typography (Matches user's reference in Image 3)
+interface FlankScriptItem {
   id: string;
-  script: string;
-  name: string;
-  top: string;
-  left: string;
-  color: string;
-  glow: string;
-  reverse?: boolean;
-  delay: string;
+  text: string;
+  styleType: 'stroke-white' | 'stroke-sky' | 'stroke-glow' | 'ghost-glow';
+  size?: string;
 }
 
-const INDIAN_SCRIPTS: IndianLanguageScript[] = [
-  // Upper Left Arc
-  { id: 'hi', script: 'हिन्दी', name: 'Hindi', top: '15%', left: '22%', color: 'text-cyan-300', glow: 'rgba(34, 211, 238, 0.45)', delay: '0s' },
-  { id: 'bn', script: 'বাংলা', name: 'Bengali', top: '24%', left: '11%', color: 'text-amber-300', glow: 'rgba(251, 191, 36, 0.45)', reverse: true, delay: '1.2s' },
-  { id: 'mr', script: 'मराठी', name: 'Marathi', top: '11%', left: '36%', color: 'text-teal-300', glow: 'rgba(45, 212, 191, 0.4)', delay: '2.5s' },
-  { id: 'pa', script: 'ਪੰਜਾਬੀ', name: 'Punjabi', top: '35%', left: '7%', color: 'text-orange-300', glow: 'rgba(251, 146, 60, 0.4)', reverse: true, delay: '0.8s' },
-  { id: 'ur', script: 'اُردُو', name: 'Urdu', top: '46%', left: '13%', color: 'text-emerald-300', glow: 'rgba(52, 211, 153, 0.4)', delay: '3.1s' },
-  { id: 'as', script: 'অসমীয়া', name: 'Assamese', top: '56%', left: '8%', color: 'text-sky-300', glow: 'rgba(56, 189, 248, 0.4)', reverse: true, delay: '1.8s' },
-
-  // Apex Center & Sub-horizon
-  { id: 'sa', script: 'संस्कृत', name: 'Sanskrit', top: '8%', left: '49%', color: 'text-indigo-200', glow: 'rgba(199, 210, 254, 0.45)', delay: '2.0s' },
-  { id: 'mai', script: 'মৈথিলী', name: 'Maithili', top: '22%', left: '32%', color: 'text-purple-300', glow: 'rgba(216, 180, 254, 0.4)', reverse: true, delay: '0.4s' },
-
-  // Upper Right Arc
-  { id: 'ta', script: 'தமிழ்', name: 'Tamil', top: '16%', left: '77%', color: 'text-blue-300', glow: 'rgba(96, 165, 250, 0.45)', delay: '1.5s' },
-  { id: 'te', script: 'తెలుగు', name: 'Telugu', top: '26%', left: '87%', color: 'text-emerald-300', glow: 'rgba(52, 211, 153, 0.45)', reverse: true, delay: '0.6s' },
-  { id: 'gu', script: 'ગુજરાતી', name: 'Gujarati', top: '12%', left: '63%', color: 'text-amber-400', glow: 'rgba(251, 191, 36, 0.4)', delay: '2.8s' },
-  { id: 'kn', script: 'ಕನ್ನಡ', name: 'Kannada', top: '37%', left: '91%', color: 'text-yellow-300', glow: 'rgba(253, 224, 71, 0.4)', reverse: true, delay: '1.9s' },
-  { id: 'ml', script: 'മലയാളം', name: 'Malayalam', top: '48%', left: '84%', color: 'text-rose-300', glow: 'rgba(253, 164, 175, 0.4)', delay: '0.9s' },
-  { id: 'or', script: 'ଓଡ଼ିଆ', name: 'Odia', top: '57%', left: '89%', color: 'text-cyan-300', glow: 'rgba(34, 211, 238, 0.4)', reverse: true, delay: '2.2s' },
-  { id: 'en', script: 'English', name: 'English', top: '23%', left: '67%', color: 'text-slate-200', glow: 'rgba(226, 232, 240, 0.4)', delay: '3.4s' }
+const LEFT_FLANK_COL1: FlankScriptItem[] = [
+  { id: 'l1-1', text: 'हिंदी', styleType: 'stroke-glow', size: 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl' },
+  { id: 'l1-2', text: 'ગુજરાતી', styleType: 'stroke-white', size: 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl' },
+  { id: 'l1-3', text: 'தமிழ்', styleType: 'stroke-sky', size: 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl' },
+  { id: 'l1-4', text: 'ગુજરાતી', styleType: 'stroke-white', size: 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl' },
+  { id: 'l1-5', text: 'मराठी', styleType: 'stroke-glow', size: 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl' },
+  { id: 'l1-6', text: 'ಕನ್ನಡ', styleType: 'ghost-glow', size: 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl' }
 ];
 
-// Rotating orbit ring items placed radially along the semicircle dome
-const ORBIT_LANGUAGES = [
-  { script: 'हिन्दी', name: 'Hindi', angle: 0 },
-  { script: 'தமிழ்', name: 'Tamil', angle: 30 },
-  { script: 'తెలుగు', name: 'Telugu', angle: 60 },
-  { script: 'বাংলা', name: 'Bengali', angle: 90 },
-  { script: 'मराठी', name: 'Marathi', angle: 120 },
-  { script: 'ગુજરાતી', name: 'Gujarati', angle: 150 },
-  { script: 'ಕನ್ನಡ', name: 'Kannada', angle: 180 },
-  { script: 'മലയാളം', name: 'Malayalam', angle: 210 },
-  { script: 'ਪੰਜਾਬੀ', name: 'Punjabi', angle: 240 },
-  { script: 'ଓଡ଼ିଆ', name: 'Odia', angle: 270 },
-  { script: 'অসমীয়া', name: 'Assamese', angle: 300 },
-  { script: 'संस्कृत', name: 'Sanskrit', angle: 330 }
+const LEFT_FLANK_COL2: FlankScriptItem[] = [
+  { id: 'l2-1', text: 'संस्कृत', styleType: 'ghost-glow', size: 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl' },
+  { id: 'l2-2', text: 'हिंदी', styleType: 'stroke-sky', size: 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl' },
+  { id: 'l2-3', text: 'తెలుగు', styleType: 'stroke-white', size: 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl' },
+  { id: 'l2-4', text: 'தமிழ்', styleType: 'stroke-glow', size: 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl' },
+  { id: 'l2-5', text: 'हिंदी', styleType: 'stroke-white', size: 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl' }
 ];
+
+const RIGHT_FLANK_COL1: FlankScriptItem[] = [
+  { id: 'r1-1', text: 'తెలుగు', styleType: 'stroke-white', size: 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl' },
+  { id: 'r1-2', text: 'اُردُو', styleType: 'stroke-glow', size: 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl' },
+  { id: 'r1-3', text: 'বাংলা', styleType: 'stroke-sky', size: 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl' },
+  { id: 'r1-4', text: 'മലയാളം', styleType: 'stroke-white', size: 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl' },
+  { id: 'r1-5', text: 'বাংলা', styleType: 'ghost-glow', size: 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl' }
+];
+
+const RIGHT_FLANK_COL2: FlankScriptItem[] = [
+  { id: 'r2-1', text: 'বাংলা', styleType: 'stroke-glow', size: 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl' },
+  { id: 'r2-2', text: 'বাংলা', styleType: 'stroke-white', size: 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl' },
+  { id: 'r2-3', text: 'বাংলা', styleType: 'ghost-glow', size: 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl' },
+  { id: 'r2-4', text: 'ગુજરાતી', styleType: 'stroke-sky', size: 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl' },
+  { id: 'r2-5', text: 'বাংলা', styleType: 'stroke-white', size: 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl' },
+  { id: 'r2-6', text: 'ਪੰਜਾਬੀ', styleType: 'stroke-glow', size: 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl' }
+];
+
+const getStyleClass = (type: FlankScriptItem['styleType']) => {
+  switch (type) {
+    case 'stroke-sky':
+      return 'text-stroke-sky';
+    case 'stroke-glow':
+      return 'text-stroke-glow';
+    case 'ghost-glow':
+      return 'text-ghost-glow';
+    case 'stroke-white':
+    default:
+      return 'text-stroke-white';
+  }
+};
 
 export default function HeroScrollAnimation() {
   const [activeScenarioIdx, setActiveScenarioIdx] = useState(0);
@@ -244,7 +248,7 @@ export default function HeroScrollAnimation() {
       className="relative isolate pt-20 sm:pt-28 pb-20 sm:pb-28 px-3 sm:px-4 overflow-hidden min-h-screen"
     >
       {/* ========================================================================= */}
-      {/* DORA-STYLE HALF-PLANET HORIZON EFFECT (LIGHT, LUMINOUS & PROPERLY VISIBLE) */}
+      {/* DORA-STYLE HALF-PLANET HORIZON EFFECT & INDIAN LINGUISTIC WATERMARKS      */}
       {/* ========================================================================= */}
       <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden flex justify-center">
         
@@ -252,8 +256,8 @@ export default function HeroScrollAnimation() {
         <div className="absolute top-[80px] sm:top-[110px] w-[500px] sm:w-[900px] lg:w-[1300px] h-[320px] sm:h-[450px] bg-gradient-to-b from-[#38bdf8]/20 via-[#2563eb]/10 to-transparent blur-[85px] rounded-full" />
         
         {/* Deep Flank Cosmic Blue Glow */}
-        <div className="absolute top-0 left-[-5%] w-[450px] h-[450px] bg-[#1d4ed8]/12 blur-[150px] rounded-full" />
-        <div className="absolute top-0 right-[-5%] w-[450px] h-[450px] bg-[#0284c7]/12 blur-[150px] rounded-full" />
+        <div className="absolute top-0 left-[-5%] w-[450px] h-[450px] bg-[#1d4ed8]/15 blur-[150px] rounded-full" />
+        <div className="absolute top-0 right-[-5%] w-[450px] h-[450px] bg-[#0284c7]/15 blur-[150px] rounded-full" />
 
         {/* Cosmic Twinkling Stars (✦) in Deep Space */}
         <div className="absolute inset-0 overflow-hidden">
@@ -289,7 +293,77 @@ export default function HeroScrollAnimation() {
           ))}
         </div>
 
-        {/* The Half-Planet Spherical Horizon Dome */}
+        {/* ========================================================================= */}
+        {/* LEFT FLANK: INDIAN SCRIPT WATERMARK WATERFALL (Reference Image 3)         */}
+        {/* ========================================================================= */}
+        <div 
+          className="absolute left-[1%] sm:left-[2%] md:left-[3%] lg:left-[5%] xl:left-[7%] top-20 sm:top-24 z-0 flex gap-4 sm:gap-7 md:gap-10 opacity-30 sm:opacity-50 lg:opacity-65 select-none pointer-events-none"
+          style={{
+            maskImage: 'linear-gradient(to bottom, transparent, black 12%, black 85%, transparent)',
+            WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 12%, black 85%, transparent)'
+          }}
+        >
+          {/* Column 1 - drifts up slowly */}
+          <div className="flex flex-col gap-6 sm:gap-10 md:gap-14 animate-drift-up">
+            {LEFT_FLANK_COL1.map((item) => (
+              <span
+                key={item.id}
+                className={`font-bold font-serif tracking-wider ${item.size} ${getStyleClass(item.styleType)} transition-all duration-700`}
+              >
+                {item.text}
+              </span>
+            ))}
+          </div>
+
+          {/* Column 2 - drifts down slowly */}
+          <div className="flex flex-col gap-7 sm:gap-11 md:gap-16 pt-8 sm:pt-14 animate-drift-down">
+            {LEFT_FLANK_COL2.map((item) => (
+              <span
+                key={item.id}
+                className={`font-bold font-serif tracking-wider ${item.size} ${getStyleClass(item.styleType)} transition-all duration-700`}
+              >
+                {item.text}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* ========================================================================= */}
+        {/* RIGHT FLANK: INDIAN SCRIPT WATERMARK WATERFALL (Reference Image 3)        */}
+        {/* ========================================================================= */}
+        <div 
+          className="absolute right-[1%] sm:right-[2%] md:right-[3%] lg:right-[5%] xl:right-[7%] top-16 sm:top-20 z-0 flex gap-4 sm:gap-7 md:gap-10 opacity-30 sm:opacity-50 lg:opacity-65 select-none pointer-events-none"
+          style={{
+            maskImage: 'linear-gradient(to bottom, transparent, black 12%, black 85%, transparent)',
+            WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 12%, black 85%, transparent)'
+          }}
+        >
+          {/* Column 1 - drifts down slowly */}
+          <div className="flex flex-col gap-7 sm:gap-11 md:gap-16 pt-6 sm:pt-12 animate-drift-down">
+            {RIGHT_FLANK_COL1.map((item) => (
+              <span
+                key={item.id}
+                className={`font-bold font-serif tracking-wider ${item.size} ${getStyleClass(item.styleType)} transition-all duration-700`}
+              >
+                {item.text}
+              </span>
+            ))}
+          </div>
+
+          {/* Column 2 - drifts up slowly */}
+          <div className="flex flex-col gap-6 sm:gap-10 md:gap-14 animate-drift-up">
+            {RIGHT_FLANK_COL2.map((item) => (
+              <span
+                key={item.id}
+                className={`font-bold font-serif tracking-wider ${item.size} ${getStyleClass(item.styleType)} transition-all duration-700`}
+              >
+                {item.text}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* The Half-Planet Spherical Horizon Dome (CLEAN, NO VERTICAL LINES) */}
         <div 
           className="absolute top-[95px] sm:top-[125px] md:top-[140px] w-[160vw] min-w-[560px] max-w-[950px] md:max-w-[1500px] lg:max-w-[2100px] h-[160vw] min-w-[560px] max-w-[950px] md:max-w-[1500px] lg:max-w-[2100px] rounded-full"
           style={{
@@ -297,9 +371,9 @@ export default function HeroScrollAnimation() {
             transition: 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)'
           }}
         >
-          {/* 1. Luminous Curved Planet Rim Line (Crisp white + cyan horizon arc) */}
+          {/* 1. Luminous Curved Planet Rim Line (Crisp white + cyan horizon arc - NO side vertical borders!) */}
           <div 
-            className="absolute inset-0 rounded-full border-t-[2px] sm:border-t-[2.5px] border-x-[1px] border-white/90"
+            className="absolute inset-0 rounded-full border-t-[2px] sm:border-t-[2.5px] border-white/90"
             style={{
               maskImage: 'radial-gradient(ellipse 90% 48% at 50% 0%, black 35%, rgba(0,0,0,0.6) 65%, transparent 88%)',
               WebkitMaskImage: 'radial-gradient(ellipse 90% 48% at 50% 0%, black 35%, rgba(0,0,0,0.6) 65%, transparent 88%)',
@@ -313,85 +387,19 @@ export default function HeroScrollAnimation() {
 
           {/* 2. Light, Frosted Horizon Atmospheric Sheen (Visible under the rim) */}
           <div 
-            className="absolute inset-0 rounded-full"
+            className="absolute inset-0 rounded-full pointer-events-none"
             style={{
-              background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.28) 0%, rgba(186, 230, 253, 0.22) 6%, rgba(56, 189, 248, 0.16) 16%, rgba(37, 99, 235, 0.10) 32%, transparent 55%)'
+              background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.26) 0%, rgba(186, 230, 253, 0.18) 6%, rgba(56, 189, 248, 0.12) 16%, rgba(37, 99, 235, 0.08) 32%, transparent 55%)'
             }}
           />
 
           {/* 3. Planet Atmospheric Volume (Light and clearly visible against black space) */}
           <div 
-            className="absolute inset-0 rounded-full"
+            className="absolute inset-0 rounded-full pointer-events-none"
             style={{
-              background: 'radial-gradient(ellipse 70% 50% at 50% 0%, rgba(186, 230, 253, 0.24) 0%, rgba(56, 189, 248, 0.17) 20%, rgba(30, 58, 138, 0.22) 42%, rgba(12, 18, 32, 0.75) 68%, rgba(8, 11, 17, 0.96) 90%)'
+              background: 'radial-gradient(ellipse 70% 50% at 50% 0%, rgba(186, 230, 253, 0.22) 0%, rgba(56, 189, 248, 0.15) 20%, rgba(30, 58, 138, 0.20) 42%, rgba(12, 18, 32, 0.85) 68%, rgba(8, 11, 17, 0.98) 90%)'
             }}
           />
-
-          {/* 4. Fine Latitude Rings */}
-          <div className="absolute inset-x-16 sm:inset-x-24 top-20 sm:top-24 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-          <div className="absolute inset-x-28 sm:inset-x-40 top-44 sm:top-52 h-[1px] bg-gradient-to-r from-transparent via-sky-300/15 to-transparent" />
-          <div className="absolute inset-x-40 sm:inset-x-60 top-72 sm:top-84 h-[1px] bg-gradient-to-r from-transparent via-[#2563eb]/15 to-transparent" />
-
-          {/* 5. Rotating Indian Linguistic Orbit Ring (Slow, continuous celestial rotation) */}
-          <div className="absolute inset-[6%] rounded-full animate-orbit-slow pointer-events-none border border-sky-400/10">
-            {ORBIT_LANGUAGES.map((lang, idx) => {
-              const rad = (lang.angle * Math.PI) / 180;
-              const x = 50 + 49 * Math.cos(rad);
-              const y = 50 + 49 * Math.sin(rad);
-              return (
-                <div
-                  key={idx}
-                  className="absolute -translate-x-1/2 -translate-y-1/2 select-none"
-                  style={{ top: `${y}%`, left: `${x}%` }}
-                >
-                  <span className="inline-block px-2 sm:px-2.5 py-0.5 rounded-full bg-[#080d1a]/75 border border-sky-400/25 text-sky-200 text-[9px] sm:text-xs font-semibold tracking-wide shadow-[0_0_12px_rgba(56,189,248,0.25)] backdrop-blur-xs opacity-40 hover:opacity-90">
-                    {lang.script}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* 6. Ambient Floating Indian Languages Word Cloud (Subtle drifting & authentic script colors) */}
-          <div className="absolute inset-0 pointer-events-none overflow-hidden select-none">
-            {INDIAN_SCRIPTS.map((item) => (
-              <div
-                key={item.id}
-                className={`absolute ${item.reverse ? 'animate-float-subtle-reverse' : 'animate-float-subtle'} transition-all duration-500 opacity-40 hover:opacity-90`}
-                style={{
-                  top: item.top,
-                  left: item.left,
-                  animationDelay: item.delay
-                }}
-              >
-                <div 
-                  className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-[#090e1c]/70 border border-white/10 backdrop-blur-xs shadow-md"
-                  style={{
-                    boxShadow: `0 0 14px ${item.glow}`
-                  }}
-                >
-                  <span className={`font-bold tracking-wide text-[10px] sm:text-xs md:text-sm ${item.color}`}>
-                    {item.script}
-                  </span>
-                  <span className="text-[8px] sm:text-[9px] text-slate-400 hidden sm:inline font-mono">
-                    {item.name}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* 7. Semicircle Horizon Stream of Indian Scripts across Latitude Arc */}
-          <div className="absolute inset-x-12 sm:inset-x-28 top-44 sm:top-52 overflow-hidden h-7 pointer-events-none opacity-30">
-            <div className="animate-marquee-slow flex items-center gap-6 text-[10px] sm:text-xs text-sky-200 font-medium tracking-wider whitespace-nowrap">
-              {[...ORBIT_LANGUAGES, ...ORBIT_LANGUAGES, ...ORBIT_LANGUAGES].map((item, i) => (
-                <span key={i} className="flex items-center gap-2">
-                  <span className="text-white/90 font-semibold">{item.script}</span>
-                  <span className="text-[#38bdf8] text-[8px]">✦</span>
-                </span>
-              ))}
-            </div>
-          </div>
         </div>
       </div>
 
