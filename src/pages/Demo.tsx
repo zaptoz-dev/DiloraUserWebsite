@@ -31,7 +31,6 @@ export default function Demo() {
   const [countryCode, setCountryCode] = useState('+91');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
-  const [intent, setIntent] = useState('sales');
   const [notes, setNotes] = useState('');
   const [status, setStatus] = useState<Status>({ kind: 'idle' });
 
@@ -70,7 +69,6 @@ export default function Demo() {
           countryCode,
           phone: phone.trim(),
           email: email.trim(),
-          intent,
           notes: notes.trim(),
         }),
       });
@@ -140,10 +138,6 @@ export default function Demo() {
               <div className="flex items-start gap-3">
                 <span className="w-6 h-6 rounded-full bg-[#245ae2]/20 border border-[#245ae2]/40 text-[#60a5fa] flex items-center justify-center font-mono text-xs font-bold shrink-0">2</span>
                 <span>Answer naturally. Try interrupting mid-sentence or switching between Hindi &amp; English.</span>
-              </div>
-              <div className="flex items-start gap-3">
-                <span className="w-6 h-6 rounded-full bg-[#245ae2]/20 border border-[#245ae2]/40 text-[#60a5fa] flex items-center justify-center font-mono text-xs font-bold shrink-0">3</span>
-                <span>Experience sub-300ms latency with zero IVR keypad menus or robotic pauses.</span>
               </div>
             </div>
 
@@ -220,36 +214,17 @@ export default function Demo() {
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="email" className="text-xs font-semibold uppercase tracking-wider text-slate-400">Work Email</label>
-                  <input
-                    type="email"
-                    id="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    disabled={busy}
-                    placeholder="aarav@company.com"
-                    className={INPUT_CLASS}
-                  />
-                </div>
-
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="intent" className="text-xs font-semibold uppercase tracking-wider text-slate-400">Call Workflow</label>
-                  <select
-                    id="intent"
-                    value={intent}
-                    onChange={(e) => setIntent(e.target.value)}
-                    disabled={busy}
-                    className={`${INPUT_CLASS} cursor-pointer`}
-                  >
-                    <option value="sales" className="bg-[#0d121f] text-white">Sales &amp; Lead Qualification</option>
-                    <option value="support" className="bg-[#0d121f] text-white">Customer Support FAQ</option>
-                    <option value="booking" className="bg-[#0d121f] text-white">Appointment &amp; Visit Booking</option>
-                    <option value="collections" className="bg-[#0d121f] text-white">Debt Recovery &amp; Reminders</option>
-                    <option value="other" className="bg-[#0d121f] text-white">Custom Workflow</option>
-                  </select>
-                </div>
+              <div className="flex flex-col gap-2">
+                <label htmlFor="email" className="text-xs font-semibold uppercase tracking-wider text-slate-400">Work Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={busy}
+                  placeholder="aarav@company.com"
+                  className={INPUT_CLASS}
+                />
               </div>
 
               <div className="flex flex-col gap-2">
