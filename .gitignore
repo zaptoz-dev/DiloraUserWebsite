@@ -32,6 +32,10 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+# ...but the template must be committed, or a fresh clone has no record of which
+# variables the server needs. It holds placeholders only — verified to contain no
+# real values. Every actual credential still lives solely in .env on the box.
+!.env.example
 
 # vercel
 .vercel
