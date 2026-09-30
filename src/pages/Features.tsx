@@ -8,7 +8,7 @@ export default function Features() {
       category: "Conversational Core",
       tag: "Neural Engine",
       title: "Full-Duplex Speech & Interruption Recovery",
-      desc: "Callers speak like real humans—they interrupt mid-sentence, change their minds, or clarify names. Audeora listens while speaking and seamlessly recovers without awkward pauses.",
+      desc: "Callers speak like real humans: they interrupt mid-sentence, change their minds, or clarify names. Audeora listens while speaking and seamlessly recovers without awkward pauses.",
       stat: "<480ms",
       statLabel: "Average Voice Latency",
       features: [
@@ -39,7 +39,7 @@ export default function Features() {
       statLabel: "Simultaneous Channels",
       features: [
         "Direct SIP trunking via Exotel, Twilio, Plivo, and Tata Tele",
-        "Zero queue hold times—every call answered on ring #1",
+        "Zero queue hold times, with every call answered on ring #1",
         "Multi-agency isolation with dedicated number routing"
       ]
     },

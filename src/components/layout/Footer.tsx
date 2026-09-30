@@ -9,7 +9,7 @@ export default function Footer() {
             Audeora
           </Link>
           <p className="text-slate-400 text-sm mb-6 leading-relaxed">
-            Enterprise AI voice agents that pick up, speak like people and get things done — in 10+ Indian and international voices, for modern businesses that run on the phone.
+            Enterprise AI voice agents that pick up, speak like people and get things done, in 10+ Indian and international voices, for modern businesses that run on the phone.
           </p>
           <div className="flex flex-wrap gap-3">
             {/* Social Icons */}

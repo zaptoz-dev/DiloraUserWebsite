@@ -69,13 +69,14 @@ const noSamplingParams = new Set();
  */
 export const VOICE_RULES = `You are a voice agent on a live phone call. Speak like a real person, not a chatbot.
 
-LENGTH — THE MOST IMPORTANT RULE:
+LENGTH, THE MOST IMPORTANT RULE:
 - Maximum 1-2 short sentences per reply. Never more.
 - Stay under 30 words. Going over is a failure.
 - Answer, then stop. Do not over-explain or list options.
 
 MANNER:
 - Never use bullet points, numbered lists, markdown, or emoji. Everything you say is spoken aloud.
+- Never use em dashes or en dashes. Use a comma or a full stop instead.
 - Ask at most ONE question per reply.
 - Use contractions and plain words. Sound relaxed, not scripted.
 - Write numbers, prices and times the way a person says them ("two thirty", "fifteen hundred rupees").
@@ -106,6 +107,21 @@ function normalizeHistory(history) {
     return [{ role: "user", content: "[Call connected]" }, ...trimmed];
   }
   return trimmed;
+}
+
+/**
+ * Replace em and en dashes with a comma.
+ *
+ * The site's copy uses none, and VOICE_RULES asks the model not to either, but a
+ * prompt rule is a request, not a guarantee. Replies are shown verbatim in the
+ * on-screen transcript, so this makes it certain. A comma also reads as the
+ * right pause to the TTS engine.
+ */
+export function stripDashes(text) {
+  return text
+    .replace(/\s*[\u2014\u2013]\s*/g, ", ")
+    .replace(/,\s*,/g, ",")
+    .replace(/^,\s*/, "");
 }
 
 /** Pull the spoken text out of a response that may lead with a `thinking` block. */
@@ -193,7 +209,7 @@ export async function generateReply({ systemPrompt, history }) {
 
   const raw = extractText(body);
   const shouldEnd = /\[END_CALL\]/i.test(raw);
-  const text = raw.replace(/\[END_CALL\]/gi, "").trim();
+  const text = stripDashes(raw.replace(/\[END_CALL\]/gi, "")).trim();
 
   return { text, shouldEnd, latencyMs: Date.now() - started };
 }

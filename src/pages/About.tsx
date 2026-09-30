@@ -6,7 +6,7 @@ export default function About() {
   const values = [
     { title: "Built in India", desc: "Designed around regional languages, local telephony and the realities of high-volume Indian call operations." },
     { title: "Outcome obsessed", desc: "A good conversation is not enough. Every agent is designed to book, qualify, resolve or escalate." },
-    { title: "Trust by design", desc: "Consent, recording controls, redaction and guardrails are part of the system—not an afterthought." },
+    { title: "Trust by design", desc: "Consent, recording controls, redaction and guardrails are part of the system, not an afterthought." },
   ];
 
   return (

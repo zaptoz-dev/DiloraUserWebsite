@@ -418,7 +418,7 @@ export class VoiceSession extends EventEmitter {
       await this.speak(
         this.unheardCount === 1
           ? "Sorry, I didn't catch that."
-          : "I'm still not getting that — could you speak a little louder?",
+          : "I'm still not getting that. Could you speak a little louder?",
         { announce: true }
       );
       return;

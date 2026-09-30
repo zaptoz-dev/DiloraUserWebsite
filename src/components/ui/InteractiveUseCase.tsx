@@ -192,7 +192,7 @@ export default function InteractiveUseCase() {
           <p className="text-base sm:text-lg text-slate-400 mb-10 leading-relaxed">
             Select an industry below and start a live call to hear how our voice
             agent handles sector-specific workflows. You'll talk to it, and it
-            talks back &mdash; headphones recommended.
+            talks back. Headphones recommended.
           </p>
 
           <div className="flex flex-wrap gap-3" role="radiogroup" aria-label="Choose an industry">
@@ -238,8 +238,8 @@ export default function InteractiveUseCase() {
               </div>
               <h3 className="text-2xl font-bold text-white mb-2">{activeCase.label} AI Agent</h3>
               <p className="text-slate-400 text-sm mb-8 max-w-[280px]">
-                Have a real conversation about {activeCase.label.toLowerCase()} &mdash;
-                speak naturally, and interrupt whenever you like.
+                Have a real conversation about {activeCase.label.toLowerCase()}.
+                Speak naturally, and interrupt whenever you like.
               </p>
 
               {error && (

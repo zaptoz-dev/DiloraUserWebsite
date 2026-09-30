@@ -81,7 +81,7 @@ export default function Demo() {
       } else {
         setStatus({
           kind: 'placed',
-          message: `Audeora is dialling ${normalized} now. Pick up — it usually rings within a few seconds.`,
+          message: `Audeora is dialling ${normalized} now. Pick up, it usually rings within a few seconds.`,
         });
       }
       // Clear the number so a stray second submit can't re-dial the same person.
@@ -110,7 +110,7 @@ export default function Demo() {
             Hear Audeora on your <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#60a5fa] via-[#245ae2] to-[#93c5fd]">own phone</span>.
           </h1>
           <p className="text-base sm:text-lg text-slate-400 leading-relaxed max-w-2xl mx-auto">
-            Enter your mobile number and Audeora will dial you instantly—a live, autonomous AI call with sub-300ms conversational turn-taking.
+            Enter your mobile number and Audeora will dial you instantly for a live, autonomous AI call with sub-300ms conversational turn-taking.
           </p>
         </div>
       </section>

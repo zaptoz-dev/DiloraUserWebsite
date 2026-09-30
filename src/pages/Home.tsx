@@ -105,7 +105,7 @@ export default function Home() {
     },
     { 
       title: "Zero queue capacity", 
-      desc: "Festival spikes or Monday morning surges—Audeora answers all calls simultaneously without putting customers on hold." 
+      desc: "Festival spikes or Monday morning surges, Audeora answers all calls simultaneously without putting customers on hold." 
     },
     { 
       title: "Actionable call summaries", 
@@ -244,7 +244,7 @@ export default function Home() {
                 <ul className="flex flex-col gap-3 text-sm text-slate-200">
                   <li className="flex items-start gap-3">
                     <span className="text-emerald-400 font-bold mt-0.5">✓</span>
-                    Speaks naturally and listens simultaneously—recovers when interrupted
+                    Speaks naturally and listens simultaneously, recovering when interrupted
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="text-emerald-400 font-bold mt-0.5">✓</span>
