@@ -151,10 +151,63 @@ const COSMIC_STARS = [
   { top: '16%', left: '58%', size: 8, isCross: false, duration: 3.6, delay: 0.8, opacity: 0.6 }
 ];
 
+// Indian languages floating in the celestial semicircle dome background
+interface IndianLanguageScript {
+  id: string;
+  script: string;
+  name: string;
+  top: string;
+  left: string;
+  color: string;
+  glow: string;
+  reverse?: boolean;
+  delay: string;
+}
+
+const INDIAN_SCRIPTS: IndianLanguageScript[] = [
+  // Upper Left Arc
+  { id: 'hi', script: 'हिन्दी', name: 'Hindi', top: '15%', left: '22%', color: 'text-cyan-300', glow: 'rgba(34, 211, 238, 0.45)', delay: '0s' },
+  { id: 'bn', script: 'বাংলা', name: 'Bengali', top: '24%', left: '11%', color: 'text-amber-300', glow: 'rgba(251, 191, 36, 0.45)', reverse: true, delay: '1.2s' },
+  { id: 'mr', script: 'मराठी', name: 'Marathi', top: '11%', left: '36%', color: 'text-teal-300', glow: 'rgba(45, 212, 191, 0.4)', delay: '2.5s' },
+  { id: 'pa', script: 'ਪੰਜਾਬੀ', name: 'Punjabi', top: '35%', left: '7%', color: 'text-orange-300', glow: 'rgba(251, 146, 60, 0.4)', reverse: true, delay: '0.8s' },
+  { id: 'ur', script: 'اُردُو', name: 'Urdu', top: '46%', left: '13%', color: 'text-emerald-300', glow: 'rgba(52, 211, 153, 0.4)', delay: '3.1s' },
+  { id: 'as', script: 'অসমীয়া', name: 'Assamese', top: '56%', left: '8%', color: 'text-sky-300', glow: 'rgba(56, 189, 248, 0.4)', reverse: true, delay: '1.8s' },
+
+  // Apex Center & Sub-horizon
+  { id: 'sa', script: 'संस्कृत', name: 'Sanskrit', top: '8%', left: '49%', color: 'text-indigo-200', glow: 'rgba(199, 210, 254, 0.45)', delay: '2.0s' },
+  { id: 'mai', script: 'মৈথিলী', name: 'Maithili', top: '22%', left: '32%', color: 'text-purple-300', glow: 'rgba(216, 180, 254, 0.4)', reverse: true, delay: '0.4s' },
+
+  // Upper Right Arc
+  { id: 'ta', script: 'தமிழ்', name: 'Tamil', top: '16%', left: '77%', color: 'text-blue-300', glow: 'rgba(96, 165, 250, 0.45)', delay: '1.5s' },
+  { id: 'te', script: 'తెలుగు', name: 'Telugu', top: '26%', left: '87%', color: 'text-emerald-300', glow: 'rgba(52, 211, 153, 0.45)', reverse: true, delay: '0.6s' },
+  { id: 'gu', script: 'ગુજરાતી', name: 'Gujarati', top: '12%', left: '63%', color: 'text-amber-400', glow: 'rgba(251, 191, 36, 0.4)', delay: '2.8s' },
+  { id: 'kn', script: 'ಕನ್ನಡ', name: 'Kannada', top: '37%', left: '91%', color: 'text-yellow-300', glow: 'rgba(253, 224, 71, 0.4)', reverse: true, delay: '1.9s' },
+  { id: 'ml', script: 'മലയാളം', name: 'Malayalam', top: '48%', left: '84%', color: 'text-rose-300', glow: 'rgba(253, 164, 175, 0.4)', delay: '0.9s' },
+  { id: 'or', script: 'ଓଡ଼ିଆ', name: 'Odia', top: '57%', left: '89%', color: 'text-cyan-300', glow: 'rgba(34, 211, 238, 0.4)', reverse: true, delay: '2.2s' },
+  { id: 'en', script: 'English', name: 'English', top: '23%', left: '67%', color: 'text-slate-200', glow: 'rgba(226, 232, 240, 0.4)', delay: '3.4s' }
+];
+
+// Rotating orbit ring items placed radially along the semicircle dome
+const ORBIT_LANGUAGES = [
+  { script: 'हिन्दी', name: 'Hindi', angle: 0 },
+  { script: 'தமிழ்', name: 'Tamil', angle: 30 },
+  { script: 'తెలుగు', name: 'Telugu', angle: 60 },
+  { script: 'বাংলা', name: 'Bengali', angle: 90 },
+  { script: 'मराठी', name: 'Marathi', angle: 120 },
+  { script: 'ગુજરાતી', name: 'Gujarati', angle: 150 },
+  { script: 'ಕನ್ನಡ', name: 'Kannada', angle: 180 },
+  { script: 'മലയാളം', name: 'Malayalam', angle: 210 },
+  { script: 'ਪੰਜਾਬੀ', name: 'Punjabi', angle: 240 },
+  { script: 'ଓଡ଼ିଆ', name: 'Odia', angle: 270 },
+  { script: 'অসমীয়া', name: 'Assamese', angle: 300 },
+  { script: 'संस्कृत', name: 'Sanskrit', angle: 330 }
+];
+
 export default function HeroScrollAnimation() {
   const [activeScenarioIdx, setActiveScenarioIdx] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [mobileTab, setMobileTab] = useState<'caller' | 'pipeline' | 'crm'>('caller');
   const containerRef = useRef<HTMLDivElement>(null);
 
   const scenario = SCENARIOS[activeScenarioIdx];
@@ -278,6 +331,67 @@ export default function HeroScrollAnimation() {
           <div className="absolute inset-x-16 sm:inset-x-24 top-20 sm:top-24 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
           <div className="absolute inset-x-28 sm:inset-x-40 top-44 sm:top-52 h-[1px] bg-gradient-to-r from-transparent via-sky-300/15 to-transparent" />
           <div className="absolute inset-x-40 sm:inset-x-60 top-72 sm:top-84 h-[1px] bg-gradient-to-r from-transparent via-[#2563eb]/15 to-transparent" />
+
+          {/* 5. Rotating Indian Linguistic Orbit Ring (Slow, continuous celestial rotation) */}
+          <div className="absolute inset-[6%] rounded-full animate-orbit-slow pointer-events-none border border-sky-400/10">
+            {ORBIT_LANGUAGES.map((lang, idx) => {
+              const rad = (lang.angle * Math.PI) / 180;
+              const x = 50 + 49 * Math.cos(rad);
+              const y = 50 + 49 * Math.sin(rad);
+              return (
+                <div
+                  key={idx}
+                  className="absolute -translate-x-1/2 -translate-y-1/2 select-none"
+                  style={{ top: `${y}%`, left: `${x}%` }}
+                >
+                  <span className="inline-block px-2 sm:px-2.5 py-0.5 rounded-full bg-[#080d1a]/75 border border-sky-400/25 text-sky-200 text-[9px] sm:text-xs font-semibold tracking-wide shadow-[0_0_12px_rgba(56,189,248,0.25)] backdrop-blur-xs opacity-40 hover:opacity-90">
+                    {lang.script}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* 6. Ambient Floating Indian Languages Word Cloud (Subtle drifting & authentic script colors) */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden select-none">
+            {INDIAN_SCRIPTS.map((item) => (
+              <div
+                key={item.id}
+                className={`absolute ${item.reverse ? 'animate-float-subtle-reverse' : 'animate-float-subtle'} transition-all duration-500 opacity-40 hover:opacity-90`}
+                style={{
+                  top: item.top,
+                  left: item.left,
+                  animationDelay: item.delay
+                }}
+              >
+                <div 
+                  className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-[#090e1c]/70 border border-white/10 backdrop-blur-xs shadow-md"
+                  style={{
+                    boxShadow: `0 0 14px ${item.glow}`
+                  }}
+                >
+                  <span className={`font-bold tracking-wide text-[10px] sm:text-xs md:text-sm ${item.color}`}>
+                    {item.script}
+                  </span>
+                  <span className="text-[8px] sm:text-[9px] text-slate-400 hidden sm:inline font-mono">
+                    {item.name}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* 7. Semicircle Horizon Stream of Indian Scripts across Latitude Arc */}
+          <div className="absolute inset-x-12 sm:inset-x-28 top-44 sm:top-52 overflow-hidden h-7 pointer-events-none opacity-30">
+            <div className="animate-marquee-slow flex items-center gap-6 text-[10px] sm:text-xs text-sky-200 font-medium tracking-wider whitespace-nowrap">
+              {[...ORBIT_LANGUAGES, ...ORBIT_LANGUAGES, ...ORBIT_LANGUAGES].map((item, i) => (
+                <span key={i} className="flex items-center gap-2">
+                  <span className="text-white/90 font-semibold">{item.script}</span>
+                  <span className="text-[#38bdf8] text-[8px]">✦</span>
+                </span>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
@@ -305,31 +419,31 @@ export default function HeroScrollAnimation() {
           </div>
         </div>
 
-        {/* Main Headline (Optimized sizing for mobile: text-[30px] sm:text-5xl md:text-6xl lg:text-[70px]) */}
-        <h1 className="text-[30px] sm:text-5xl md:text-6xl lg:text-[70px] font-bold leading-[1.15] sm:leading-[1.08] mb-4 sm:mb-6 text-white tracking-tight drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]">
+        {/* Main Headline (Optimized for small mobile view: text-[26px] sm:text-4xl md:text-5xl lg:text-[68px]) */}
+        <h1 className="text-[26px] sm:text-4xl md:text-5xl lg:text-[68px] font-bold leading-[1.18] sm:leading-[1.08] mb-3 sm:mb-6 text-white tracking-tight drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]">
           Calls that sound <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#60a5fa] via-[#245ae2] to-[#93c5fd]">human</span>.<br />
           Outcomes that <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400">scale</span>.
-          <span className="inline-block text-[#38bdf8] text-xl sm:text-3xl ml-1.5 animate-pulse align-middle">✦</span>
+          <span className="inline-block text-[#38bdf8] text-lg sm:text-3xl ml-1.5 animate-pulse align-middle">✦</span>
         </h1>
 
         {/* Subtitle */}
-        <p className="text-xs sm:text-base md:text-lg text-slate-300 mb-6 sm:mb-8 max-w-xl px-2 leading-relaxed drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
+        <p className="text-xs sm:text-base md:text-lg text-slate-300 mb-4 sm:mb-8 max-w-lg px-2 leading-relaxed drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
           Audeora sits between your callers and your systems, turning real-time spoken conversations into completed business workflows in under 300ms.
         </p>
 
         {/* Dora-style Interactive Voice Prompt Input Bar (Compact on mobile) */}
-        <div className="w-full max-w-[340px] sm:max-w-lg md:max-w-xl mb-6 sm:mb-8 px-1">
-          <div className="relative flex items-center bg-[#0d1424]/90 backdrop-blur-xl border border-white/20 rounded-full p-1.5 sm:p-2 pl-3.5 sm:pl-5 shadow-[0_15px_40px_rgba(0,0,0,0.7),0_0_25px_rgba(36,90,226,0.25)] transition-all hover:border-white/35">
-            <span className="text-[#38bdf8] text-sm sm:text-base mr-2 shrink-0">✦</span>
+        <div className="w-full max-w-[300px] sm:max-w-lg md:max-w-xl mb-4 sm:mb-8 px-1">
+          <div className="relative flex items-center bg-[#0d1424]/90 backdrop-blur-xl border border-white/20 rounded-full p-1 sm:p-2 pl-3 sm:pl-5 shadow-[0_15px_40px_rgba(0,0,0,0.7),0_0_25px_rgba(36,90,226,0.25)] transition-all hover:border-white/35">
+            <span className="text-[#38bdf8] text-xs sm:text-base mr-1.5 sm:mr-2 shrink-0">✦</span>
             <input 
               type="text"
               readOnly
               value={scenario.leftPhone.userQuery}
-              className="bg-transparent text-[11px] sm:text-xs md:text-sm text-slate-200 placeholder-slate-400 outline-none w-full cursor-default truncate pr-2"
+              className="bg-transparent text-[10px] sm:text-xs md:text-sm text-slate-200 placeholder-slate-400 outline-none w-full cursor-default truncate pr-1 sm:pr-2"
             />
             <Link
               to="/voice-lab"
-              className="shrink-0 bg-[#245ae2] hover:bg-[#1d4ed8] text-white text-[10px] sm:text-xs font-semibold px-3 sm:px-4 py-1.5 sm:py-2 rounded-full transition-all flex items-center gap-1 shadow-[0_0_15px_rgba(36,90,226,0.5)]"
+              className="shrink-0 bg-[#245ae2] hover:bg-[#1d4ed8] text-white text-[9px] sm:text-xs font-semibold px-2.5 sm:px-4 py-1 sm:py-2 rounded-full transition-all flex items-center gap-1 shadow-[0_0_15px_rgba(36,90,226,0.5)]"
             >
               <span>Test Voice</span>
               <span>→</span>
@@ -338,10 +452,10 @@ export default function HeroScrollAnimation() {
         </div>
 
         {/* Primary Action Buttons (Responsive on mobile) */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-2.5 sm:gap-4 w-full sm:w-auto px-4 sm:px-0">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 w-full sm:w-auto px-4 sm:px-0">
           <Link 
             to="/demo" 
-            className="flex items-center justify-center gap-2 w-full sm:w-auto bg-[#245ae2] hover:bg-[#1d4ed8] px-6 sm:px-8 py-2.5 sm:py-3.5 rounded-full text-xs sm:text-[15px] font-semibold text-white transition-all duration-300 shadow-[0_0_30px_rgba(36,90,226,0.5)] hover:shadow-[0_0_50px_rgba(36,90,226,0.75)] hover:-translate-y-0.5"
+            className="flex items-center justify-center gap-2 w-full sm:w-auto bg-[#245ae2] hover:bg-[#1d4ed8] px-5 sm:px-8 py-2 sm:py-3.5 rounded-full text-xs sm:text-[15px] font-semibold text-white transition-all duration-300 shadow-[0_0_30px_rgba(36,90,226,0.5)] hover:shadow-[0_0_50px_rgba(36,90,226,0.75)] hover:-translate-y-0.5"
           >
             <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
@@ -351,7 +465,7 @@ export default function HeroScrollAnimation() {
           
           <Link 
             to="/voice-lab" 
-            className="flex items-center justify-center gap-2 w-full sm:w-auto bg-[#0d1220]/80 backdrop-blur-md border border-white/20 hover:border-white/40 px-6 sm:px-8 py-2.5 sm:py-3.5 rounded-full text-xs sm:text-[15px] font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 shadow-lg"
+            className="flex items-center justify-center gap-2 w-full sm:w-auto bg-[#0d1220]/80 backdrop-blur-md border border-white/20 hover:border-white/40 px-5 sm:px-8 py-2 sm:py-3.5 rounded-full text-xs sm:text-[15px] font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 shadow-lg"
           >
             Explore Voice Lab
             <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -399,74 +513,111 @@ export default function HeroScrollAnimation() {
           </svg>
         </div>
 
-        {/* 3-Column Grid: Left Phone, Center Audeora Engine, Right Phone */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-20">
+        {/* Mobile Stage Switcher (Calls -> Action Engine -> Live CRM) */}
+        <div className="lg:hidden flex items-center justify-center gap-1 p-1 bg-[#0c1220]/90 backdrop-blur-md border border-white/10 rounded-full mb-5 mx-auto w-fit shadow-xl">
+          <button
+            onClick={() => setMobileTab('caller')}
+            className={`px-3 py-1 rounded-full text-[10px] sm:text-xs font-semibold transition-all flex items-center gap-1 ${
+              mobileTab === 'caller'
+                ? 'bg-[#245ae2] text-white shadow-[0_0_15px_rgba(36,90,226,0.6)]'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            <span>📞</span>
+            <span>Caller View</span>
+          </button>
+          <button
+            onClick={() => setMobileTab('pipeline')}
+            className={`px-3 py-1 rounded-full text-[10px] sm:text-xs font-semibold transition-all flex items-center gap-1 ${
+              mobileTab === 'pipeline'
+                ? 'bg-[#245ae2] text-white shadow-[0_0_15px_rgba(36,90,226,0.6)]'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            <span>⚡</span>
+            <span>Action Engine</span>
+          </button>
+          <button
+            onClick={() => setMobileTab('crm')}
+            className={`px-3 py-1 rounded-full text-[10px] sm:text-xs font-semibold transition-all flex items-center gap-1 ${
+              mobileTab === 'crm'
+                ? 'bg-[#245ae2] text-white shadow-[0_0_15px_rgba(36,90,226,0.6)]'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            <span>📊</span>
+            <span>CRM Synced</span>
+          </button>
+        </div>
+
+        {/* 3-Column Layout: Responsive on mobile via tabs, Side-by-side on desktop */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center relative z-20">
           
           {/* ================= LEFT PHONE: CALLER / VOICE INPUT ================= */}
           <div 
-            className="lg:col-span-4 flex flex-col items-center"
+            className={`lg:col-span-4 flex-col items-center ${mobileTab === 'caller' ? 'flex' : 'hidden lg:flex'}`}
             style={{
               transform: `translateY(${scrollProgress * -15}px)`,
               transition: 'transform 0.2s ease-out'
             }}
           >
-            {/* Phone Bezel Frame */}
-            <div className="relative w-full max-w-[275px] sm:max-w-[310px] h-[480px] sm:h-[520px] rounded-[36px] sm:rounded-[42px] bg-[#0c121e] border-4 border-slate-700/60 shadow-[0_20px_60px_rgba(0,0,0,0.8),0_0_40px_rgba(36,90,226,0.2)] p-3.5 flex flex-col justify-between overflow-hidden">
+            {/* Phone Bezel Frame (Scaled down to 345px on mobile, 490px on desktop) */}
+            <div className="relative w-full max-w-[250px] sm:max-w-[285px] md:max-w-[310px] h-[345px] sm:h-[470px] md:h-[510px] rounded-[26px] sm:rounded-[38px] bg-[#0c121e] border-2 sm:border-4 border-slate-700/60 shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_30px_rgba(36,90,226,0.2)] p-2 sm:p-3.5 flex flex-col justify-between overflow-hidden">
               
               {/* Dynamic Island Notch */}
-              <div className="absolute top-4 left-1/2 -translate-x-1/2 w-28 h-6 bg-black rounded-full flex items-center justify-between px-3 z-30">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80 animate-pulse" />
-                <span className="w-3 h-3 rounded-full bg-slate-900 border border-slate-700" />
+              <div className="absolute top-2.5 sm:top-4 left-1/2 -translate-x-1/2 w-16 sm:w-28 h-3.5 sm:h-6 bg-black rounded-full flex items-center justify-between px-2 sm:px-3 z-30">
+                <span className="w-1.5 sm:w-2.5 h-1.5 sm:h-2.5 rounded-full bg-emerald-500/80 animate-pulse" />
+                <span className="w-2 sm:w-3 h-2 sm:h-3 rounded-full bg-slate-900 border border-slate-700" />
               </div>
 
               {/* Status Header */}
-              <div className="pt-2 px-3 flex items-center justify-between text-[11px] font-mono text-slate-400 z-20">
+              <div className="pt-0.5 sm:pt-2 px-2 sm:px-3 flex items-center justify-between text-[9px] sm:text-[11px] font-mono text-slate-400 z-20">
                 <span>9:41</span>
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-1 sm:gap-1.5">
                   <span>5G</span>
-                  <span className="w-4 h-2 rounded-sm border border-slate-400 inline-block p-0.5">
+                  <span className="w-3.5 sm:w-4 h-2 rounded-xs border border-slate-400 inline-block p-0.5">
                     <span className="w-full h-full bg-emerald-400 block rounded-2xs" />
                   </span>
                 </div>
               </div>
 
               {/* Inner Phone Screen Content */}
-              <div className="flex-1 mt-7 flex flex-col justify-between py-2">
+              <div className="flex-1 mt-2.5 sm:mt-6 flex flex-col justify-between py-1 sm:py-2">
                 
                 {/* Caller Identification Bar */}
-                <div className="bg-[#141b2d] rounded-2xl p-3 border border-white/5 flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#245ae2] to-[#60a5fa] flex items-center justify-center font-bold text-white text-xs shadow-md">
+                <div className="bg-[#141b2d] rounded-xl sm:rounded-2xl p-1.5 sm:p-3 border border-white/5 flex items-center justify-between mb-1.5 sm:mb-3">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gradient-to-tr from-[#245ae2] to-[#60a5fa] flex items-center justify-center font-bold text-white text-[10px] sm:text-xs shadow-md shrink-0">
                       {scenario.leftPhone.callerAvatar}
                     </div>
                     <div>
-                      <div className="text-xs font-semibold text-white leading-tight">
+                      <div className="text-[10px] sm:text-xs font-semibold text-white leading-tight">
                         {scenario.leftPhone.callerName}
                       </div>
-                      <div className="text-[10px] text-slate-400 font-mono">
+                      <div className="text-[8px] sm:text-[10px] text-slate-400 font-mono">
                         {scenario.leftPhone.callerNumber}
                       </div>
                     </div>
                   </div>
-                  <span className="px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-[10px] font-mono">
+                  <span className="px-1.5 sm:px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-[8px] sm:text-[10px] font-mono">
                     Live Call
                   </span>
                 </div>
 
                 {/* Dialog Messages */}
-                <div className="space-y-3 my-auto">
+                <div className="space-y-1.5 sm:space-y-3 my-auto">
                   
                   {/* Caller Query Bubble */}
-                  <div className="bg-[#1b2338] border border-white/10 rounded-2xl rounded-tl-sm p-3.5 text-xs text-slate-100 shadow-md">
-                    <div className="text-[10px] font-mono text-slate-400 uppercase tracking-wider mb-1">
+                  <div className="bg-[#1b2338] border border-white/10 rounded-xl sm:rounded-2xl rounded-tl-xs p-2 sm:p-3 text-[9px] sm:text-xs text-slate-100 shadow-md leading-relaxed">
+                    <div className="text-[8px] sm:text-[10px] font-mono text-slate-400 uppercase tracking-wider mb-0.5 sm:mb-1">
                       Spoken to AI:
                     </div>
                     "{scenario.leftPhone.userQuery}"
                   </div>
 
                   {/* Audeora Response Bubble */}
-                  <div className="bg-gradient-to-br from-[#1a3880]/70 to-[#0e1f4d]/90 border border-[#245ae2]/60 rounded-2xl rounded-tr-sm p-3.5 text-xs text-white shadow-[0_0_25px_rgba(36,90,226,0.3)]">
-                    <div className="flex items-center justify-between text-[10px] font-mono text-[#d6f549] font-bold mb-1">
+                  <div className="bg-gradient-to-br from-[#1a3880]/70 to-[#0e1f4d]/90 border border-[#245ae2]/60 rounded-xl sm:rounded-2xl rounded-tr-xs p-2 sm:p-3 text-[9px] sm:text-xs text-white shadow-[0_0_20px_rgba(36,90,226,0.3)] leading-relaxed">
+                    <div className="flex items-center justify-between text-[8px] sm:text-[10px] font-mono text-[#d6f549] font-bold mb-0.5 sm:mb-1">
                       <span className="flex items-center gap-1">
                         <span className="w-1.5 h-1.5 rounded-full bg-[#d6f549] animate-pulse" />
                         Audeora Response (&lt;300ms)
@@ -476,8 +627,8 @@ export default function HeroScrollAnimation() {
                   </div>
 
                   {/* Status Tag */}
-                  <div className="bg-[#0b101c] border border-white/10 rounded-xl px-3 py-2 flex items-center justify-between text-[11px]">
-                    <div className="flex items-center gap-1.5 text-slate-300 font-medium">
+                  <div className="bg-[#0b101c] border border-white/10 rounded-lg sm:rounded-xl px-2 sm:px-3 py-1 sm:py-1.5 flex items-center justify-between text-[9px] sm:text-[11px]">
+                    <div className="flex items-center gap-1 text-slate-300 font-medium">
                       <span className="text-[#60a5fa]">⚡</span>
                       <span>{scenario.leftPhone.statusTag}</span>
                     </div>
@@ -485,15 +636,15 @@ export default function HeroScrollAnimation() {
                   </div>
 
                   {/* Action summary note */}
-                  <div className="text-[11px] text-slate-400 px-1 leading-relaxed">
+                  <div className="text-[8px] sm:text-[11px] text-slate-400 px-1 leading-tight line-clamp-2">
                     {scenario.leftPhone.actionNote}
                   </div>
                 </div>
 
                 {/* Micro Audio Equalizer at bottom */}
-                <div className="pt-2 border-t border-white/5 flex items-center justify-between text-[10px] font-mono text-slate-400">
+                <div className="pt-1 sm:pt-2 border-t border-white/5 flex items-center justify-between text-[8px] sm:text-[10px] font-mono text-slate-400">
                   <span className="flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#60a5fa] animate-ping" />
+                    <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-[#60a5fa] animate-ping" />
                     Audio Connected
                   </span>
                   <span className="text-[#d6f549]">48kHz Opus</span>
@@ -501,56 +652,56 @@ export default function HeroScrollAnimation() {
               </div>
 
               {/* Bottom Home Indicator Bar */}
-              <div className="w-24 h-1 bg-slate-600 rounded-full mx-auto mt-1" />
+              <div className="w-16 sm:w-24 h-0.5 sm:h-1 bg-slate-600 rounded-full mx-auto mt-0.5 sm:mt-1" />
             </div>
 
             {/* Left Floating App Icon Badge */}
-            <div className="mt-4 w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#245ae2] to-[#60a5fa] flex items-center justify-center text-xl shadow-[0_0_25px_rgba(36,90,226,0.5)] border border-white/20">
+            <div className="mt-2.5 sm:mt-4 w-9 h-9 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-[#245ae2] to-[#60a5fa] flex items-center justify-center text-sm sm:text-xl shadow-[0_0_20px_rgba(36,90,226,0.5)] border border-white/20">
               {scenario.leftBadgeIcon}
             </div>
           </div>
 
           {/* ================= CENTER: AUDEORA STEP PIPELINE ================= */}
-          <div className="lg:col-span-4 flex flex-col items-center text-center px-2">
+          <div className={`lg:col-span-4 flex-col items-center text-center px-2 ${mobileTab === 'pipeline' ? 'flex' : 'hidden lg:flex'}`}>
             
             {/* Audeora Logo & Branding */}
-            <div className="flex items-center gap-2.5 mb-5">
-              <div className="w-9 h-9 rounded-xl bg-[#245ae2] flex items-center justify-center font-bold text-white shadow-[0_0_20px_rgba(36,90,226,0.6)]">
+            <div className="flex items-center gap-2 mb-3 sm:mb-5">
+              <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl bg-[#245ae2] flex items-center justify-center font-bold text-white text-xs sm:text-base shadow-[0_0_20px_rgba(36,90,226,0.6)]">
                 A
               </div>
-              <span className="text-2xl font-bold tracking-tight text-white">
+              <span className="text-xl sm:text-2xl font-bold tracking-tight text-white">
                 Audeora
               </span>
             </div>
 
             {/* Steps Checklist Card */}
-            <div className="w-full max-w-[295px] sm:max-w-md bg-[#0d1424] border border-[#245ae2]/40 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-[0_0_50px_rgba(36,90,226,0.25)] backdrop-blur-xl relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-[#245ae2]/10 rounded-full blur-2xl pointer-events-none" />
+            <div className="w-full max-w-[260px] sm:max-w-md bg-[#0d1424] border border-[#245ae2]/40 rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 shadow-[0_0_40px_rgba(36,90,226,0.25)] backdrop-blur-xl relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-28 sm:w-32 h-28 sm:h-32 bg-[#245ae2]/10 rounded-full blur-2xl pointer-events-none" />
 
-              <div className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-4 text-left">
+              <div className="text-[10px] sm:text-xs font-mono text-slate-400 uppercase tracking-wider mb-2.5 sm:mb-4 text-left">
                 Autonomous Action Pipeline
               </div>
 
-              <div className="space-y-2.5 sm:space-y-3 text-left">
+              <div className="space-y-1.5 sm:space-y-3 text-left">
                 {scenario.centerSteps.map((step, idx) => (
                   <div 
                     key={idx}
-                    className="bg-[#121a2e] border border-white/5 rounded-xl px-3 py-2 sm:px-3.5 sm:py-2.5 flex items-center justify-between text-xs transition-all hover:border-[#245ae2]/40"
+                    className="bg-[#121a2e] border border-white/5 rounded-lg sm:rounded-xl px-2.5 sm:px-3.5 py-1.5 sm:py-2.5 flex items-center justify-between text-xs transition-all hover:border-[#245ae2]/40"
                   >
-                    <div className="flex items-center gap-2.5">
+                    <div className="flex items-center gap-2 sm:gap-2.5">
                       <span className="text-sm sm:text-base">{step.icon}</span>
-                      <span className="text-slate-200 font-medium text-[11px] sm:text-xs">
+                      <span className="text-slate-200 font-medium text-[10px] sm:text-xs">
                         {step.title}
                       </span>
                     </div>
-                    <span className="w-4 h-4 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-[10px] shrink-0">
+                    <span className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-[9px] sm:text-[10px] shrink-0">
                       ✓
                     </span>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-4 sm:mt-5 pt-3 sm:pt-4 border-t border-white/5 flex items-center justify-between text-[10px] sm:text-[11px] font-mono text-slate-400">
+              <div className="mt-3 sm:mt-5 pt-2.5 sm:pt-4 border-t border-white/5 flex items-center justify-between text-[9px] sm:text-[11px] font-mono text-slate-400">
                 <span>Latency</span>
                 <span className="text-emerald-400 font-bold">&lt;300ms Turnaround</span>
               </div>
@@ -559,56 +710,56 @@ export default function HeroScrollAnimation() {
 
           {/* ================= RIGHT PHONE: ACTION / DESTINATION ================= */}
           <div 
-            className="lg:col-span-4 flex flex-col items-center"
+            className={`lg:col-span-4 flex-col items-center ${mobileTab === 'crm' ? 'flex' : 'hidden lg:flex'}`}
             style={{
               transform: `translateY(${scrollProgress * 15}px)`,
               transition: 'transform 0.2s ease-out'
             }}
           >
-            {/* Phone Bezel Frame */}
-            <div className="relative w-full max-w-[275px] sm:max-w-[310px] h-[480px] sm:h-[520px] rounded-[36px] sm:rounded-[42px] bg-[#0c121e] border-4 border-slate-700/60 shadow-[0_20px_60px_rgba(0,0,0,0.8),0_0_40px_rgba(36,90,226,0.2)] p-3.5 flex flex-col justify-between overflow-hidden">
+            {/* Phone Bezel Frame (Scaled down to 345px on mobile, 490px on desktop) */}
+            <div className="relative w-full max-w-[250px] sm:max-w-[285px] md:max-w-[310px] h-[345px] sm:h-[470px] md:h-[510px] rounded-[26px] sm:rounded-[38px] bg-[#0c121e] border-2 sm:border-4 border-slate-700/60 shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_30px_rgba(36,90,226,0.2)] p-2 sm:p-3.5 flex flex-col justify-between overflow-hidden">
               
               {/* Dynamic Island Notch */}
-              <div className="absolute top-4 left-1/2 -translate-x-1/2 w-28 h-6 bg-black rounded-full flex items-center justify-between px-3 z-30">
-                <span className="w-2.5 h-2.5 rounded-full bg-blue-500/80 animate-pulse" />
-                <span className="w-3 h-3 rounded-full bg-slate-900 border border-slate-700" />
+              <div className="absolute top-2.5 sm:top-4 left-1/2 -translate-x-1/2 w-16 sm:w-28 h-3.5 sm:h-6 bg-black rounded-full flex items-center justify-between px-2 sm:px-3 z-30">
+                <span className="w-1.5 sm:w-2.5 h-1.5 sm:h-2.5 rounded-full bg-blue-500/80 animate-pulse" />
+                <span className="w-2 sm:w-3 h-2 sm:h-3 rounded-full bg-slate-900 border border-slate-700" />
               </div>
 
               {/* Status Header */}
-              <div className="pt-2 px-3 flex items-center justify-between text-[11px] font-mono text-slate-400 z-20">
+              <div className="pt-0.5 sm:pt-2 px-2 sm:px-3 flex items-center justify-between text-[9px] sm:text-[11px] font-mono text-slate-400 z-20">
                 <span>9:41</span>
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-1 sm:gap-1.5">
                   <span>5G</span>
-                  <span className="w-4 h-2 rounded-sm border border-slate-400 inline-block p-0.5">
+                  <span className="w-3.5 sm:w-4 h-2 rounded-xs border border-slate-400 inline-block p-0.5">
                     <span className="w-full h-full bg-emerald-400 block rounded-2xs" />
                   </span>
                 </div>
               </div>
 
               {/* Inner Screen Content: Live CRM / Spreadsheet / Calendar Table */}
-              <div className="flex-1 mt-7 flex flex-col justify-between py-2">
+              <div className="flex-1 mt-2.5 sm:mt-6 flex flex-col justify-between py-1 sm:py-2">
                 
                 <div>
                   {/* Screen Header Bar */}
-                  <div className="flex items-center justify-between pb-3 border-b border-white/5 mb-3">
-                    <div className="flex items-center gap-2">
-                      <span className="text-slate-400 text-xs">&lt;</span>
-                      <span className="text-xs font-semibold text-white truncate max-w-[170px]">
+                  <div className="flex items-center justify-between pb-1.5 sm:pb-3 border-b border-white/5 mb-1.5 sm:mb-3">
+                    <div className="flex items-center gap-1 sm:gap-2">
+                      <span className="text-slate-400 text-[10px] sm:text-xs">&lt;</span>
+                      <span className="text-[10px] sm:text-xs font-semibold text-white truncate max-w-[140px] sm:max-w-[170px]">
                         {scenario.rightPhone.title}
                       </span>
                     </div>
-                    <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-[10px] font-mono">
+                    <span className="px-1.5 sm:px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-[8px] sm:text-[10px] font-mono">
                       Synced ✓
                     </span>
                   </div>
 
                   {/* Spreadsheet Grid / CRM Table */}
-                  <div className="border border-white/10 rounded-xl overflow-hidden bg-[#0e1424] text-[10px]">
+                  <div className="border border-white/10 rounded-lg sm:rounded-xl overflow-hidden bg-[#0e1424] text-[8px] sm:text-[10px]">
                     
                     {/* Table Headers */}
-                    <div className="grid grid-cols-4 bg-[#141c30] p-2 border-b border-white/10 font-mono text-slate-400 font-semibold">
+                    <div className="grid grid-cols-4 bg-[#141c30] p-1 sm:p-2 border-b border-white/10 font-mono text-slate-400 font-semibold">
                       {scenario.rightPhone.columns.map((col, idx) => (
-                        <div key={idx} className="truncate px-1">{col}</div>
+                        <div key={idx} className="truncate px-0.5 sm:px-1">{col}</div>
                       ))}
                     </div>
 
@@ -617,14 +768,14 @@ export default function HeroScrollAnimation() {
                       {scenario.rightPhone.rows.map((row, rIdx) => (
                         <div 
                           key={rIdx} 
-                          className={`grid grid-cols-4 p-2 items-center ${
+                          className={`grid grid-cols-4 p-1 sm:p-2 items-center ${
                             rIdx === 0 ? 'bg-[#245ae2]/15 text-white font-medium' : 'text-slate-300'
                           }`}
                         >
                           {row.map((cell, cIdx) => (
                             <div 
                               key={cIdx} 
-                              className={`truncate px-1 ${
+                              className={`truncate px-0.5 sm:px-1 ${
                                 cIdx === 3 ? 'text-emerald-400 font-bold' : ''
                               }`}
                             >
@@ -638,35 +789,35 @@ export default function HeroScrollAnimation() {
                 </div>
 
                 {/* Destination Confirmation Card */}
-                <div className="bg-[#12192c] border border-white/5 rounded-2xl p-3 sm:p-3.5 my-auto">
-                  <div className="flex items-center justify-between mb-1.5 sm:mb-2">
-                    <span className="text-[9px] sm:text-[10px] font-mono text-slate-400 uppercase tracking-wider">
+                <div className="bg-[#12192c] border border-white/5 rounded-xl sm:rounded-2xl p-2 sm:p-3.5 my-auto">
+                  <div className="flex items-center justify-between mb-1 sm:mb-2">
+                    <span className="text-[8px] sm:text-[10px] font-mono text-slate-400 uppercase tracking-wider">
                       Webhook Status
                     </span>
-                    <span className="text-[9px] sm:text-[10px] font-mono text-[#d6f549] font-bold">200 OK</span>
+                    <span className="text-[8px] sm:text-[10px] font-mono text-[#d6f549] font-bold">200 OK</span>
                   </div>
-                  <div className="text-[11px] sm:text-xs text-slate-200 leading-relaxed">
+                  <div className="text-[9px] sm:text-xs text-slate-200 leading-snug">
                     Data recorded automatically with full audio transcript and caller intent tags.
                   </div>
                 </div>
 
                 {/* Connected Telephony Footnote */}
-                <div className="pt-2 border-t border-white/5 flex items-center justify-between text-[9px] sm:text-[10px] font-mono text-slate-400">
-                  <span>Carrier SIP: Exotel</span>
-                  <span className="text-emerald-400">Zero Queue Time</span>
+                <div className="pt-1 sm:pt-2 border-t border-white/5 flex items-center justify-between text-[8px] sm:text-[10px] font-mono text-slate-400">
+                  <span>SIP: Exotel</span>
+                  <span className="text-emerald-400">Zero Wait</span>
                 </div>
               </div>
 
               {/* Bottom Home Indicator Bar */}
-              <div className="w-24 h-1 bg-slate-600 rounded-full mx-auto mt-1" />
+              <div className="w-16 sm:w-24 h-0.5 sm:h-1 bg-slate-600 rounded-full mx-auto mt-0.5 sm:mt-1" />
             </div>
 
             {/* Right Floating App Icon Badges */}
-            <div className="mt-4 flex items-center gap-3">
+            <div className="mt-2.5 sm:mt-4 flex items-center gap-2 sm:gap-3">
               {scenario.rightBadges.map((badge, bIdx) => (
                 <div 
                   key={bIdx}
-                  className={`w-11 h-11 sm:w-12 sm:h-12 rounded-2xl ${badge.bg} flex items-center justify-center text-lg sm:text-xl shadow-lg border`}
+                  className={`w-9 h-9 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl ${badge.bg} flex items-center justify-center text-sm sm:text-xl shadow-lg border`}
                   title={badge.name}
                 >
                   {badge.icon}
@@ -678,9 +829,9 @@ export default function HeroScrollAnimation() {
         </div>
 
         {/* Bottom Interactive Workflow Selector */}
-        <div className="mt-10 sm:mt-16 flex flex-col items-center justify-center gap-3 sm:gap-4 px-2">
+        <div className="mt-8 sm:mt-16 flex flex-col items-center justify-center gap-2.5 sm:gap-4 px-2">
           
-          <div className="bg-[#0c1220]/90 backdrop-blur-2xl border border-white/10 rounded-full p-1 sm:p-1.5 flex items-center gap-1.5 sm:gap-2 shadow-2xl overflow-x-auto max-w-full">
+          <div className="bg-[#0c1220]/90 backdrop-blur-2xl border border-white/10 rounded-full p-1 sm:p-1.5 flex items-center gap-1 sm:gap-2 shadow-2xl overflow-x-auto max-w-full">
             
             {/* Play/Pause Auto-cycle Toggle */}
             <button
@@ -689,9 +840,9 @@ export default function HeroScrollAnimation() {
               title={isPlaying ? 'Pause Auto-cycle' : 'Resume Auto-cycle'}
             >
               {isPlaying ? (
-                <span className="font-mono text-[10px] sm:text-xs font-bold">||</span>
+                <span className="font-mono text-[9px] sm:text-xs font-bold">||</span>
               ) : (
-                <span className="font-mono text-[10px] sm:text-xs font-bold">▶</span>
+                <span className="font-mono text-[9px] sm:text-xs font-bold">▶</span>
               )}
             </button>
 
@@ -705,7 +856,7 @@ export default function HeroScrollAnimation() {
                     setActiveScenarioIdx(idx);
                     setIsPlaying(false);
                   }}
-                  className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-[11px] sm:text-xs font-semibold transition-all flex items-center gap-1.5 sm:gap-2 shrink-0 ${
+                  className={`px-2.5 sm:px-4 py-1 sm:py-2 rounded-full text-[10px] sm:text-xs font-semibold transition-all flex items-center gap-1 sm:gap-2 shrink-0 ${
                     isSelected
                       ? 'bg-[#245ae2] text-white shadow-[0_0_20px_rgba(36,90,226,0.6)]'
                       : 'bg-transparent text-slate-400 hover:text-white hover:bg-white/5'
@@ -719,7 +870,7 @@ export default function HeroScrollAnimation() {
           </div>
 
           {/* Bottom helper text */}
-          <div className="text-[11px] sm:text-xs text-slate-400 text-center font-medium max-w-md px-2">
+          <div className="text-[10px] sm:text-xs text-slate-400 text-center font-medium max-w-md px-2">
             You choose which workflows your AI executes. Connect your telephony and CRM in minutes.
           </div>
 

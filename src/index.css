@@ -241,21 +241,45 @@ h1, h2, h3, h4, h5, h6 {
   to { transform: rotate(0deg); }
 }
 
-@keyframes ripple-pulse {
-  0% { transform: scale(0.92); opacity: 0.7; }
-  50% { transform: scale(1.2); opacity: 0.15; }
-  100% { transform: scale(0.92); opacity: 0.7; }
+@keyframes float-subtle {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-7px) rotate(1deg); }
 }
 
-.animate-spin-slow {
-  animation: spin-slow 24s linear infinite;
+@keyframes float-subtle-reverse {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(7px) rotate(-1deg); }
 }
 
-.animate-spin-reverse-slow {
-  animation: spin-reverse-slow 32s linear infinite;
+@keyframes orbit-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-.animate-ripple-pulse {
-  animation: ripple-pulse 5s ease-in-out infinite;
+@keyframes orbit-counter {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+.animate-float-subtle {
+  animation: float-subtle 6s ease-in-out infinite;
+}
+
+.animate-float-subtle-reverse {
+  animation: float-subtle-reverse 7.5s ease-in-out infinite;
+}
+
+.animate-marquee-slow {
+  display: flex;
+  width: max-content;
+  animation: marquee 40s linear infinite;
+}
+
+.animate-orbit-slow {
+  animation: orbit-slow 65s linear infinite;
+}
+
+.animate-orbit-counter {
+  animation: orbit-counter 80s linear infinite;
 }
 

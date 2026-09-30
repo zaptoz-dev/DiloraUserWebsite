@@ -28,10 +28,12 @@ export default function Navbar() {
   const closeMenu = () => setMobileMenuOpen(false);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-3 sm:pt-6 px-3 sm:px-4">
+    <header className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-2 sm:pt-6 px-3 sm:px-4 bg-gradient-to-b from-[#080b11] via-[#080b11]/60 to-transparent pb-2 pointer-events-none *:pointer-events-auto">
       <div 
         className={`w-full max-w-7xl flex items-center justify-between px-3.5 sm:px-6 py-2 sm:py-3 transition-all duration-500 rounded-full border ${
-          isScrolled ? 'bg-[#080b11]/90 border-white/10 backdrop-blur-xl shadow-2xl shadow-black/60' : 'bg-transparent border-transparent'
+          isScrolled 
+            ? 'bg-[#080b11]/95 border-white/15 backdrop-blur-xl shadow-2xl shadow-black/80' 
+            : 'bg-[#080b11]/80 sm:bg-transparent border-white/10 sm:border-transparent backdrop-blur-lg sm:backdrop-blur-none'
         }`}
       >
         <Link to="/" className="flex items-center gap-2 sm:gap-3 font-body font-bold text-base sm:text-xl tracking-tight text-white" onClick={closeMenu}>
