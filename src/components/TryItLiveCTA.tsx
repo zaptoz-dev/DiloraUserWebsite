@@ -3,7 +3,10 @@ import Badge from './ui/Badge';
 
 export default function TryItLiveCTA() {
   return (
-    <section className="py-24 px-4 border-t border-white/10 bg-[#0b0f19]">
+    // No background or top border of its own: the band used to sit on #0b0f19
+    // with a border-t, which read as an off-colour stripe above the footer on
+    // every page against the #080b11 page background.
+    <section className="py-24 px-4">
       <div className="max-w-4xl mx-auto text-center flex flex-col items-center">
         <Badge className="mb-8">TRY IT LIVE</Badge>
         <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white tracking-tight">
