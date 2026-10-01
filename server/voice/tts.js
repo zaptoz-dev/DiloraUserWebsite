@@ -23,6 +23,7 @@
 import { PollyClient, SynthesizeSpeechCommand } from "@aws-sdk/client-polly";
 import { SAMPLE_RATE, tts, ttsChain } from "./config.js";
 import * as sarvam from "./sarvam.js";
+import * as elevenlabs from "./elevenlabs.js";
 
 const MURF_STREAM_URL = "https://global.api.murf.ai/v1/speech/stream";
 const MAX_TTS_CHARS = 1500;
@@ -149,10 +150,25 @@ async function* murfStream(text) {
   }
 }
 
-/** name -> { stream(text, options), available() } */
+/**
+ * name -> { stream(text, voices), available() }
+ *
+ * `voices` maps provider name to that provider's voice id, because a voice id
+ * means nothing outside its own catalogue: ElevenLabs uses opaque ids, Sarvam
+ * uses speaker names. Each provider picks out its own entry and falls back to
+ * its configured default when the persona doesn't name one.
+ *
+ * Earlier this passed a single `voice` string and sarvam.stream() destructured
+ * `speaker`, so the persona's voice was silently dropped and every agent spoke
+ * as the default "priya".
+ */
 const providers = {
+  elevenlabs: {
+    stream: (text, voices) => elevenlabs.stream(text, { voiceId: voices.elevenlabs }),
+    available: () => Boolean(tts.elevenlabs.apiKey()),
+  },
   sarvam: {
-    stream: (text, options) => sarvam.stream(text, options),
+    stream: (text, voices) => sarvam.stream(text, { speaker: voices.sarvam }),
     available: () => Boolean(tts.sarvam.apiKey()),
   },
   polly: {
@@ -187,10 +203,13 @@ function candidates() {
  *
  * @param {string} rawText
  * @param {object} [options]
- * @param {string} [options.voice] Provider-specific voice id (a Sarvam speaker).
+ * @param {Record<string,string>} [options.voices] Voice id per provider, e.g.
+ *   { elevenlabs: "<voice id>", sarvam: "priya" }. Missing entries use that
+ *   provider's configured default.
  * @returns {AsyncGenerator<Buffer>}
  */
 export async function* synthesize(rawText, options = {}) {
+  const voices = options.voices ?? {};
   const text = sanitizeForSpeech(rawText);
   if (!text) return;
 
@@ -205,7 +224,7 @@ export async function* synthesize(rawText, options = {}) {
     let yielded = false;
 
     try {
-      for await (const chunk of providers[name].stream(text, options)) {
+      for await (const chunk of providers[name].stream(text, voices)) {
         if (chunk?.length) {
           yielded = true;
           yield chunk;

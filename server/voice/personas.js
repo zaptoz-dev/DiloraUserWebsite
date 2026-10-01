@@ -19,7 +19,7 @@
  * than cautious. The specifics are obviously fictional and let the agent hold a
  * real conversation.
  *
- * `voice` names a Sarvam bulbul:v3 speaker, so each industry agent sounds like a
+ * `voices` names one voice per TTS provider (ElevenLabs id, Sarvam speaker), so each industry agent sounds like a
  * different person rather than one voice wearing seven hats — which is most of
  * what makes the selector feel like it is doing something. Sarvam's catalogue
  * happens to contain exact matches for Priya, Rohan and Kavya. Every value here
@@ -39,8 +39,12 @@ const personas = [
     id: "real-estate",
     label: "Real Estate",
     agentName: "Priya",
-    /** Sarvam bulbul:v3 speaker — exact match for the agent's name. */
-    voice: "priya",
+    /**
+     * Voice per TTS provider. ElevenLabs is primary; Sarvam is used only if
+     * ElevenLabs refuses a request (for example, out of characters).
+     * ElevenLabs: Tarini: expressive and cheerful, suits a sales-led agent.
+     */
+    voices: { elevenlabs: "FFmp1h1BMl0iVHA0JxrI", sarvam: "priya" },
     company: "Sunrise Properties",
     greeting:
       "Hi, this is Priya from Sunrise Properties. Are you looking to buy, or to rent?",
@@ -69,8 +73,12 @@ If they ask about something not in your inventory, say you will have a colleague
     id: "hr",
     label: "Human Resources",
     agentName: "Ananya",
-    /** Sarvam bulbul:v3 speaker — warm, professional. */
-    voice: "neha",
+    /**
+     * Voice per TTS provider. ElevenLabs is primary; Sarvam is used only if
+     * ElevenLabs refuses a request (for example, out of characters).
+     * ElevenLabs: Rashmita: kind and supportive, suits a candidate screen.
+     */
+    voices: { elevenlabs: "tB49Hs4WRYjj1hLb5T9E", sarvam: "neha" },
     company: "Zaptoz Technologies",
     greeting:
       "Hi, Ananya from Zaptoz HR. Thanks for applying. Do you have five minutes to talk?",
@@ -102,8 +110,12 @@ Never discuss other candidates or promise a final decision.`,
     id: "retail",
     label: "Retail",
     agentName: "Meera",
-    /** Sarvam bulbul:v3 speaker — bright, service-desk energy. */
-    voice: "pooja",
+    /**
+     * Voice per TTS provider. ElevenLabs is primary; Sarvam is used only if
+     * ElevenLabs refuses a request (for example, out of characters).
+     * ElevenLabs: Neha P: relatable customer-care tone.
+     */
+    voices: { elevenlabs: "8baRIHZEGj62eS9YHzC6", sarvam: "pooja" },
     company: "Urban Threads",
     greeting:
       "Hi, this is Meera from Urban Threads support. How can I help you today?",
@@ -129,8 +141,12 @@ If something is outside the list above, offer to have a senior agent call back w
     id: "legal",
     label: "Legal",
     agentName: "Rohan",
-    /** Sarvam bulbul:v3 speaker — exact match for the agent's name. */
-    voice: "rohan",
+    /**
+     * Voice per TTS provider. ElevenLabs is primary; Sarvam is used only if
+     * ElevenLabs refuses a request (for example, out of characters).
+     * ElevenLabs: Moses Sam Paul: mature and professional.
+     */
+    voices: { elevenlabs: "sUwtOYEjCoROzbhBKwqi", sarvam: "rohan" },
     company: "Mehta & Associates",
     greeting:
       "Good afternoon, Mehta and Associates. This is Rohan. How can I direct your enquiry?",
@@ -161,8 +177,12 @@ If the matter sounds urgent (an arrest, a court date within a week, an eviction 
     id: "sales",
     label: "Sales Teams",
     agentName: "Arjun",
-    /** Sarvam bulbul:v3 speaker — confident male, suits an SDR. */
-    voice: "rahul",
+    /**
+     * Voice per TTS provider. ElevenLabs is primary; Sarvam is used only if
+     * ElevenLabs refuses a request (for example, out of characters).
+     * ElevenLabs: Aakash Aryan: energetic and engaging, built for conversation.
+     */
+    voices: { elevenlabs: "MXGyTMlsvQgQ4BL0emIa", sarvam: "rahul" },
     company: "Audeora",
     greeting:
       "Hi, Arjun from Audeora. You downloaded our voice-agent guide. Got a minute?",
@@ -194,8 +214,12 @@ Be direct and easy to talk to. If they are not interested, thank them and end th
     id: "services",
     label: "Services",
     agentName: "Kavya",
-    /** Sarvam bulbul:v3 speaker — exact match for the agent's name. */
-    voice: "kavya",
+    /**
+     * Voice per TTS provider. ElevenLabs is primary; Sarvam is used only if
+     * ElevenLabs refuses a request (for example, out of characters).
+     * ElevenLabs: Tarini again: only four Indian female voices exist on the account for five female agents.
+     */
+    voices: { elevenlabs: "FFmp1h1BMl0iVHA0JxrI", sarvam: "kavya" },
     company: "QuickFix Home Services",
     greeting:
       "QuickFix Home Services, this is Kavya. What needs fixing?",
@@ -225,8 +249,12 @@ If the caller describes a gas leak, an electrical burning smell, or major water 
     id: "healthcare",
     label: "Healthcare",
     agentName: "Divya",
-    /** Sarvam bulbul:v3 speaker — calm, reassuring. */
-    voice: "simran",
+    /**
+     * Voice per TTS provider. ElevenLabs is primary; Sarvam is used only if
+     * ElevenLabs refuses a request (for example, out of characters).
+     * ElevenLabs: Monika Sogam: designed for clinic appointment calls.
+     */
+    voices: { elevenlabs: "7xOqQceOZC5dhvkaqKtD", sarvam: "simran" },
     company: "Wellspring Clinic",
     greeting:
       "Wellspring Clinic, this is Divya speaking. Are you calling to book an appointment?",
@@ -269,11 +297,11 @@ export function isValidPersonaId(id) {
 
 /** Safe to expose: labels, names and voices only, never the prompts. */
 export function listPersonas() {
-  return personas.map(({ id, label, agentName, company, voice }) => ({
+  return personas.map(({ id, label, agentName, company, voices }) => ({
     id,
     label,
     agentName,
     company,
-    voice,
+    voices,
   }));
 }

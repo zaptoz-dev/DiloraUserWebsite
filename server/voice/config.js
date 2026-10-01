@@ -210,10 +210,23 @@ export const tts = {
   /**
    * "auto" walks `ttsChain` in order and uses the first provider that answers,
    * latching a failing one off for a few minutes so a dead vendor is not retried
-   * on every single turn. Name a single provider ("sarvam", "polly", "murf") to
-   * pin it and disable fallback.
+   * on every single turn. Name a single provider ("elevenlabs", "sarvam",
+   * "polly", "murf") to pin it and disable fallback.
    */
   provider: process.env.VOICE_TTS_PROVIDER || "auto",
+
+  elevenlabs: {
+    // Accepts either spelling; the .env uses ELEVEN_LABS_API_KEY.
+    apiKey: () => process.env.ELEVEN_LABS_API_KEY || process.env.ELEVENLABS_API_KEY,
+    /**
+     * eleven_v4_turbo. Measured on the streaming endpoint with this account's
+     * Indian voices: v4 Turbo p50 249ms, full v4 p50 1510ms, Flash v2.5 p50
+     * 185ms. Full v4 would add ~1.3s before every reply. See elevenlabs.js.
+     */
+    model: process.env.ELEVENLABS_MODEL || "eleven_v4_turbo",
+    /** Fallback when a persona does not name its own ElevenLabs voice (Monika Sogam). */
+    voiceId: process.env.ELEVENLABS_VOICE_ID || "7xOqQceOZC5dhvkaqKtD",
+  },
 
   sarvam: {
     apiKey: () => process.env.SARVAM_API_KEY,
@@ -254,25 +267,26 @@ export const tts = {
 /**
  * Provider preference order for "auto".
  *
- * Sarvam leads because its Indian voices suit this product, and because it is
- * the account with credit on it. Polly sits behind it as the safety net: it runs
- * on the AWS credentials Bedrock already needs, so it cannot be separately
- * out of quota.
+ * ElevenLabs leads: best voice quality of the four, with Indian voices on the
+ * account, and the fastest to first audio. Sarvam is next, since its voices
+ * suit an India-facing demo too. Polly is the safety net: it runs on the AWS
+ * credentials Bedrock already needs, so it cannot separately run out of quota.
  *
- * Measured time-to-first-byte, so the cost of the ordering is explicit:
- *   Polly  Kajal            ~200ms
- *   Sarvam bulbul:v3        ~429ms   (streaming, linear16)
- *   Murf   falcon-2         ~130-300ms  — but currently HTTP 402, out of characters
+ * ElevenLabs is pay-as-you-go with a character allowance. When it runs out it
+ * starts refusing requests, gets latched off for five minutes at a time, and
+ * Sarvam takes over without the visitor noticing anything but a voice change.
  *
- * Sarvam is therefore ~230ms slower to first audio than Polly. That is a
- * deliberate trade for voice quality on an India-facing demo. To prefer speed,
- * set VOICE_TTS_PROVIDER=polly.
+ * Measured time-to-first-byte:
+ *   ElevenLabs eleven_v4_turbo  ~249ms p50
+ *   Polly      Kajal            ~200ms
+ *   Sarvam     bulbul:v3        ~429ms   (streaming, linear16)
+ *   Murf       falcon-2         ~130-300ms, but HTTP 402, out of characters
  *
  * Murf is last rather than removed: the integration is intact and it returns to
  * service on its own the moment the balance is topped up.
  */
 export const ttsChain = (
-  process.env.VOICE_TTS_CHAIN || "sarvam,polly,murf"
+  process.env.VOICE_TTS_CHAIN || "elevenlabs,sarvam,polly,murf"
 )
   .split(",")
   .map((p) => p.trim().toLowerCase())
@@ -288,7 +302,11 @@ export function isConfigured() {
   );
   // Any one working voice is enough. Polly rides on the same AWS credentials, so
   // in practice hasLlm already implies a usable fallback.
-  const hasTts = Boolean(tts.sarvam.apiKey()) || hasLlm || Boolean(tts.murf.apiKey());
+  const hasTts =
+    Boolean(tts.elevenlabs.apiKey()) ||
+    Boolean(tts.sarvam.apiKey()) ||
+    hasLlm ||
+    Boolean(tts.murf.apiKey());
   return hasStt && hasLlm && hasTts;
 }
 
@@ -303,6 +321,10 @@ export function configSummary() {
     tts: {
       provider: tts.provider,
       chain: ttsChain,
+      elevenlabs: {
+        keyPresent: Boolean(tts.elevenlabs.apiKey()),
+        model: tts.elevenlabs.model,
+      },
       sarvam: {
         keyPresent: Boolean(tts.sarvam.apiKey()),
         speaker: tts.sarvam.speaker,

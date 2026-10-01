@@ -491,7 +491,7 @@ export class VoiceSession extends EventEmitter {
       // Each persona names its own voice, so the seven industries sound like
       // seven different people. Providers without a per-voice catalogue ignore
       // this and use their configured default.
-      for await (const chunk of synthesize(text, { voice: this.persona.voice })) {
+      for await (const chunk of synthesize(text, { voices: this.persona.voices })) {
         if (this.closed || generation !== this.playbackGeneration) break;
 
         // Vendor chunk sizes are arbitrary; re-slice to a fixed pace so the
