@@ -127,7 +127,7 @@ export class VoiceSession extends EventEmitter {
         company: this.persona.company,
       },
       voiceProvider: activeProvider(),
-      maxSeconds: limits.maxSessionSeconds,
+      maxSeconds: Number.isFinite(limits.maxSessionSeconds) ? limits.maxSessionSeconds : null,
     });
 
     this.ticker = setInterval(() => {

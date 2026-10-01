@@ -133,18 +133,31 @@ export const playback = {
 // ---------------------------------------------------------------------------
 // Session limits
 // ---------------------------------------------------------------------------
+/**
+ * A limit from the environment. 0 (or unset) means no limit.
+ *
+ * Every limit is off by choice of the site owner. The checks still run, so
+ * restoring one is a single env var, e.g. VOICE_MAX_SESSION_SECONDS=90.
+ * With all of them off, a session ends only when the visitor hangs up or
+ * closes the tab.
+ */
+const limitOf = (value) => {
+  const n = Number(value);
+  return Number.isFinite(n) && n > 0 ? n : Infinity;
+};
+
 export const limits = {
   enabled: (process.env.VOICE_DEMO_ENABLED ?? "true") !== "false",
-  maxPerIpPerHour: num(process.env.VOICE_MAX_PER_IP_PER_HOUR, 3),
-  maxConcurrent: num(process.env.VOICE_MAX_CONCURRENT, 5),
-  maxSessionSeconds: num(process.env.VOICE_MAX_SESSION_SECONDS, 90),
-
-  /** Stop paying for an idle session that the browser never closed. */
-  hangupAfterSilenceSeconds: num(process.env.VOICE_HANGUP_SILENCE_SEC, 20),
-
-  /** Belt and braces against a runaway loop burning Bedrock credits. */
-  maxTurns: num(process.env.VOICE_MAX_TURNS, 25),
+  maxPerIpPerHour: limitOf(process.env.VOICE_MAX_PER_IP_PER_HOUR),
+  maxConcurrent: limitOf(process.env.VOICE_MAX_CONCURRENT),
+  maxSessionSeconds: limitOf(process.env.VOICE_MAX_SESSION_SECONDS),
+  /** Hang up after this much caller silence. */
+  hangupAfterSilenceSeconds: limitOf(process.env.VOICE_HANGUP_SILENCE_SEC),
+  maxTurns: limitOf(process.env.VOICE_MAX_TURNS),
 };
+
+/** JSON has no Infinity; report "no limit" as null. */
+export const limitForJson = (n) => (Number.isFinite(n) ? n : null);
 
 /**
  * Exact-match origin allowlist. This endpoint spends Deepgram, Polly and
@@ -334,9 +347,12 @@ export function configSummary() {
       murf: { keyPresent: Boolean(tts.murf.apiKey()), voice: tts.murf.voiceId },
     },
     limits: {
-      maxPerIpPerHour: limits.maxPerIpPerHour,
-      maxConcurrent: limits.maxConcurrent,
-      maxSessionSeconds: limits.maxSessionSeconds,
+      // null = no limit
+      maxPerIpPerHour: limitForJson(limits.maxPerIpPerHour),
+      maxConcurrent: limitForJson(limits.maxConcurrent),
+      maxSessionSeconds: limitForJson(limits.maxSessionSeconds),
+      hangupAfterSilenceSeconds: limitForJson(limits.hangupAfterSilenceSeconds),
+      maxTurns: limitForJson(limits.maxTurns),
     },
   };
 }

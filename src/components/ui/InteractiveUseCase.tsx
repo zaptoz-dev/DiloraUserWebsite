@@ -259,7 +259,7 @@ export default function InteractiveUseCase() {
               </button>
 
               <p className="text-[11px] text-gray-500 mt-5 uppercase tracking-widest font-semibold">
-                {unavailableReason ?? 'Uses your microphone \u00b7 90 seconds'}
+                {unavailableReason ?? 'Uses your microphone'}
               </p>
             </div>
           )}
@@ -385,7 +385,7 @@ export default function InteractiveUseCase() {
               </h3>
               <p className="text-slate-400 text-xs mb-3 shrink-0">
                 {endReason === 'time_limit'
-                  ? 'The 90-second demo limit was reached.'
+                  ? 'The demo time limit was reached.'
                   : endReason === 'caller_silent'
                     ? 'The call ended after a long silence.'
                     : `${transcript.length} message${transcript.length === 1 ? '' : 's'} exchanged.`}

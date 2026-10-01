@@ -34,7 +34,7 @@
  */
 
 import { WebSocketServer } from "ws";
-import { allowedOrigins, limits, configSummary } from "./config.js";
+import { allowedOrigins, limits, configSummary, limitForJson } from "./config.js";
 import { isValidPersonaId, DEFAULT_PERSONA_ID, listPersonas } from "./personas.js";
 import { ttsStatus } from "./tts.js";
 import { VoiceSession } from "./session.js";
@@ -57,6 +57,8 @@ const ipHits = new Map();
 let activeSessions = 0;
 
 function rateLimitOk(ip) {
+  // No per-IP limit: nothing to track.
+  if (!Number.isFinite(limits.maxPerIpPerHour)) return true;
   const now = Date.now();
   const windowStart = now - 3600_000;
   const hits = (ipHits.get(ip) ?? []).filter((t) => t > windowStart);
@@ -273,6 +275,7 @@ export function voiceStatus() {
     tts: { ...summary.tts, ...ttsStatus() },
     personas: listPersonas(),
     activeSessions,
-    slotsAvailable: Math.max(0, limits.maxConcurrent - activeSessions),
+    // null = no concurrency limit
+    slotsAvailable: limitForJson(Math.max(0, limits.maxConcurrent - activeSessions)),
   };
 }

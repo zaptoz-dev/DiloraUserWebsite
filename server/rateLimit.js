@@ -14,9 +14,16 @@
  * behind more than one instance, move these counters to Redis.
  */
 
-function num(name, fallback) {
+/**
+ * A limit from the environment. 0 (or unset) means no limit.
+ *
+ * All limits are currently off by choice of the site owner. Each check below
+ * still runs, so restoring a limit is a single env var on the box, e.g.
+ * DEMO_MAX_PER_NUMBER_PER_DAY=3, with no code change.
+ */
+function limit(name) {
   const raw = Number(process.env[name]);
-  return Number.isFinite(raw) && raw > 0 ? raw : fallback;
+  return Number.isFinite(raw) && raw > 0 ? raw : Infinity;
 }
 
 const HOUR_MS = 60 * 60 * 1000;
@@ -24,11 +31,11 @@ const DAY_MS = 24 * HOUR_MS;
 
 export function getLimits() {
   return {
-    perIpPerHour: num("DEMO_MAX_PER_IP_PER_HOUR", 3),
-    perIpPerDay: num("DEMO_MAX_PER_IP_PER_DAY", 10),
-    perNumberPerHour: num("DEMO_MAX_PER_NUMBER_PER_HOUR", 1),
-    perNumberPerDay: num("DEMO_MAX_PER_NUMBER_PER_DAY", 3),
-    globalPerDay: num("DEMO_MAX_GLOBAL_PER_DAY", 100),
+    perIpPerHour: limit("DEMO_MAX_PER_IP_PER_HOUR"),
+    perIpPerDay: limit("DEMO_MAX_PER_IP_PER_DAY"),
+    perNumberPerHour: limit("DEMO_MAX_PER_NUMBER_PER_HOUR"),
+    perNumberPerDay: limit("DEMO_MAX_PER_NUMBER_PER_DAY"),
+    globalPerDay: limit("DEMO_MAX_GLOBAL_PER_DAY"),
   };
 }
 
