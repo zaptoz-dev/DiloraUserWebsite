@@ -181,7 +181,13 @@ export const stt = {
    * endpoint. nova-3 measured 0.3-1.4s consistently.
    */
   model: process.env.DEEPGRAM_STT_MODEL || "nova-3",
-  language: process.env.DEEPGRAM_LANGUAGE || "en",
+  /**
+   * "multi" so callers can speak English, Hindi, or a mix of both. Measured on
+   * nova-3: "en" returns an empty transcript for Hindi speech; "hi" handles
+   * Hindi but mangles English place names; "multi" got Hindi, English and
+   * Hinglish right and tags each with its language.
+   */
+  language: process.env.DEEPGRAM_LANGUAGE || "multi",
   timeoutMs: num(process.env.DEEPGRAM_TIMEOUT_MS, 12000),
 };
 

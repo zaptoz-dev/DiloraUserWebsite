@@ -191,8 +191,8 @@ export default function InteractiveUseCase() {
 
           <p className="text-base sm:text-lg text-slate-400 mb-10 leading-relaxed">
             Select an industry below and start a live call to hear how our voice
-            agent handles sector-specific workflows. You'll talk to it, and it
-            talks back. Headphones recommended.
+            agent handles sector-specific workflows. Talk to it in English or
+            Hindi, and it answers in the same language. Headphones recommended.
           </p>
 
           <div className="flex flex-wrap gap-3" role="radiogroup" aria-label="Choose an industry">
@@ -239,7 +239,7 @@ export default function InteractiveUseCase() {
               <h3 className="text-2xl font-bold text-white mb-2">{activeCase.label} AI Agent</h3>
               <p className="text-slate-400 text-sm mb-8 max-w-[280px]">
                 Have a real conversation about {activeCase.label.toLowerCase()}.
-                Speak naturally, and interrupt whenever you like.
+                Speak in English or Hindi, and interrupt whenever you like.
               </p>
 
               {error && (
@@ -259,7 +259,7 @@ export default function InteractiveUseCase() {
               </button>
 
               <p className="text-[11px] text-gray-500 mt-5 uppercase tracking-widest font-semibold">
-                {unavailableReason ?? 'Uses your microphone'}
+                {unavailableReason ?? 'English \u00b7 \u0939\u093f\u0902\u0926\u0940 \u00b7 Uses your microphone'}
               </p>
             </div>
           )}

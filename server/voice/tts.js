@@ -94,6 +94,8 @@ async function* pollyStream(text) {
       OutputFormat: "pcm",
       SampleRate: String(SAMPLE_RATE),
       VoiceId: tts.polly.voiceId,
+      // Kajal is bilingual en-IN/hi-IN; tell it which one so Devanagari is read as Hindi.
+      LanguageCode: /[\u0900-\u097F]/.test(text) ? "hi-IN" : "en-IN",
       Engine: tts.polly.engine,
     })
   );

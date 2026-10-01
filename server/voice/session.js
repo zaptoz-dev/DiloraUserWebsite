@@ -51,6 +51,22 @@ function rms(buffer) {
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+/** Devanagari anywhere means the caller is speaking Hindi or Hinglish. */
+const isHindi = (text) => /[\u0900-\u097F]/.test(text ?? "");
+
+/**
+ * Lines the session says on its own, outside the LLM. They follow the caller's
+ * language so someone talking in Hindi isn't suddenly answered in English.
+ */
+const LINES = {
+  repeat: { en: "Sorry, could you say that again?", hi: "माफ़ कीजिए, क्या आप फिर से बता सकते हैं?" },
+  unheard: { en: "Sorry, I didn't catch that.", hi: "माफ़ कीजिए, मैं सुन नहीं पाई।" },
+  louder: {
+    en: "I'm still not getting that. Could you speak a little louder?",
+    hi: "अभी भी ठीक से सुनाई नहीं दे रहा। क्या आप थोड़ा ज़ोर से बोल सकते हैं?",
+  },
+};
+
 const STATE = {
   STARTING: "starting",
   LISTENING: "listening",
@@ -108,6 +124,8 @@ export class VoiceSession extends EventEmitter {
     this.loudFrames = 0;
     this.processing = false;
     this.unheardCount = 0;
+    /** Language of the caller's latest utterance: "en" or "hi". */
+    this.language = "en";
     this.closed = false;
     this.ticker = null;
   }
@@ -157,6 +175,17 @@ export class VoiceSession extends EventEmitter {
       turns: this.turns,
     });
     this.emit("ended", reason);
+  }
+
+  /** A canned line in the caller's current language. */
+  say(key) {
+    const line = LINES[key];
+    if (this.language !== "hi") return line.en;
+    // Hindi first person agrees with the speaker's gender; only "unheard" varies.
+    if (key === "unheard" && this.persona.gender === "male") {
+      return "माफ़ कीजिए, मैं सुन नहीं पाया।";
+    }
+    return line.hi;
   }
 
   setState(state) {
@@ -350,6 +379,7 @@ export class VoiceSession extends EventEmitter {
 
       this.unheardCount = 0;
       this.turns++;
+      this.language = isHindi(transcript) ? "hi" : "en";
       this.history.push({ role: "user", content: transcript });
       this.sendJson({
         type: "transcript",
@@ -368,7 +398,7 @@ export class VoiceSession extends EventEmitter {
       if (!reply.text) {
         // Usually the Bedrock deadline firing. The caller has already waited,
         // so recover audibly *and* visibly rather than leaving a silent gap.
-        await this.speak("Sorry, could you say that again?", { announce: true });
+        await this.speak(this.say("repeat"), { announce: true });
         return;
       }
 
@@ -416,9 +446,7 @@ export class VoiceSession extends EventEmitter {
     if (wasSubstantial && this.unheardCount <= 2) {
       this.processing = false;
       await this.speak(
-        this.unheardCount === 1
-          ? "Sorry, I didn't catch that."
-          : "I'm still not getting that. Could you speak a little louder?",
+        this.unheardCount === 1 ? this.say("unheard") : this.say("louder"),
         { announce: true }
       );
       return;

@@ -104,7 +104,8 @@ export async function* stream(text, { speaker } = {}) {
     },
     body: JSON.stringify({
       text: text.slice(0, MAX_CHARS),
-      target_language_code: tts.sarvam.language,
+      // Hindi replies arrive in Devanagari; en-IN would read them badly.
+      target_language_code: /[\u0900-\u097F]/.test(text) ? "hi-IN" : tts.sarvam.language,
       speaker: resolveSpeaker(speaker),
       // bulbul:v3 only. v1/v2 reject these speakers outright.
       model: "bulbul:v3",
