@@ -2,7 +2,11 @@ import { Link } from 'react-router-dom';
 
 export default function Footer() {
   return (
-    <footer className="mt-24 border-t border-white/10 bg-[#080b11] py-16 px-4">
+    // No top margin: a margin here is a transparent gap, and the fixed
+    // orange/purple background glows in App.tsx showed through it as a
+    // coloured band above the footer on every page. Pages already end with
+    // their own bottom padding.
+    <footer className="border-t border-white/10 bg-[#080b11] py-16 px-4">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between gap-12">
         <div className="max-w-xs">
           <Link to="/" className="font-body font-bold text-2xl mb-4 block text-white tracking-tight">
