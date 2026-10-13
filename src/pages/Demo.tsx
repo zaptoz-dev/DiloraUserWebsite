@@ -110,7 +110,7 @@ export default function Demo() {
             Hear Audeora on your <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#60a5fa] via-[#245ae2] to-[#93c5fd]">own phone</span>.
           </h1>
           <p className="text-base sm:text-lg text-slate-400 leading-relaxed max-w-2xl mx-auto">
-            Enter your mobile number and Audeora will dial you instantly for a live, autonomous AI call with sub-300ms conversational turn-taking.
+            Enter your mobile number and Audeora will call you for a live AI conversation.
           </p>
         </div>
       </section>
@@ -133,18 +133,17 @@ export default function Demo() {
             <div className="space-y-4 text-sm text-slate-300">
               <div className="flex items-start gap-3">
                 <span className="w-6 h-6 rounded-full bg-[#245ae2]/20 border border-[#245ae2]/40 text-[#60a5fa] flex items-center justify-center font-mono text-xs font-bold shrink-0">1</span>
-                <span>You will receive an incoming phone call within 10 to 30 seconds.</span>
+                <span>You will receive an incoming phone call shortly.</span>
               </div>
               <div className="flex items-start gap-3">
                 <span className="w-6 h-6 rounded-full bg-[#245ae2]/20 border border-[#245ae2]/40 text-[#60a5fa] flex items-center justify-center font-mono text-xs font-bold shrink-0">2</span>
-                <span>Answer naturally. Try interrupting mid-sentence or switching between Hindi &amp; English.</span>
+                <span>Answer naturally and ask whatever you like.</span>
               </div>
             </div>
 
             <div className="pt-6 border-t border-white/5 text-xs text-slate-500 space-y-2 font-mono">
-              <div>• Powered by Carrier SIP Trunks</div>
-              <div>• TRAI compliant (9 AM - 9 PM IST)</div>
-              <div>• Zero sales reps or credit cards required</div>
+              <div>• Free to try</div>
+              <div>• No credit card required</div>
             </div>
           </div>
 
@@ -251,7 +250,7 @@ export default function Demo() {
                     className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white"
                   />
                 )}
-                {busy ? 'Connecting to Telecom Trunk…' : 'Trigger Live Demo Call'}
+                {busy ? 'Placing your call…' : 'Trigger Live Demo Call'}
               </button>
 
               <div aria-live="polite">
@@ -263,7 +262,7 @@ export default function Demo() {
                 )}
                 {status.kind === 'rescheduled' && (
                   <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-300">
-                    <p className="font-semibold mb-1">Call queued for compliant hours.</p>
+                    <p className="font-semibold mb-1">Call scheduled for later.</p>
                     <p className="text-amber-400/80 text-xs">{status.message}</p>
                   </div>
                 )}

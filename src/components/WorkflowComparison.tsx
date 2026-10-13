@@ -58,11 +58,11 @@ export default function WorkflowComparison() {
   const stepsWith = [
     {
       step: '01',
-      title: 'Instant Call Intake',
+      title: 'Call Intake',
       role: 'Audeora Voice Agent',
       badge: 'Agent',
       badgeColor: 'bg-[#d6f549] text-black font-bold',
-      desc: 'Answers on Ring #1 in caller\'s native language. Zero queue hold time.',
+      desc: 'Answers in the caller\'s language, without a keypad menu.',
       icon: '⚡'
     },
     {
@@ -71,7 +71,7 @@ export default function WorkflowComparison() {
       role: 'Neural Speech Engine',
       badge: 'Automated',
       badgeColor: 'bg-[#245ae2]/20 border border-[#245ae2]/40 text-[#93c5fd]',
-      desc: 'Classifies Hindi, English, Tamil, Telugu or regional dialects in first 2s.',
+      desc: 'Recognises the caller\'s language and what they need.',
       icon: '🌐'
     },
     {
@@ -80,7 +80,7 @@ export default function WorkflowComparison() {
       role: 'Audeora Voice Agent',
       badge: 'Agent',
       badgeColor: 'bg-[#d6f549] text-black font-bold',
-      desc: 'Pulls CRM history instantly; remembers previous caller promises & context.',
+      desc: 'Uses details from your systems to personalise the conversation.',
       icon: '🧠'
     },
     {
@@ -89,7 +89,7 @@ export default function WorkflowComparison() {
       role: 'Audeora Voice Agent',
       badge: 'Agent',
       badgeColor: 'bg-[#d6f549] text-black font-bold',
-      desc: 'Sub-300ms conversational turn-taking. Handles interruptions naturally.',
+      desc: 'Natural turn-taking. Handles interruptions smoothly.',
       icon: '🎯'
     },
     {
@@ -98,16 +98,16 @@ export default function WorkflowComparison() {
       role: 'Human Specialist',
       badge: 'Warm Handoff',
       badgeColor: 'bg-amber-500/20 border border-amber-500/40 text-amber-300',
-      desc: 'Only 15% edge cases handed over to humans with live summary screen pop.',
+      desc: 'Complex cases are handed to your team with a call summary.',
       icon: '👤'
     },
     {
       step: '06',
-      title: 'Real-Time CRM Sync',
+      title: 'CRM Update',
       role: 'Webhook Engine',
       badge: 'Automated',
       badgeColor: 'bg-[#245ae2]/20 border border-[#245ae2]/40 text-[#93c5fd]',
-      desc: 'Verbatim transcript, extracted entities, and sentiment logged instantly.',
+      desc: 'Transcript and key call details logged after the call.',
       icon: '✨'
     }
   ];
@@ -197,7 +197,7 @@ export default function WorkflowComparison() {
             <div className="w-full max-w-4xl mb-8 p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center gap-3 text-xs sm:text-sm text-amber-300">
               <span className="text-lg">⚠️</span>
               <div>
-                <strong className="text-amber-200">Linear Bottleneck Chain:</strong> 4 out of 6 call stages require human tele-callers. High call queues, script drift, and 20%+ dropped call rates during surges.
+                <strong className="text-amber-200">Linear Bottleneck Chain:</strong> Most call stages depend on human tele-callers, which means queues, inconsistent scripts and missed calls during busy periods.
               </div>
             </div>
 
@@ -243,16 +243,16 @@ export default function WorkflowComparison() {
             {/* Operational Impact Bar */}
             <div className="w-full grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
               <div className="p-4 rounded-2xl bg-black/40 border border-white/5">
-                <div className="text-xl font-bold text-amber-400 mb-1">8 - 14 Mins</div>
-                <div className="text-xs text-slate-400">Average Customer Wait Time</div>
+                <div className="text-xl font-bold text-amber-400 mb-1">Long Waits</div>
+                <div className="text-xs text-slate-400">Callers wait for a free agent</div>
               </div>
               <div className="p-4 rounded-2xl bg-black/40 border border-white/5">
-                <div className="text-xl font-bold text-rose-400 mb-1">22% Dropped</div>
-                <div className="text-xs text-slate-400">Peak Hour Abandonment Rate</div>
+                <div className="text-xl font-bold text-rose-400 mb-1">Missed Calls</div>
+                <div className="text-xs text-slate-400">Busy hours mean dropped calls</div>
               </div>
               <div className="p-4 rounded-2xl bg-black/40 border border-white/5">
                 <div className="text-xl font-bold text-slate-300 mb-1">Linear Scaling</div>
-                <div className="text-xs text-slate-400">More Calls = More Salaries</div>
+                <div className="text-xs text-slate-400">More calls means more hiring</div>
               </div>
             </div>
           </div>
@@ -268,7 +268,7 @@ export default function WorkflowComparison() {
             <div className="w-full max-w-4xl mb-8 p-4 rounded-2xl bg-[#245ae2]/15 border border-[#245ae2]/40 flex items-center gap-3 text-xs sm:text-sm text-[#93c5fd]">
               <span className="text-lg">⚡</span>
               <div>
-                <strong className="text-white">Continuous Autonomous Loop:</strong> 85%+ calls resolved end-to-end by Audeora Voice Agents. Sub-300ms conversation latency, zero queue delays, and real-time CRM updates.
+                <strong className="text-white">Continuous Autonomous Loop:</strong> Routine calls handled end to end by Audeora voice agents, with natural turn-taking and CRM updates after each call.
               </div>
             </div>
 
@@ -312,16 +312,16 @@ export default function WorkflowComparison() {
             {/* Performance Outcomes Bar */}
             <div className="w-full grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
               <div className="p-4 rounded-2xl bg-black/40 border border-[#245ae2]/30 shadow-md">
-                <div className="text-xl font-bold text-[#d6f549] mb-1">&lt;300ms</div>
-                <div className="text-xs text-slate-300">Voice Response Turnaround</div>
+                <div className="text-xl font-bold text-[#d6f549] mb-1">Natural</div>
+                <div className="text-xs text-slate-300">Conversational responses</div>
               </div>
               <div className="p-4 rounded-2xl bg-black/40 border border-[#245ae2]/30 shadow-md">
-                <div className="text-xl font-bold text-white mb-1">85%+ First Call</div>
-                <div className="text-xs text-slate-300">Autonomous Resolution Rate</div>
+                <div className="text-xl font-bold text-white mb-1">End to End</div>
+                <div className="text-xs text-slate-300">Routine calls handled by AI</div>
               </div>
               <div className="p-4 rounded-2xl bg-black/40 border border-[#245ae2]/30 shadow-md">
-                <div className="text-xl font-bold text-[#60a5fa] mb-1">0 Sec Hold</div>
-                <div className="text-xs text-slate-300">Parallel Calling Capacity</div>
+                <div className="text-xl font-bold text-[#60a5fa] mb-1">In Parallel</div>
+                <div className="text-xs text-slate-300">Several calls at once</div>
               </div>
             </div>
           </div>

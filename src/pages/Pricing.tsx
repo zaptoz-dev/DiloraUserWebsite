@@ -15,11 +15,11 @@ export default function Pricing() {
       isPopular: false,
       features: [
         "1 Production Voice Agent",
-        "Up to 50 concurrent calls",
-        "10+ Indian & Global accents",
-        "Sub-300ms conversation latency",
-        "Full call transcripts & recordings",
-        "CRM Webhook integrations (Zapier, Make)",
+        "Call capacity sized for a pilot",
+        "Indian & global voices",
+        "Natural conversation flow",
+        "Call transcripts & recordings",
+        "CRM webhook integration",
         "Standard Email & Chat Support"
       ],
       ctaText: "Start Pilot Trial",
@@ -29,16 +29,16 @@ export default function Pricing() {
       name: "Growth & Scale",
       tag: "High Volume Calling",
       desc: "For scaling operations with continuous multi-channel calling and bi-directional CRM sync.",
-      badge: "Most Popular",
+      badge: "Scale",
       isPopular: true,
       features: [
         "Up to 5 Specialized Voice Agents",
-        "Up to 500 concurrent call channels",
-        "Native CRM sync (Salesforce, Zoho, HubSpot)",
-        "Warm human agent transfer with context summary",
-        "Custom vocabulary & regional slang fine-tuning",
-        "Real-time analytics & sentiment scoring",
-        "Dedicated Slack channel & priority SLA"
+        "Higher call capacity",
+        "CRM sync",
+        "Human agent transfer with a call summary",
+        "Custom vocabulary",
+        "Call analytics",
+        "Priority support"
       ],
       ctaText: "Schedule Scale Demo",
       ctaLink: "/demo"
@@ -47,16 +47,16 @@ export default function Pricing() {
       name: "Enterprise & Agency",
       tag: "Multi-Client Deployment",
       desc: "For agencies, BPOs, and enterprises requiring dedicated infrastructure and white-labeling.",
-      badge: "Bespoke SLA",
+      badge: "Custom",
       isPopular: false,
       features: [
-        "Unlimited Voice Agents & isolated workspaces",
-        "1,000+ parallel calls with zero queue wait",
-        "Custom cloned voice models & bespoke personas",
-        "Direct carrier SIP trunking (Exotel, Twilio, Plivo)",
-        "On-premise / private cloud deployment option",
-        "Full SOC2 & HIPAA compliant data handling",
-        "24/7 dedicated solutions engineer"
+        "Multiple voice agents & isolated workspaces",
+        "Capacity sized to your call volume",
+        "Custom personas",
+        "SIP trunking with your carrier",
+        "Deployment options agreed with your team",
+        "Data handling agreed with your team",
+        "Dedicated solutions contact"
       ],
       ctaText: "Contact Enterprise Sales",
       ctaLink: "/demo"
@@ -66,19 +66,19 @@ export default function Pricing() {
   const faqs = [
     {
       q: "Can I bring my existing phone numbers and telecom carrier?",
-      a: "Yes. Audeora easily connects to your existing Exotel, Twilio, Plivo, or SIP trunk credentials. You don't have to change your publicized numbers or ported carriers."
+      a: "Yes. Audeora can work with your existing telephony provider and SIP trunk, so in most cases you can keep your current phone numbers."
     },
     {
       q: "How does Audeora handle callers speaking Hinglish or regional dialects?",
-      a: "Our speech pipeline is purpose-built for Indian multilingual patterns. In the first 2 seconds, Audeora classifies whether the caller prefers Hindi, English, Hinglish, Tamil, Telugu, or Gujarati, and switches context seamlessly."
+      a: "Audeora is designed for Indian callers. It can talk in English, Hindi or Hinglish and replies in the language the caller uses."
     },
     {
       q: "What happens when a caller asks a complex edge-case question?",
-      a: "Audeora executes a graceful warm transfer. The caller is connected to your human agent while an instant live summary pop appears on the human agent's screen, so the customer never repeats themselves."
+      a: "Audeora can transfer the call to someone on your team, along with a summary of the conversation so far, so the caller doesn't have to repeat themselves."
     },
     {
       q: "How fast can we launch our first live production campaign?",
-      a: "Most businesses go live within 24 to 48 hours. You simply provide your qualification script, attach your CRM webhook, test a few trial calls, and launch."
+      a: "Timelines depend on your workflow. You share your call script and CRM details, test a few trial calls with our team, and then launch."
     }
   ];
 
@@ -90,13 +90,13 @@ export default function Pricing() {
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-[#245ae2]/15 blur-[140px] rounded-full pointer-events-none" />
 
         <div className="max-w-4xl mx-auto relative z-10">
-          <Badge className="mb-6">TRANSPARENT VALUE</Badge>
+          <Badge className="mb-6">PLANS</Badge>
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-6 text-white leading-tight">
             Start with one workflow.<br />
             Scale to <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#60a5fa] via-[#245ae2] to-[#93c5fd]">every customer call</span>.
           </h1>
           <p className="text-lg md:text-xl text-slate-400 leading-relaxed max-w-2xl mx-auto">
-            Predictable plans tailored to your call volume and operational depth. Talk to our solutions team for a dedicated pilot.
+            Plans tailored to your call volume and operational needs. Talk to our team about a pilot.
           </p>
         </div>
       </section>

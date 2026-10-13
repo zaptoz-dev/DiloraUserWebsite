@@ -8,64 +8,64 @@ export default function Features() {
       category: "Conversational Core",
       tag: "Neural Engine",
       title: "Full-Duplex Speech & Interruption Recovery",
-      desc: "Callers speak like real humans: they interrupt mid-sentence, change their minds, or clarify names. Audeora listens while speaking and seamlessly recovers without awkward pauses.",
-      stat: "<480ms",
-      statLabel: "Average Voice Latency",
+      desc: "Callers speak like real humans: they interrupt mid-sentence, change their minds, or clarify names. Audeora listens while it speaks and picks the conversation back up.",
+      stat: "Natural",
+      statLabel: "Conversation flow",
       features: [
-        "Natural barge-in handling without robotic robotic stutter",
-        "Context-aware hesitation & filler word generation",
-        "Dynamic pitch and pace modulation based on caller emotion"
+        "Natural barge-in handling",
+        "Context-aware responses",
+        "Adjustable speaking pace and tone"
       ]
     },
     {
       category: "Multilingual Intelligence",
       tag: "Regional AI",
-      title: "10+ Native Indian & Global Accents",
-      desc: "Instant language detection within the first 2 seconds of the call. Effortlessly code-switches between English, Hindi, Hinglish, Tamil, Telugu, Marathi, and Gujarati in real time.",
-      stat: "10+",
+      title: "Native Indian & Global Accents",
+      desc: "Talk to callers in the language they are comfortable with, including English, Hindi and Hinglish, with replies in the same language.",
+      stat: "Multilingual",
       statLabel: "Languages & Accents",
       features: [
-        "Dialect familiarity for tier-2 and tier-3 Indian cities",
-        "Seamless English + Hindi (Hinglish) conversational flow",
+        "Voices that sound familiar to Indian callers",
+        "English + Hindi (Hinglish) conversations",
         "Pre-configured regional male and female vocal personas"
       ]
     },
     {
       category: "Telephony Infrastructure",
-      tag: "Carrier Ready",
-      title: "Zero-Hold Queue & Massive Concurrency",
-      desc: "Scale from 5 to 5,000 parallel calls during Diwali flash sales or campaign spikes. Plugs directly into your existing enterprise trunks with high carrier reliability.",
-      stat: "1,000+",
-      statLabel: "Simultaneous Channels",
+      tag: "Telephony",
+      title: "Parallel Calling for Busy Periods",
+      desc: "Take more calls at once during flash sales or campaign spikes. Connects to your existing phone numbers and carrier.",
+      stat: "Parallel",
+      statLabel: "Calling",
       features: [
-        "Direct SIP trunking via Exotel, Twilio, Plivo, and Tata Tele",
-        "Zero queue hold times, with every call answered on ring #1",
+        "SIP trunking with your telephony provider",
+        "Fewer callers left waiting on hold",
         "Multi-agency isolation with dedicated number routing"
       ]
     },
     {
       category: "Data & Workflows",
       tag: "CRM Sync",
-      title: "Instant Transcription & CRM Dispositioning",
-      desc: "Every call produces an auditable verbatim transcript, structured parameter extraction (budget, date, pin code), and sentiment classification delivered straight into your database.",
-      stat: "100%",
-      statLabel: "Transcribed & Synced",
+      title: "Transcription & CRM Dispositioning",
+      desc: "Calls can produce a transcript, structured details (budget, date, pin code) and a call outcome, delivered into your systems.",
+      stat: "Synced",
+      statLabel: "Transcripts & CRM",
       features: [
-        "Instant webhooks to Salesforce, Zoho, HubSpot, LeadSquared",
-        "Lead status dispositioning and promise-to-pay calendar sync",
-        "Warm human handoff with live call summary screen pop"
+        "Webhooks into your CRM",
+        "Lead status dispositioning and follow-up scheduling",
+        "Human handoff with a call summary"
       ]
     }
   ];
 
   const integrationPartners = [
-    { name: "Exotel", type: "Telephony Trunk" },
-    { name: "Twilio", type: "Global Voice" },
-    { name: "Plivo", type: "Carrier SIP" },
-    { name: "Salesforce", type: "CRM Sync" },
-    { name: "Zoho CRM", type: "Lead Pipeline" },
-    { name: "HubSpot", type: "Marketing Automation" },
-    { name: "LeadSquared", type: "Sales Execution" },
+    { name: "Telephony", type: "Your existing numbers" },
+    { name: "SIP Trunks", type: "Carrier connection" },
+    { name: "Inbound", type: "Answer incoming calls" },
+    { name: "Outbound", type: "Place follow-up calls" },
+    { name: "CRM", type: "Push call outcomes" },
+    { name: "Calendars", type: "Book appointments" },
+    { name: "Messaging", type: "Send confirmations" },
     { name: "Webhooks / REST", type: "Custom API" }
   ];
 
@@ -82,7 +82,7 @@ export default function Features() {
             Every call, handled like your <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#60a5fa] via-[#245ae2] to-[#93c5fd]">best tele-caller</span>.
           </h1>
           <p className="text-lg md:text-xl text-slate-400 leading-relaxed max-w-2xl mx-auto mb-10">
-            Engineered with low-latency audio pipelines, carrier-grade telephony, and bi-directional CRM integration for autonomous phone operations.
+            Built for natural phone conversations, with telephony and CRM integration for automated phone operations.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
@@ -159,7 +159,7 @@ export default function Features() {
               </div>
 
               <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-between">
-                <span className="text-xs text-slate-500 font-mono">Enterprise Ready</span>
+                <span className="text-xs text-slate-500 font-mono">Audeora platform</span>
                 <Link to="/demo" className="text-xs font-semibold text-[#60a5fa] hover:text-white flex items-center gap-1 transition-colors">
                   See in action &rarr;
                 </Link>
@@ -174,7 +174,7 @@ export default function Features() {
         <div className="text-center max-w-2xl mx-auto mb-12">
           <Badge className="mb-4">INTEGRATION ECOSYSTEM</Badge>
           <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
-            Connects seamlessly to your telecom & CRM stack
+            Connects to your telecom & CRM stack
           </h2>
           <p className="text-slate-400 text-sm sm:text-base">
             Bring your existing numbers, keep your current phone carrier, and feed qualified data into your CRM in real time.

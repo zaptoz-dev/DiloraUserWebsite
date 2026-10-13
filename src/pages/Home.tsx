@@ -10,28 +10,28 @@ export default function Home() {
 
   const stats = [
     {
-      metric: "10+",
-      label: "Indian & Global Languages",
-      detail: "Hindi, English, Tamil, Telugu, Marathi, Gujarati & more",
+      metric: "Speak",
+      label: "Natural voices",
+      detail: "Indian and global voices that sound like a real person on the line",
       badge: "Multilingual"
     },
     {
-      metric: "<300ms",
-      label: "Voice Response Latency",
-      detail: "Natural turn-taking with zero awkward pauses",
-      badge: "Real-time"
+      metric: "Listen",
+      label: "Real conversations",
+      detail: "Callers can interrupt, ask questions and change direction",
+      badge: "Conversational"
     },
     {
-      metric: "24/7",
-      label: "Parallel Calling Capacity",
-      detail: "Handles hundreds of concurrent inbound and outbound calls",
-      badge: "High Availability"
+      metric: "Act",
+      label: "Workflow ready",
+      detail: "Book, qualify, confirm and follow up as part of the call",
+      badge: "Automation"
     },
     {
-      metric: "100%",
-      label: "Logged & Transcribed",
-      detail: "Full transcripts, intent analysis and CRM dispositioning",
-      badge: "Enterprise Ready"
+      metric: "Log",
+      label: "Call records",
+      detail: "Transcripts and call summaries for your team",
+      badge: "Insights"
     }
   ];
 
@@ -39,24 +39,24 @@ export default function Home() {
     {
       id: 'support',
       title: 'Customer Support',
-      headline: 'Resolve customer inquiries with zero wait time',
+      headline: 'Resolve customer inquiries over the phone',
       description: 'Audeora handles inbound queries, order tracking, address verification, and common FAQs naturally in the caller’s preferred language.',
       features: [
-        'Instant answers without robotic IVR menus',
-        'Automatic language detection in first 2 seconds',
-        'Warm handoff with summary when human agents are needed'
+        'Natural conversation instead of IVR menus',
+        'Replies in the caller’s language',
+        'Hands off to your team when needed'
       ],
       tag: 'Inbound Resolution'
     },
     {
       id: 'sales',
       title: 'Sales & Lead Qualification',
-      headline: 'Qualify portal and campaign leads in seconds',
-      description: 'Connect with prospective buyers within seconds of their enquiry, identify budget and timeline, and book meetings directly into sales calendars.',
+      headline: 'Follow up on new leads quickly',
+      description: 'Call prospective buyers soon after they enquire, understand budget and timeline, and book meetings with your sales team.',
       features: [
-        'Sub-60-second follow-up on fresh inquiries',
+        'Prompt follow-up on new enquiries',
         'Consistent discovery and qualification questions',
-        'Calendar booking and direct CRM record creation'
+        'Meeting booking and CRM updates'
       ],
       tag: 'Pipeline Acceleration'
     },
@@ -68,19 +68,19 @@ export default function Home() {
       features: [
         'Pre-dispatch address and availability checks',
         'Rescheduling management without agent intervention',
-        'Instant webhook updates back into your operational database'
+        'Updates sent back to your systems'
       ],
       tag: 'Workflow Automation'
     },
     {
       id: 'collections',
       title: 'Reminders & Follow-ups',
-      headline: 'Consistent, polite follow-ups that get results',
-      description: 'Automate payment reminders, renewal notices, appointment follow-ups, and KYC nudges with clear, respectful compliance scripting.',
+      headline: 'Consistent, polite follow-ups',
+      description: 'Automate payment reminders, renewal notices, appointment follow-ups, and KYC nudges with clear, respectful scripts.',
       features: [
         'Promise-to-pay capture and scheduled callbacks',
-        'Full call recordings and transcripts for compliance',
-        'Zero script drift or tired tele-caller tone'
+        'Call recordings and transcripts for review',
+        'A consistent, courteous tone'
       ],
       tag: 'Compliance & Recovery'
     }
@@ -89,7 +89,7 @@ export default function Home() {
   const features = [
     { 
       title: "Voice recording & transcripts", 
-      desc: "Automatically record, store, and transcribe every conversation for quality assurance, compliance, and team review." 
+      desc: "Record, store, and transcribe conversations for quality review and team training." 
     },
     { 
       title: "Lead qualification & routing", 
@@ -97,23 +97,23 @@ export default function Home() {
     },
     { 
       title: "Human-like conversation flow", 
-      desc: "Sub-300ms turn-taking, natural fillers, barge-in support, and intelligent interruption handling." 
+      desc: "Natural turn-taking, barge-in support, and smooth interruption handling." 
     },
     { 
-      title: "10+ Indian & Global Voices", 
-      desc: "Hindi, English, Tamil, Telugu, Kannada, Malayalam, Marathi, Gujarati, Odia, Bengali and more." 
+      title: "Indian & Global Voices", 
+      desc: "Hindi, English and other Indian languages, with male and female voices." 
     },
     { 
-      title: "Zero queue capacity", 
-      desc: "Festival spikes or Monday morning surges, Audeora answers all calls simultaneously without putting customers on hold." 
+      title: "Built for busy periods", 
+      desc: "Festival spikes or Monday morning surges, Audeora takes calls in parallel so callers spend less time waiting." 
     },
     { 
       title: "Actionable call summaries", 
-      desc: "Transcripts, extracted parameters, caller sentiment, and disposition logged right after the call ends." 
+      desc: "Transcripts, key details, and call outcomes logged after the call ends." 
     },
     { 
       title: "Telephony & CRM ready", 
-      desc: "Plug your numbers from Exotel, Twilio, or Plivo, and push call data to Zoho, Salesforce, HubSpot, or webhooks." 
+      desc: "Use your existing phone numbers and send call data to your CRM or through webhooks." 
     },
     { 
       title: "Multi-agent workspaces", 
@@ -130,12 +130,12 @@ export default function Home() {
     { 
       num: "02", 
       title: "Select voice & language", 
-      desc: "Choose male or female voices across 10+ languages. Set speaking pace, persona tone, and language switching rules." 
+      desc: "Choose male or female voices and the languages you need. Set speaking pace, persona tone, and language rules." 
     },
     { 
       num: "03", 
       title: "Connect telephony & CRM", 
-      desc: "Attach your existing numbers (Exotel, Twilio, Plivo) and map CRM fields for automatic data logging." 
+      desc: "Attach your existing phone numbers and map CRM fields for automatic data logging." 
     },
     { 
       num: "04", 
@@ -248,20 +248,20 @@ export default function Home() {
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="text-emerald-400 font-bold mt-0.5">✓</span>
-                    10+ native Indian regional accents for authentic, local customer connection
+                    Indian voices and accents for a local, familiar feel
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="text-emerald-400 font-bold mt-0.5">✓</span>
-                    Instant answers in under 300ms without robotic pauses
+                    Responds conversationally, without robotic pauses
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="text-emerald-400 font-bold mt-0.5">✓</span>
-                    Live notes, dispositioning, and CRM records generated after every call
+                    Call notes and CRM records after each call
                   </li>
                 </ul>
               </div>
               <div className="mt-8 pt-6 border-t border-white/10 text-xs text-[#93c5fd] font-medium flex items-center justify-between">
-                <span>Enterprise ready on Exotel, Twilio & Plivo</span>
+                <span>Works with your existing telephony</span>
                 <Link to="/voice-lab" className="hover:underline flex items-center gap-1">Hear Voices &rarr;</Link>
               </div>
             </div>
@@ -278,7 +278,7 @@ export default function Home() {
               Tailored voice agents for your workflow
             </h2>
             <p className="text-slate-400 text-base sm:text-lg">
-              Switch between key use cases to see how Audeora handles diverse call scenarios in production.
+              Switch between key use cases to see how Audeora handles different call scenarios.
             </p>
           </div>
 
@@ -426,7 +426,7 @@ export default function Home() {
                 to="/voice-lab" 
                 className="w-full sm:w-auto bg-white/5 border border-white/10 hover:bg-white/10 text-white px-8 py-4 rounded-full font-semibold text-[15px] transition-all"
               >
-                Listen to 10+ Voices
+                Listen to the Voices
               </Link>
             </div>
           </div>

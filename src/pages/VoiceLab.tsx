@@ -273,13 +273,13 @@ export default function VoiceLab() {
         <div className="max-w-4xl mx-auto relative z-10">
           <Badge className="mb-6">VOICE ARCHITECTURE</Badge>
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-4 text-white leading-tight">
-            10 Indian &amp; Global Voices.<br />
+            Indian &amp; Global Voices.<br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#60a5fa] via-[#245ae2] to-[#93c5fd]">
               Optical DVD Sound Deck.
             </span>
           </h1>
           <p className="text-base sm:text-lg text-slate-400 max-w-xl mx-auto mb-6">
-            Select any language disc, toggle between male and female personas, and experience crystal-clear studio acoustics.
+            Select any language disc, toggle between male and female personas, and listen to each voice.
           </p>
 
           {/* Master Gender Pill */}
@@ -324,7 +324,7 @@ export default function VoiceLab() {
                 DVD AUDIO OPTICAL DECK
               </div>
               <span className="text-xs font-mono text-slate-400 hidden sm:inline">
-                DOLBY DIGITAL STEREO // 48kHz 24-BIT
+                AUDEORA VOICE SAMPLES
               </span>
             </div>
 
@@ -542,7 +542,7 @@ export default function VoiceLab() {
 
               {/* Bottom Direct Callback Link */}
               <div className="flex items-center justify-between text-xs pt-1 px-1">
-                <span className="text-slate-400">Sub-300ms Audio Turnaround</span>
+                <span className="text-slate-400">Natural Conversation Flow</span>
                 <Link to="/demo" className="text-[#60a5fa] hover:text-white font-semibold transition-colors flex items-center gap-1">
                   Test On Your Phone &rarr;
                 </Link>

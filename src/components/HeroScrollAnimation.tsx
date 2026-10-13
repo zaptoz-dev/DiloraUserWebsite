@@ -38,15 +38,15 @@ const SCENARIOS: WorkflowScenario[] = [
       callerNumber: '+91 98201 •••••',
       callerAvatar: 'RV',
       userQuery: 'Namaste, mujhe Dr. Sharma ke saath kal shaam 4 baje consultation book karna hai.',
-      aiResponse: 'Haanji Rahul ji! Kal 4:00 PM Dr. Sharma ke saath slot confirm kar diya hai. WhatsApp confirmation bhej diya hai.',
+      aiResponse: 'Haanji Rahul ji! Kal 4:00 PM Dr. Sharma ke saath slot confirm kar diya hai. Confirmation message bhej diya hai.',
       statusTag: 'Using Audeora Voice',
       actionNote: 'Appointment scheduled and confirmed in clinic calendar.'
     },
     centerSteps: [
-      { icon: '📞', title: 'Answer in 240ms (Hindi)', color: 'text-blue-400' },
+      { icon: '📞', title: 'Answer in Hindi', color: 'text-blue-400' },
       { icon: '🗣️', title: 'Extract intent: Dental Checkup', color: 'text-emerald-400' },
-      { icon: '📅', title: 'Check Google Calendar slot', color: 'text-amber-400' },
-      { icon: '💬', title: 'Sync to CRM & send WhatsApp', color: 'text-teal-400' }
+      { icon: '📅', title: 'Check calendar slot', color: 'text-amber-400' },
+      { icon: '💬', title: 'Sync to CRM & send confirmation', color: 'text-teal-400' }
     ],
     rightPhone: {
       title: 'Clinic Bookings (Live)',
@@ -60,7 +60,7 @@ const SCENARIOS: WorkflowScenario[] = [
     leftBadgeIcon: '📞',
     rightBadges: [
       { name: 'Calendar', icon: '📅', bg: 'bg-blue-500/20 border-blue-500/40 text-blue-300' },
-      { name: 'WhatsApp', icon: '💬', bg: 'bg-emerald-500/20 border-emerald-500/40 text-emerald-300' }
+      { name: 'Messaging', icon: '💬', bg: 'bg-emerald-500/20 border-emerald-500/40 text-emerald-300' }
     ]
   },
   {
@@ -80,7 +80,7 @@ const SCENARIOS: WorkflowScenario[] = [
       { icon: '📞', title: 'Outbound trigger on fresh order', color: 'text-blue-400' },
       { icon: '📦', title: 'Verify address & landmark', color: 'text-emerald-400' },
       { icon: '✅', title: 'Customer confirmed COD order', color: 'text-amber-400' },
-      { icon: '⚡', title: 'Update Shopify & Shiprocket', color: 'text-teal-400' }
+      { icon: '⚡', title: 'Update store & shipping', color: 'text-teal-400' }
     ],
     rightPhone: {
       title: 'Orders & Dispatch Queue',
@@ -93,8 +93,8 @@ const SCENARIOS: WorkflowScenario[] = [
     },
     leftBadgeIcon: '📦',
     rightBadges: [
-      { name: 'Shopify', icon: '🛍️', bg: 'bg-emerald-500/20 border-emerald-500/40 text-emerald-300' },
-      { name: 'Shiprocket', icon: '🚚', bg: 'bg-purple-500/20 border-purple-500/40 text-purple-300' }
+      { name: 'Store', icon: '🛍️', bg: 'bg-emerald-500/20 border-emerald-500/40 text-emerald-300' },
+      { name: 'Shipping', icon: '🚚', bg: 'bg-purple-500/20 border-purple-500/40 text-purple-300' }
     ]
   },
   {
@@ -105,16 +105,16 @@ const SCENARIOS: WorkflowScenario[] = [
       callerName: 'Amitabh Joshi',
       callerNumber: '+91 98112 •••••',
       callerAvatar: 'AJ',
-      userQuery: 'Main aaj shaam tak UPI se ₹8,500 pay kar doonga, WhatsApp pe payment link bhej dijiye.',
-      aiResponse: 'Bilkul Amitabh ji! Razorpay UPI payment link aapke WhatsApp par bhej diya gaya hai. Thank you!',
+      userQuery: 'Main aaj shaam tak UPI se ₹8,500 pay kar doonga, payment link bhej dijiye.',
+      aiResponse: 'Bilkul Amitabh ji! UPI payment link aapko bhej diya gaya hai. Thank you!',
       statusTag: 'Using Audeora Voice',
       actionNote: 'Promise-to-pay captured and ledger updated.'
     },
     centerSteps: [
       { icon: '📞', title: 'Compliant polite reminder (Hindi)', color: 'text-blue-400' },
       { icon: '💳', title: 'Capture promise-to-pay date', color: 'text-emerald-400' },
-      { icon: '📲', title: 'Generate & send instant UPI link', color: 'text-amber-400' },
-      { icon: '📊', title: 'Update loan ledger in Salesforce', color: 'text-teal-400' }
+      { icon: '📲', title: 'Generate & send UPI link', color: 'text-amber-400' },
+      { icon: '📊', title: 'Update loan ledger in CRM', color: 'text-teal-400' }
     ],
     rightPhone: {
       title: 'Collections Ledger (Real-time)',
@@ -127,8 +127,8 @@ const SCENARIOS: WorkflowScenario[] = [
     },
     leftBadgeIcon: '💳',
     rightBadges: [
-      { name: 'Salesforce', icon: '☁️', bg: 'bg-blue-500/20 border-blue-500/40 text-blue-300' },
-      { name: 'Razorpay', icon: '⚡', bg: 'bg-amber-500/20 border-amber-500/40 text-amber-300' }
+      { name: 'CRM', icon: '☁️', bg: 'bg-blue-500/20 border-blue-500/40 text-blue-300' },
+      { name: 'Payments', icon: '⚡', bg: 'bg-amber-500/20 border-amber-500/40 text-amber-300' }
     ]
   }
 ];
@@ -436,7 +436,7 @@ export default function HeroScrollAnimation() {
 
         {/* Subtitle */}
         <p className="text-xs sm:text-base md:text-lg text-slate-300 mb-4 sm:mb-8 max-w-lg px-2 leading-relaxed drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
-          Audeora sits between your callers and your systems, turning real-time spoken conversations into completed business workflows in under 300ms.
+          Audeora sits between your callers and your systems, turning spoken conversations into completed business workflows.
         </p>
 
         {/* Dora-style Interactive Voice Prompt Input Bar (Compact on mobile) */}
@@ -628,7 +628,7 @@ export default function HeroScrollAnimation() {
                     <div className="flex items-center justify-between text-[8px] sm:text-[10px] font-mono text-[#d6f549] font-bold mb-0.5 sm:mb-1">
                       <span className="flex items-center gap-1">
                         <span className="w-1.5 h-1.5 rounded-full bg-[#d6f549] animate-pulse" />
-                        Audeora Response (&lt;300ms)
+                        Audeora Response
                       </span>
                     </div>
                     "{scenario.leftPhone.aiResponse}"
@@ -655,7 +655,7 @@ export default function HeroScrollAnimation() {
                     <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-[#60a5fa] animate-ping" />
                     Audio Connected
                   </span>
-                  <span className="text-[#d6f549]">48kHz Opus</span>
+                  <span className="text-[#d6f549]">Live</span>
                 </div>
               </div>
 
@@ -710,8 +710,8 @@ export default function HeroScrollAnimation() {
               </div>
 
               <div className="mt-3 sm:mt-5 pt-2.5 sm:pt-4 border-t border-white/5 flex items-center justify-between text-[9px] sm:text-[11px] font-mono text-slate-400">
-                <span>Latency</span>
-                <span className="text-emerald-400 font-bold">&lt;300ms Turnaround</span>
+                <span>Status</span>
+                <span className="text-emerald-400 font-bold">Responding</span>
               </div>
             </div>
           </div>
@@ -811,8 +811,8 @@ export default function HeroScrollAnimation() {
 
                 {/* Connected Telephony Footnote */}
                 <div className="pt-1 sm:pt-2 border-t border-white/5 flex items-center justify-between text-[8px] sm:text-[10px] font-mono text-slate-400">
-                  <span>SIP: Exotel</span>
-                  <span className="text-emerald-400">Zero Wait</span>
+                  <span>SIP trunk</span>
+                  <span className="text-emerald-400">Live</span>
                 </div>
               </div>
 
@@ -879,7 +879,7 @@ export default function HeroScrollAnimation() {
 
           {/* Bottom helper text */}
           <div className="text-[10px] sm:text-xs text-slate-400 text-center font-medium max-w-md px-2">
-            You choose which workflows your AI executes. Connect your telephony and CRM in minutes.
+            You choose which workflows your AI executes. Connect your telephony and CRM.
           </div>
 
         </div>

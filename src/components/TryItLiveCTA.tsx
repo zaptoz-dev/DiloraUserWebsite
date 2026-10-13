@@ -13,7 +13,7 @@ export default function TryItLiveCTA() {
           Let Audeora call you.
         </h2>
         <p className="text-xl text-slate-400 mb-10 max-w-2xl leading-relaxed">
-          Hear the voice, natural pace and real-time language switching on your own phone.
+          Hear the voice and natural pace on your own phone.
         </p>
         <Link 
           to="/demo" 
