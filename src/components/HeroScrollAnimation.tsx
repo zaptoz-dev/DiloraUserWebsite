@@ -423,7 +423,6 @@ export default function HeroScrollAnimation() {
 
           <div className="mt-2 flex items-center gap-1.5 text-xs sm:text-sm font-semibold tracking-wide text-white drop-shadow-md">
             <span>Audeora AI</span>
-            <span className="px-1.5 py-0.5 rounded text-[9px] sm:text-[10px] bg-white/15 text-slate-300 font-mono font-normal">Enterprise</span>
           </div>
         </div>
 
