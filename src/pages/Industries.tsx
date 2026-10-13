@@ -1,15 +1,34 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import {
+  BellRing,
+  CalendarCheck,
+  ClipboardList,
+  CreditCard,
+  Factory,
+  HeartPulse,
+  IndianRupee,
+  Landmark,
+  Package,
+  RotateCcw,
+  ShieldCheck,
+  ShoppingBag,
+  Stethoscope,
+  Truck,
+  Wrench,
+  type LucideIcon,
+} from 'lucide-react';
 import Badge from '../components/ui/Badge';
+import IndustryVisual from '../components/ui/IndustryVisual';
 import TryItLiveCTA from '../components/TryItLiveCTA';
 
 interface IndustryItem {
   id: string;
-  category: 'growth' | 'ops' | 'bfsi' | 'services';
   title: string;
   badge: string;
-  roi: string;
-  image: string;
+  focus: string;
+  icon: LucideIcon;
+  tasks: [LucideIcon, LucideIcon, LucideIcon];
+  accent: string;
   desc: string;
   sampleCall: {
     caller: string;
@@ -18,29 +37,15 @@ interface IndustryItem {
 }
 
 export default function Industries() {
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
-
   const industries: IndustryItem[] = [
     {
-      id: 'real-estate',
-      category: 'growth',
-      title: 'Real Estate & Property Portals',
-      badge: 'Speed-to-Lead',
-      roi: 'Fast Lead Callback',
-      image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80',
-      desc: 'Qualify portal inquiries soon after form submission. Verify budget, property type, and preferred locality, then book site visits into your sales team’s calendar.',
-      sampleCall: {
-        caller: 'Hi, I saw your 3BHK listing in Whitefield, is it still available?',
-        agent: 'Yes, we have 2 high-floor units ready for possession. Would you like to schedule a private site visit this Saturday at 11 AM or 3 PM?'
-      }
-    },
-    {
       id: 'healthcare',
-      category: 'services',
       title: 'Healthcare, Hospitals & Diagnostics',
-      badge: 'Appointment Booking',
-      roi: 'Fewer Missed Calls',
-      image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=80',
+      badge: 'Appointments',
+      focus: 'Patient Reminders',
+      icon: HeartPulse,
+      tasks: [CalendarCheck, Stethoscope, BellRing],
+      accent: '#34d399',
       desc: 'Answer clinic and hospital calls, including after hours. Handle appointment bookings, send pre-procedure reminders in regional languages, and coordinate diagnostic report dispatch.',
       sampleCall: {
         caller: 'Mujhe Dr. Sharma ke paas checkup ke liye appointment chahiye kal.',
@@ -48,109 +53,48 @@ export default function Industries() {
       }
     },
     {
-      id: 'ecommerce',
-      category: 'ops',
-      title: 'E-commerce & D2C Brands',
-      badge: 'RTO & Abandoned Cart Recovery',
-      roi: 'Order Confirmation',
-      image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80',
-      desc: 'Confirm cash-on-delivery orders after checkout, verify pin-code deliverability, update shipping addresses, and recover high-value abandoned checkouts with personalized offers.',
+      id: 'retail',
+      title: 'Retail & E-commerce',
+      badge: 'Order Confirmation',
+      focus: 'Returns & Exchanges',
+      icon: ShoppingBag,
+      tasks: [Package, Truck, RotateCcw],
+      accent: '#d6f549',
+      desc: 'Confirm cash-on-delivery orders after checkout, verify delivery addresses, answer order-status questions, and handle returns, exchanges and store enquiries.',
       sampleCall: {
         caller: 'Kya mera order dispatch ho gaya hai?',
         agent: 'Namaste Rahul! Aapka order #8492 kal shaam tak deliver ho jayega. Kya aapka delivery address HSR Layout wala hi hai?'
       }
     },
     {
-      id: 'banking',
-      category: 'bfsi',
-      title: 'Banking, NBFCs & Fintech',
-      badge: 'Compliance & Verification',
-      roi: 'Consistent Outreach',
-      image: 'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=800&q=80',
-      desc: 'Automate loan pre-qualification, credit card activation follow-ups, and KYC re-verification nudges with consent capture and clear, consistent scripts.',
+      id: 'bfsi',
+      title: 'Banking, Financial Services & Insurance',
+      badge: 'KYC & Verification',
+      focus: 'Payment Reminders',
+      icon: Landmark,
+      tasks: [CreditCard, ShieldCheck, IndianRupee],
+      accent: '#60a5fa',
+      desc: 'Automate loan and policy follow-ups, KYC re-verification nudges, renewal and EMI reminders, and promise-to-pay capture, with consent capture and clear, consistent scripts.',
       sampleCall: {
-        caller: 'I received a message regarding my pre-approved business credit line.',
-        agent: 'Welcome! You have a pre-qualified limit of ₹15 Lakhs at 10.5% interest. Would you like me to send the digital KYC link to your phone?'
+        caller: 'Main is hafte EMI nahi bhar paunga, salary late aayi hai.',
+        agent: 'Samajh gaya. Kya hum 18 tareekh ko payment schedule kar dein? Main aapko payment link SMS kar deta hoon.'
       }
     },
     {
-      id: 'collections',
-      category: 'bfsi',
-      title: 'Debt Recovery & Collections',
-      badge: 'Promise-to-Pay (PTP)',
-      roi: 'Promise-to-Pay Capture',
-      image: 'https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&w=800&q=80',
-      desc: 'Conduct polite, empathetic, and persistent payment reminders. Lock in promise-to-pay dates, calculate settlement figures in real time, and keep audio recordings for review.',
+      id: 'manufacturing',
+      title: 'Manufacturing & Distribution',
+      badge: 'Dealer Orders',
+      focus: 'Service Requests',
+      icon: Factory,
+      tasks: [ClipboardList, Truck, Wrench],
+      accent: '#f59e0b',
+      desc: 'Take dealer and distributor orders, share dispatch status, log service and warranty requests, and schedule technician visits without tying up your sales or service desk.',
       sampleCall: {
-        caller: 'Main is hafte pay nahi kar paunga, salary late aayi hai.',
-        agent: 'Samajh gaya sir. Kya hum 18 tareekh ko payment schedule kar dein taaki aapka CIBIL score affect na ho? Main payment link SMS kar raha hoon.'
-      }
-    },
-    {
-      id: 'automotive',
-      category: 'growth',
-      title: 'Automotive Dealerships & Service',
-      badge: 'Test Drive Conversion',
-      roi: 'Test Drive Booking',
-      image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=800&q=80',
-      desc: 'Respond to new vehicle quotes quickly, schedule doorstep test drives, and trigger routine service maintenance reminders before customers defect to third-party garages.',
-      sampleCall: {
-        caller: 'I want a quote for the new EV SUV top model.',
-        agent: 'The top EV variant is currently available in Pearl White and Matte Grey. Would you prefer a home test drive tomorrow, or would you like to visit our Andheri showroom?'
-      }
-    },
-    {
-      id: 'logistics',
-      category: 'ops',
-      title: 'Logistics, Supply Chain & Courier',
-      badge: 'First-Attempt Delivery Rate',
-      roi: 'Delivery Confirmation',
-      image: 'https://images.unsplash.com/photo-1616401784845-180882ba9ba8?auto=format&fit=crop&w=800&q=80',
-      desc: 'Reduce failed deliveries before trucks depart. Confirm recipient availability, collect landmark details, and handle real-time delivery reschedule requests without human dispatchers.',
-      sampleCall: {
-        caller: 'Main abhi ghar pe nahi hoon, kya courier delivery kal ho sakti hai?',
-        agent: 'Bilkul! Maine aapka delivery slot kal subah 11 baje se 2 baje ke beech reschedule kar diya hai. Driver aapko aane se pehle call karega.'
-      }
-    },
-    {
-      id: 'education',
-      category: 'services',
-      title: 'EdTech & University Admissions',
-      badge: 'Student Counseling Booking',
-      roi: 'Counseling Booking',
-      image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80',
-      desc: 'Call student inquiries soon after they enquire, explain course syllabi, verify education background, and schedule 1-on-1 counselor guidance sessions in their native language.',
-      sampleCall: {
-        caller: 'What is the eligibility for the Data Science executive program?',
-        agent: 'The program requires a graduation degree with at least 50% marks. Are you currently working, and how many years of work experience do you have?'
-      }
-    },
-    {
-      id: 'bpo',
-      category: 'ops',
-      title: 'BPOs & Customer Support Shifts',
-      badge: 'Night & Peak Shift Absorption',
-      roi: 'Overflow Handling',
-      image: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=800&q=80',
-      desc: 'Absorb high-volume repetitive Tier-1 inquiries, manage weekend/midnight overflows, and let human agents focus on complex exceptions with auto-transcribed context handoffs.',
-      sampleCall: {
-        caller: 'I need to check why my invoice shows an unexpected extra charge.',
-        agent: 'I have pulled up your latest invoice #7102. The charge corresponds to the cloud add-on activated on Sept 1st. Would you like me to break down each line item?'
+        caller: 'Our machine on line 3 is showing a pressure fault. Can someone come today?',
+        agent: 'I have logged a service request for line 3. A technician can visit today between 2 and 4 PM. Shall I confirm that slot?'
       }
     }
   ];
-
-  const categories = [
-    { id: 'all', label: 'All Industries' },
-    { id: 'growth', label: 'Sales & Growth' },
-    { id: 'ops', label: 'Operations & Logistics' },
-    { id: 'bfsi', label: 'BFSI & Collections' },
-    { id: 'services', label: 'Healthcare & Services' }
-  ];
-
-  const filtered = selectedCategory === 'all' 
-    ? industries 
-    : industries.filter(i => i.category === selectedCategory);
 
   return (
     <div className="pt-28 pb-20 bg-[#080b11] text-slate-100 min-h-screen">
@@ -161,58 +105,35 @@ export default function Industries() {
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-[#245ae2]/15 blur-[140px] rounded-full pointer-events-none" />
 
         <div className="max-w-4xl mx-auto relative z-10">
-          <Badge className="mb-6">ENTERPRISE VERTICALS</Badge>
+          <Badge className="mb-6">INDUSTRIES</Badge>
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-6 text-white leading-tight">
             Engineered for businesses that <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#60a5fa] via-[#245ae2] to-[#93c5fd]">live on the phone</span>.
           </h1>
-          <p className="text-lg md:text-xl text-slate-400 leading-relaxed max-w-2xl mx-auto mb-10">
-            From speed-to-lead calls to debt recovery and order confirmations, Audeora adapts to your exact operational playbook.
+          <p className="text-lg md:text-xl text-slate-400 leading-relaxed max-w-2xl mx-auto">
+            From patient appointments to dealer orders, Audeora adapts to the way your team already works.
           </p>
-
-          {/* Filter Pills */}
-          <div className="flex flex-wrap items-center justify-center gap-2">
-            {categories.map(cat => (
-              <button
-                key={cat.id}
-                onClick={() => setSelectedCategory(cat.id)}
-                className={`px-5 py-2.5 rounded-full text-xs font-semibold transition-all border ${
-                  selectedCategory === cat.id
-                    ? 'bg-[#245ae2] border-[#245ae2] text-white shadow-[0_0_20px_rgba(36,90,226,0.5)]'
-                    : 'bg-[#0f1422] border-white/10 text-slate-400 hover:text-white hover:border-white/20'
-                }`}
-              >
-                {cat.label}
-              </button>
-            ))}
-          </div>
         </div>
       </section>
 
       {/* Industries Grid */}
-      <section className="py-12 px-4 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filtered.map((item) => (
+      <section className="py-12 px-4 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {industries.map((item) => (
             <div
               key={item.id}
               className="bg-[#0d121f] border border-white/10 rounded-3xl overflow-hidden hover:border-[#245ae2]/50 transition-all duration-300 flex flex-col group hover:-translate-y-1 shadow-xl hover:shadow-[0_0_40px_rgba(36,90,226,0.2)]"
             >
-              {/* Card Image Banner with Badges */}
-              <div className="relative h-52 w-full overflow-hidden">
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 opacity-80"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0d121f] via-[#0d121f]/40 to-transparent" />
-                
+              {/* Animated industry graphic with badges */}
+              <div className="relative w-full">
+                <IndustryVisual icon={item.icon} tasks={item.tasks} accent={item.accent} />
+
                 {/* Top Badges */}
                 <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-10">
                   <span className="px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-[11px] font-semibold text-slate-200">
                     {item.badge}
                   </span>
                   <span className="px-3 py-1 rounded-full bg-[#245ae2]/80 backdrop-blur-md border border-[#245ae2] text-[11px] font-bold text-white shadow-md">
-                    {item.roi}
+                    {item.focus}
                   </span>
                 </div>
               </div>
