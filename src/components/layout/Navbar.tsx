@@ -40,10 +40,6 @@ export default function Navbar() {
           <img src={logoImg} alt="Audeora Logo" className="h-7 w-7 sm:h-9 sm:w-9 object-contain bg-white/5 border border-white/10 rounded-full p-0.5 sm:p-1 hover-call-ring transition-transform" />
           <span className="flex items-center gap-1.5 sm:gap-2">
             Audeora
-            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[9px] sm:text-[10px] font-medium text-emerald-400">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-              Live
-            </span>
           </span>
         </Link>
 
