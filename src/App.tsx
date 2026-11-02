@@ -7,6 +7,9 @@ import VoiceLab from './pages/VoiceLab';
 import Industries from './pages/Industries';
 import Pricing from './pages/Pricing';
 import Demo from './pages/Demo';
+import Privacy from './pages/Privacy';
+import Terms from './pages/Terms';
+import Dpa from './pages/Dpa';
 import ScrollToTop from './components/ScrollToTop';
 
 function App() {
@@ -32,6 +35,9 @@ function App() {
             <Route path="/industries" element={<Industries />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/demo" element={<Demo />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/dpa" element={<Dpa />} />
           </Routes>
         </main>
         <Footer />

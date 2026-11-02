@@ -93,9 +93,9 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto mt-16 pt-8 border-t border-[var(--border)] flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-[var(--muted-foreground)]">
         <p>© 2026 Zaptoz Technologies Private Limited | ZAPTOZ TECHNOLOGIES LLC | All rights reserved.</p>
         <div className="flex gap-4">
-          <a href="#" className="hover:text-white transition-colors">Privacy</a>
-          <a href="#" className="hover:text-white transition-colors">Terms</a>
-          <a href="#" className="hover:text-white transition-colors">DPA</a>
+          <Link to="/privacy" className="hover:text-white transition-colors">Privacy</Link>
+          <Link to="/terms" className="hover:text-white transition-colors">Terms</Link>
+          <Link to="/dpa" className="hover:text-white transition-colors">DPA</Link>
         </div>
       </div>
     </footer>

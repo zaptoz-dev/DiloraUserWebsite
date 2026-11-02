@@ -1,7 +1,10 @@
-import { useState, useRef, useEffect } from 'react';
+import { useEffect, useRef, useState, type KeyboardEvent, type RefObject } from 'react';
 import { Link } from 'react-router-dom';
+import { Loader2, Pause, Play } from 'lucide-react';
 import Badge from '../components/ui/Badge';
 import TryItLiveCTA from '../components/TryItLiveCTA';
+
+type Gender = 'female' | 'male';
 
 interface VoiceItem {
   id: string;
@@ -10,6 +13,8 @@ interface VoiceItem {
   code: string;
   color: string;
   greeting: string;
+  /** Masculine form of the greeting, for languages where the wording is gendered. */
+  greetingMale?: string;
   translation: string;
   audio: {
     female: string;
@@ -25,6 +30,7 @@ const VOICES: VoiceItem[] = [
     code: 'HI-IN',
     color: 'from-amber-500 to-rose-600',
     greeting: 'नमस्ते! मैं ऑडिओरा बोल रही हूँ।',
+    greetingMale: 'नमस्ते! मैं ऑडिओरा बोल रहा हूँ।',
     translation: 'Namaste! This is Audeora speaking.',
     audio: {
       female: 'audio/Hindi_female.mp3',
@@ -150,480 +156,480 @@ const VOICES: VoiceItem[] = [
   }
 ];
 
+const GENDERS: Gender[] = ['female', 'male'];
+const GENDER_LABEL: Record<Gender, string> = { female: 'Female', male: 'Male' };
+/** Seconds to jump per arrow key on the progress bar. */
+const SEEK_STEPS: Record<string, number> = { ArrowLeft: -2, ArrowDown: -2, ArrowRight: 2, ArrowUp: 2 };
+
+// Audio paths are relative, so prefixing Vite's base URL resolves them under
+// both the GitHub Pages build (/DiloraUserWebsite/) and the server build (/).
+function audioUrl(path: string) {
+  return `${import.meta.env.BASE_URL}${path}`;
+}
+
+function formatTime(seconds: number) {
+  if (!Number.isFinite(seconds) || seconds < 0) return '0:00';
+  const whole = Math.floor(seconds);
+  return `${Math.floor(whole / 60)}:${String(whole % 60).padStart(2, '0')}`;
+}
+
+function greetingFor(voice: VoiceItem, gender: Gender) {
+  return gender === 'male' && voice.greetingMale ? voice.greetingMale : voice.greeting;
+}
+
+/** 'HI-IN' -> 'hi-IN', for the lang attribute on native-script text. */
+function langTag(code: string) {
+  const [language, region] = code.split('-');
+  return `${language.toLowerCase()}-${region}`;
+}
+
+// ---------------------------------------------------------------------------
+// Waveform
+// ---------------------------------------------------------------------------
+
+const BAR_COUNT = 32;
+const CENTRE = (BAR_COUNT - 1) / 2;
+
+// Resting shape: tallest in the middle and tapering out, with a fixed ripple so
+// it reads as a voice. Fixed rather than random so every render is identical.
+const REST_LEVELS = Array.from({ length: BAR_COUNT }, (_, i) => {
+  const fromCentre = Math.abs(i - CENTRE) / CENTRE;
+  return 0.15 + 0.4 * (1 - fromCentre) * (0.55 + 0.45 * Math.abs(Math.sin(i * 1.9)));
+});
+
+interface WaveformProps {
+  /** This card owns the shared audio element. */
+  live: boolean;
+  playing: boolean;
+  /** False under prefers-reduced-motion: the bars stay still. */
+  animate: boolean;
+  analyserRef: RefObject<AnalyserNode>;
+  audioRef: RefObject<HTMLAudioElement>;
+}
+
+/**
+ * Decorative bars that follow the real audio through an AnalyserNode. Low
+ * frequencies, where most speech energy sits, drive the middle bars. When no
+ * analyser is available the bars are driven from the playback position
+ * instead, so the card still looks alive. Bars are updated directly in a
+ * requestAnimationFrame loop rather than through React state.
+ */
+function Waveform({ live, playing, animate, analyserRef, audioRef }: WaveformProps) {
+  const barsRef = useRef<(HTMLSpanElement | null)[]>([]);
+
+  useEffect(() => {
+    if (!live || !playing || !animate) return;
+    const analyser = analyserRef.current;
+    const bins = analyser ? new Uint8Array(analyser.frequencyBinCount) : null;
+    let frame = 0;
+
+    const draw = () => {
+      if (analyser && bins) analyser.getByteFrequencyData(bins);
+      const t = audioRef.current?.currentTime ?? 0;
+      barsRef.current.forEach((bar, i) => {
+        if (!bar) return;
+        const fromCentre = Math.abs(i - CENTRE) / CENTRE;
+        const level =
+          analyser && bins
+            ? (bins[1 + Math.round(fromCentre * 40)] / 255) * (0.85 + fromCentre * 0.6)
+            : (0.3 + 0.7 * Math.abs(Math.sin(t * 6 + i * 0.55))) * (1 - fromCentre * 0.55);
+        bar.style.transform = `scaleY(${Math.min(1, Math.max(0.08, level))})`;
+      });
+      frame = requestAnimationFrame(draw);
+    };
+
+    frame = requestAnimationFrame(draw);
+    return () => cancelAnimationFrame(frame);
+  }, [live, playing, animate, analyserRef, audioRef]);
+
+  return (
+    <div aria-hidden="true" className="flex h-8 w-full items-center justify-between">
+      {REST_LEVELS.map((level, i) => (
+        <span
+          key={i}
+          ref={(el) => {
+            barsRef.current[i] = el;
+          }}
+          className={`h-full w-[3px] rounded-full ${
+            live ? 'bg-gradient-to-t from-[#245ae2] to-[#60a5fa]' : 'bg-slate-500/40'
+          }`}
+          style={{ transform: `scaleY(${level})` }}
+        />
+      ))}
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Page
+// ---------------------------------------------------------------------------
+
+interface ActiveClip {
+  index: number;
+  gender: Gender;
+}
+
+type WebkitWindow = Window & { webkitAudioContext?: typeof AudioContext };
+
+function usePrefersReducedMotion() {
+  const query = '(prefers-reduced-motion: reduce)';
+  const [reduced, setReduced] = useState(() => window.matchMedia?.(query).matches ?? false);
+  useEffect(() => {
+    const media = window.matchMedia?.(query);
+    if (!media) return;
+    const onChange = () => setReduced(media.matches);
+    media.addEventListener('change', onChange);
+    return () => media.removeEventListener('change', onChange);
+  }, []);
+  return reduced;
+}
+
 export default function VoiceLab() {
-  const [activeIdx, setActiveIdx] = useState(0);
-  const [gender, setGender] = useState<'female' | 'male'>('female');
-  const [isPlaying, setIsPlaying] = useState(false);
+  // One <audio> element for the whole page, so only one clip can ever play.
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
+  const audioGraphFailedRef = useRef(false);
+  const activeRef = useRef<ActiveClip | null>(null);
+  // Incremented on every play() call, so a late rejection from an earlier
+  // request cannot show an error on the wrong card.
+  const playRequestRef = useRef(0);
+
+  const [active, setActiveState] = useState<ActiveClip | null>(null);
+  const [playing, setPlaying] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [isEjected, setIsEjected] = useState(false);
+  const [error, setError] = useState<{ index: number; message: string } | null>(null);
+  const reducedMotion = usePrefersReducedMotion();
 
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const setActive = (clip: ActiveClip | null) => {
+    activeRef.current = clip;
+    setActiveState(clip);
+  };
 
-  const activeVoice = VOICES[activeIdx];
+  const resetToIdle = () => {
+    setActive(null);
+    setPlaying(false);
+    setLoading(false);
+    setCurrentTime(0);
+    setDuration(0);
+  };
 
-  // Play/Pause current audio track
-  const togglePlay = (index = activeIdx, currentGender = gender) => {
-    const target = VOICES[index];
-    const path = currentGender === 'female' ? target.audio.female : target.audio.male;
-    const baseUrl = import.meta.env.BASE_URL || '/';
-    const fullAudioPath = path.startsWith('/') ? `${baseUrl}${path.slice(1)}` : `${baseUrl}${path}`;
+  const fail = (index: number, message: string) => {
+    resetToIdle();
+    setError({ index, message });
+  };
 
-    if (isPlaying && index === activeIdx && currentGender === gender && audioRef.current) {
-      audioRef.current.pause();
-      setIsPlaying(false);
-      return;
+  // Route the audio element through an AnalyserNode so the waveform follows
+  // the real sound. This runs inside the click handler because browsers only
+  // let an AudioContext start or resume after a user gesture. If Web Audio is
+  // unavailable the element keeps playing on its own and the waveform falls
+  // back to following the playback position.
+  const connectAnalyser = (audio: HTMLAudioElement) => {
+    if (audioGraphFailedRef.current) return;
+    try {
+      if (!audioCtxRef.current) {
+        const Ctx = window.AudioContext ?? (window as WebkitWindow).webkitAudioContext;
+        if (!Ctx) throw new Error('Web Audio is not supported');
+        const ctx = new Ctx();
+        audioCtxRef.current = ctx;
+        const source = ctx.createMediaElementSource(audio);
+        const analyser = ctx.createAnalyser();
+        analyser.fftSize = 256;
+        analyser.smoothingTimeConstant = 0.75;
+        // Once the element is routed into the graph this is the only path its
+        // sound takes, so the analyser must feed the speakers too.
+        source.connect(analyser);
+        analyser.connect(ctx.destination);
+        analyserRef.current = analyser;
+      }
+      if (audioCtxRef.current.state === 'suspended') {
+        audioCtxRef.current.resume().catch(() => {});
+      }
+    } catch {
+      audioGraphFailedRef.current = true;
+      analyserRef.current = null;
+      audioCtxRef.current?.close().catch(() => {});
+      audioCtxRef.current = null;
     }
+  };
 
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-    }
-
-    setIsEjected(false);
-    setActiveIdx(index);
-
-    const audio = new Audio(fullAudioPath);
-    audioRef.current = audio;
-
-    audio.ontimeupdate = () => {
-      setCurrentTime(audio.currentTime);
-      setDuration(audio.duration || 0);
-    };
-
-    audio.onended = () => {
-      setIsPlaying(false);
-      setCurrentTime(0);
-    };
-
-    audio.play().then(() => {
-      setIsPlaying(true);
-    }).catch((err) => {
-      console.warn("Audio play blocked or unavailable:", err);
-      setIsPlaying(false);
+  const startPlayback = (audio: HTMLAudioElement, index: number) => {
+    const request = ++playRequestRef.current;
+    audio.play().catch((err: unknown) => {
+      if (request !== playRequestRef.current) return;
+      const name = err instanceof DOMException ? err.name : '';
+      // AbortError means a pause or a new clip interrupted this one: expected.
+      if (name === 'AbortError') return;
+      fail(
+        index,
+        name === 'NotAllowedError'
+          ? 'Your browser blocked playback. Press play again.'
+          : 'This clip could not be played. Please try again.'
+      );
     });
   };
 
-  // Change gender and immediately switch track if playing
-  const handleGenderSwitch = (newGender: 'female' | 'male') => {
-    setGender(newGender);
-    if (isPlaying) {
-      togglePlay(activeIdx, newGender);
-    }
-  };
+  const handleToggle = (index: number, gender: Gender) => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    connectAnalyser(audio);
+    setError(null);
 
-  // Stop playback and reset
-  const handleStop = () => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
+    const current = activeRef.current;
+    if (current && current.index === index && current.gender === gender) {
+      if (audio.paused) startPlayback(audio, index);
+      else audio.pause();
+      return;
     }
-    setIsPlaying(false);
+
+    audio.pause();
+    audio.src = audioUrl(VOICES[index].audio[gender]);
+    setActive({ index, gender });
+    setPlaying(false);
+    setLoading(true);
     setCurrentTime(0);
+    setDuration(0);
+    startPlayback(audio, index);
   };
 
-  // Eject disc tray
-  const handleEject = () => {
-    handleStop();
-    setIsEjected(true);
+  const seekTo = (seconds: number) => {
+    const audio = audioRef.current;
+    if (!audio || !Number.isFinite(audio.duration) || audio.duration <= 0) return;
+    const target = Math.min(Math.max(seconds, 0), audio.duration);
+    audio.currentTime = target;
+    setCurrentTime(target);
   };
 
-  // Previous Track
-  const handlePrev = () => {
-    const prevIdx = activeIdx === 0 ? VOICES.length - 1 : activeIdx - 1;
-    setActiveIdx(prevIdx);
-    if (isPlaying) {
-      togglePlay(prevIdx, gender);
-    }
-  };
-
-  // Next Track
-  const handleNext = () => {
-    const nextIdx = (activeIdx + 1) % VOICES.length;
-    setActiveIdx(nextIdx);
-    if (isPlaying) {
-      togglePlay(nextIdx, gender);
-    }
-  };
-
-  // Clean up audio on unmount
+  // Stop playback when leaving the page: a detached <audio> element keeps
+  // playing otherwise.
   useEffect(() => {
+    const audio = audioRef.current;
     return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
+      playRequestRef.current++;
+      if (audio) {
+        audio.pause();
+        audio.removeAttribute('src');
+        audio.load();
       }
+      audioCtxRef.current?.close().catch(() => {});
+      audioCtxRef.current = null;
+      analyserRef.current = null;
     };
   }, []);
 
-  const formatTime = (time: number) => {
-    if (!time || isNaN(time)) return '00:00';
-    const mins = Math.floor(time / 60);
-    const secs = Math.floor(time % 60);
-    return `${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
-  };
-
   return (
     <div className="pt-28 pb-24 bg-[#080b11] text-slate-100 min-h-screen">
-      
       {/* Header */}
       <section className="py-12 px-4 text-center relative overflow-hidden">
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[350px] bg-[#245ae2]/15 blur-[150px] rounded-full pointer-events-none" />
 
         <div className="max-w-4xl mx-auto relative z-10">
-          <Badge className="mb-6">VOICE ARCHITECTURE</Badge>
+          <Badge className="mb-6">VOICE LAB</Badge>
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-4 text-white leading-tight">
-            Indian &amp; Global Voices.<br />
+            Hear Audeora<br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#60a5fa] via-[#245ae2] to-[#93c5fd]">
-              Optical DVD Sound Deck.
+              in your language.
             </span>
           </h1>
-          <p className="text-base sm:text-lg text-slate-400 max-w-xl mx-auto mb-6">
-            Select any language disc, toggle between male and female personas, and listen to each voice.
+          <p className="text-base sm:text-lg text-slate-400 max-w-xl mx-auto">
+            Pick a language and press play to hear a female or male voice.
           </p>
-
-          {/* Master Gender Pill */}
-          <div className="inline-flex bg-[#0f1422] rounded-full p-1.5 border border-white/10 shadow-2xl">
-            <button
-              onClick={() => handleGenderSwitch('female')}
-              className={`flex items-center gap-2 px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-300 ${
-                gender === 'female'
-                  ? 'bg-[#245ae2] text-white shadow-[0_0_20px_rgba(36,90,226,0.6)]'
-                  : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              <span>♀</span> Female Voice
-            </button>
-            <button
-              onClick={() => handleGenderSwitch('male')}
-              className={`flex items-center gap-2 px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-300 ${
-                gender === 'male'
-                  ? 'bg-[#245ae2] text-white shadow-[0_0_20px_rgba(36,90,226,0.6)]'
-                  : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              <span>♂</span> Male Voice
-            </button>
-          </div>
         </div>
       </section>
 
-      {/* ============================================================ */}
-      {/* THE DVD AUDIO CONSOLE DECK                                    */}
-      {/* ============================================================ */}
-      <section className="px-4 max-w-5xl mx-auto mb-16">
-        
-        {/* DVD Player Housing Chassis */}
-        <div className="bg-gradient-to-b from-[#141b2e] via-[#0d121f] to-[#080b11] border-2 border-[#245ae2]/40 rounded-[2.5rem] p-6 sm:p-10 shadow-[0_0_80px_rgba(36,90,226,0.25)] relative overflow-hidden">
-          
-          {/* Top Chassis Details & Branding */}
-          <div className="flex items-center justify-between border-b border-white/10 pb-5 mb-8">
-            <div className="flex items-center gap-3">
-              <div className="px-3 py-1 rounded bg-[#245ae2]/20 border border-[#245ae2]/40 font-mono text-[11px] font-bold text-[#93c5fd] uppercase tracking-widest flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-[#d6f549] animate-pulse" />
-                DVD AUDIO OPTICAL DECK
-              </div>
-              <span className="text-xs font-mono text-slate-400 hidden sm:inline">
-                AUDEORA VOICE SAMPLES
-              </span>
-            </div>
+      {/* Language cards */}
+      <section aria-label="Voice samples" className="px-4 max-w-7xl mx-auto">
+        <ul className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4">
+          {VOICES.map((voice, index) => {
+            const isActive = active?.index === index;
+            const activeGender = isActive ? active.gender : null;
+            const lang = langTag(voice.code);
+            const cardError = error?.index === index ? error.message : null;
+            const progress = duration > 0 ? Math.min(100, (currentTime / duration) * 100) : 0;
 
-            <div className="flex items-center gap-2 text-xs font-mono text-slate-400">
-              <span className="text-slate-500">DISC {activeIdx + 1} OF 10</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-[#245ae2]" />
-              <span className="text-white font-bold uppercase">{gender}</span>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-            
-            {/* Left: The Spinning Holographic Optical DVD Disc */}
-            <div className="lg:col-span-6 flex flex-col items-center justify-center">
-              
-              <div className="relative w-64 h-64 sm:w-72 sm:h-72 flex items-center justify-center">
-                
-                {/* Laser Ray Beam Effect */}
-                <div className={`absolute -top-6 right-10 w-2 h-32 bg-gradient-to-b from-[#60a5fa] to-transparent blur-[1px] rotate-45 pointer-events-none transition-opacity duration-300 ${
-                  isPlaying ? 'opacity-80' : 'opacity-0'
-                }`} />
-
-                {/* Outer Glow Halo */}
-                <div className={`absolute inset-0 rounded-full blur-2xl transition-all duration-500 ${
-                  isPlaying ? 'bg-[#245ae2]/30 scale-105' : 'bg-transparent'
-                }`} />
-
-                {/* The Physical Optical DVD Disc */}
-                <div
-                  onClick={() => togglePlay()}
-                  className={`relative w-full h-full rounded-full cursor-pointer select-none transition-all duration-700 shadow-2xl flex items-center justify-center border-4 border-slate-700/60 ${
-                    isPlaying ? 'animate-[spin_6s_linear_infinite]' : ''
-                  } ${isEjected ? 'scale-75 opacity-40 translate-y-6' : 'hover:scale-105'}`}
-                  style={{
-                    background: `
-                      radial-gradient(circle at center, transparent 32%, rgba(0,0,0,0.7) 33%, transparent 35%),
-                      repeating-radial-gradient(circle at center, rgba(255,255,255,0.06) 0px, rgba(255,255,255,0.06) 1px, transparent 2px, transparent 4px),
-                      conic-gradient(from 0deg, #1e293b, #245ae2 60deg, #d6f549 120deg, #60a5fa 180deg, #ec4899 240deg, #06b6d4 300deg, #1e293b 360deg)
-                    `
-                  }}
-                  title="Click disc to Play/Pause"
-                >
-                  {/* Prismatic Holographic Sheen Overlays */}
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-white/15 via-transparent to-black/40 pointer-events-none" />
-
-                  {/* Concentric Mirror Ring */}
-                  <div className="w-44 h-44 rounded-full border border-white/25 flex items-center justify-center bg-black/40 backdrop-blur-sm shadow-inner relative">
-                    
-                    {/* Disc Print Text */}
-                    <div className="text-center px-2 pointer-events-none">
-                      <div className="text-[10px] font-mono tracking-widest text-[#d6f549] font-bold uppercase">
-                        AUDEORA DVD
-                      </div>
-                      <div className="text-lg font-extrabold text-white tracking-tight leading-tight mt-0.5">
-                        {activeVoice.name}
-                      </div>
-                      <div className="text-xs font-semibold text-slate-300">
-                        {activeVoice.nativeScript}
-                      </div>
-                      <div className="text-[9px] font-mono text-[#93c5fd] uppercase tracking-wider mt-1">
-                        {gender} VOCAL
-                      </div>
-                    </div>
-
-                    {/* Center Polycarbonate Spindle Clamping Hole */}
-                    <div className="absolute w-14 h-14 rounded-full bg-[#080b11] border-4 border-slate-600 shadow-2xl flex items-center justify-center">
-                      <div className="w-6 h-6 rounded-full bg-slate-900 border border-white/30" />
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-
-              {/* Status Under Disc */}
-              <div className="mt-4 text-xs font-mono text-slate-400 flex items-center gap-2">
-                <span className={`w-2 h-2 rounded-full ${isPlaying ? 'bg-emerald-400 animate-pulse' : 'bg-slate-600'}`} />
-                <span>{isPlaying ? `SPINNING: ${activeVoice.code}` : (isEjected ? 'TRAY OPEN / EJECTED' : 'READY IN DRIVE')}</span>
-              </div>
-            </div>
-
-            {/* Right: VFD Digital Display Screen & Controls */}
-            <div className="lg:col-span-6 space-y-6">
-              
-              {/* DVD VFD Green-Blue Digital Display Screen */}
-              <div className="bg-[#05080e] border-2 border-[#1e293b] rounded-2xl p-5 shadow-[inset_0_2px_15px_rgba(0,0,0,0.8)] relative font-mono text-cyan-400">
-                <div className="flex items-center justify-between text-[11px] border-b border-cyan-900/40 pb-2 mb-3">
-                  <span className="text-[#d6f549] font-bold flex items-center gap-1.5">
-                    <span className={`inline-block w-2 h-2 rounded-full ${isPlaying ? 'bg-[#d6f549]' : 'bg-cyan-900'}`} />
-                    {isPlaying ? 'PLAY' : (isEjected ? 'EJECT' : 'STOP')}
-                  </span>
-                  <span className="text-slate-400">{activeVoice.code}</span>
-                  <span className="text-cyan-300 uppercase font-bold">{gender} VOICE</span>
-                </div>
-
-                {/* Large Track & Time Display */}
-                <div className="flex items-baseline justify-between mb-3">
-                  <div>
-                    <span className="text-xs text-slate-500 block">TRACK</span>
-                    <span className="text-2xl sm:text-3xl font-bold tracking-wider text-white">
-                      0{activeIdx + 1}
-                    </span>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-xs text-slate-500 block">ELAPSED / TOTAL</span>
-                    <span className="text-xl sm:text-2xl font-bold tracking-wider text-[#60a5fa]">
-                      {formatTime(currentTime)} / {formatTime(duration)}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Spoken Audio Subtitle Display */}
-                <div className="bg-black/50 p-3 rounded-xl border border-cyan-950/60 mb-3">
-                  <div className="text-[10px] text-slate-500 uppercase tracking-widest mb-1">
-                    Spoken Dialogue
-                  </div>
-                  <div className="text-sm font-semibold text-white font-sans">
-                    "{activeVoice.greeting}"
-                  </div>
-                  <div className="text-xs text-slate-400 font-sans italic mt-0.5">
-                    "{activeVoice.translation}"
-                  </div>
-                </div>
-
-                {/* Animated Audio Equalizer Spectrum */}
-                <div className="flex items-end justify-between gap-1 h-8 pt-1">
-                  {[...Array(24)].map((_, i) => (
-                    <span
-                      key={i}
-                      className={`w-full rounded-sm transition-all duration-100 ${
-                        isPlaying 
-                          ? 'bg-gradient-to-t from-cyan-600 via-[#60a5fa] to-[#d6f549]' 
-                          : 'bg-cyan-950/40 h-1'
-                      }`}
-                      style={isPlaying ? {
-                        height: `${Math.max(10, Math.sin(i * 0.8 + currentTime * 10) * 85 + 15)}%`
-                      } : {}}
-                    />
-                  ))}
-                </div>
-              </div>
-
-              {/* Physical DVD Deck Buttons */}
-              <div className="bg-[#0f1422] border border-white/10 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3 shadow-xl">
-                
-                {/* Previous Button */}
-                <button
-                  onClick={handlePrev}
-                  className="p-3 rounded-xl bg-[#141b2c] hover:bg-[#1d273f] text-slate-300 hover:text-white border border-white/5 transition-all shadow-md active:scale-95"
-                  title="Previous Track (Prev Language)"
-                >
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" />
-                  </svg>
-                </button>
-
-                {/* Master Play / Pause Button */}
-                <button
-                  onClick={() => togglePlay()}
-                  className="flex-1 min-w-[140px] py-3.5 px-6 rounded-xl bg-[#245ae2] hover:bg-[#1d4ed8] text-white font-bold text-sm transition-all shadow-[0_0_25px_rgba(36,90,226,0.5)] active:scale-95 flex items-center justify-center gap-2"
-                >
-                  {isPlaying ? (
-                    <>
-                      <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
-                      </svg>
-                      <span>PAUSE</span>
-                    </>
-                  ) : (
-                    <>
-                      <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z" />
-                      </svg>
-                      <span>PLAY DISC</span>
-                    </>
-                  )}
-                </button>
-
-                {/* Stop Button */}
-                <button
-                  onClick={handleStop}
-                  className="p-3 rounded-xl bg-[#141b2c] hover:bg-[#1d273f] text-slate-300 hover:text-white border border-white/5 transition-all shadow-md active:scale-95"
-                  title="Stop Audio"
-                >
-                  <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                    <path d="M6 6h12v12H6z" />
-                  </svg>
-                </button>
-
-                {/* Next Button */}
-                <button
-                  onClick={handleNext}
-                  className="p-3 rounded-xl bg-[#141b2c] hover:bg-[#1d273f] text-slate-300 hover:text-white border border-white/5 transition-all shadow-md active:scale-95"
-                  title="Next Track (Next Language)"
-                >
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
-                  </svg>
-                </button>
-
-                {/* Eject Button */}
-                <button
-                  onClick={handleEject}
-                  className={`p-3 rounded-xl border transition-all shadow-md active:scale-95 ${
-                    isEjected 
-                      ? 'bg-amber-500/20 border-amber-500 text-amber-300' 
-                      : 'bg-[#141b2c] hover:bg-[#1d273f] border-white/5 text-slate-400 hover:text-white'
-                  }`}
-                  title="Eject / Open Tray"
-                >
-                  <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                    <path d="M5 17h14v2H5zm7-12L5.33 15h13.34z" />
-                  </svg>
-                </button>
-              </div>
-
-              {/* Bottom Direct Callback Link */}
-              <div className="flex items-center justify-between text-xs pt-1 px-1">
-                <span className="text-slate-400">Natural Conversation Flow</span>
-                <Link to="/demo" className="text-[#60a5fa] hover:text-white font-semibold transition-colors flex items-center gap-1">
-                  Test On Your Phone &rarr;
-                </Link>
-              </div>
-
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================================ */}
-      {/* 10 VOICES DISC RACK (THE OPTICAL DISC SELECTOR)              */}
-      {/* ============================================================ */}
-      <section className="px-4 max-w-6xl mx-auto mb-20">
-        <div className="text-center mb-10">
-          <div className="inline-block px-3 py-1 rounded-full bg-[#245ae2]/10 border border-[#245ae2]/25 text-xs font-semibold text-[#60a5fa] mb-3">
-            SELECT A VOICE DISC
-          </div>
-          <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-            Pick from 10 Regional Language Discs
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1">
-            Click any disc to insert it into the DVD player deck above.
-          </p>
-        </div>
-
-        {/* 10 Language Disc Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
-          {VOICES.map((v, idx) => {
-            const isSelected = activeIdx === idx;
-            const isCurrentPlaying = isPlaying && isSelected;
+            const onSeekKey = (e: KeyboardEvent<HTMLDivElement>) => {
+              const step = SEEK_STEPS[e.key];
+              if (step !== undefined) seekTo(currentTime + step);
+              else if (e.key === 'Home') seekTo(0);
+              else if (e.key === 'End') seekTo(duration);
+              else return;
+              e.preventDefault();
+            };
 
             return (
-              <div
-                key={v.id}
-                onClick={() => togglePlay(idx, gender)}
-                className={`rounded-2xl p-4 cursor-pointer transition-all duration-300 flex flex-col items-center text-center group relative overflow-hidden border ${
-                  isSelected
-                    ? 'bg-[#141b2c] border-[#245ae2] shadow-[0_0_25px_rgba(36,90,226,0.3)] scale-105'
-                    : 'bg-[#0d121f] border-white/10 hover:border-white/20 hover:bg-[#101626]'
+              <li
+                key={voice.id}
+                className={`flex flex-col rounded-2xl border p-4 transition-all duration-300 ${
+                  isActive
+                    ? 'bg-[#0f1422] border-[#245ae2]/70 shadow-[0_0_40px_rgba(36,90,226,0.28)]'
+                    : 'bg-[#0d121f] border-white/10 hover:border-white/20'
                 }`}
               >
-                {/* Mini Disc Icon */}
-                <div
-                  className={`w-14 h-14 rounded-full border-2 border-white/20 flex items-center justify-center mb-3 shadow-lg relative ${
-                    isCurrentPlaying ? 'animate-[spin_4s_linear_infinite]' : 'group-hover:scale-110 transition-transform'
-                  }`}
-                  style={{
-                    background: `
-                      radial-gradient(circle at center, #080b11 25%, transparent 28%),
-                      conic-gradient(from 0deg, #1e293b, #245ae2, #d6f549, #60a5fa, #ec4899, #1e293b)
-                    `
-                  }}
-                >
-                  <div className="w-4 h-4 rounded-full bg-[#080b11] border border-white/40" />
-                </div>
-
-                {/* Language Info */}
-                <h3 className="text-sm font-bold text-white tracking-tight">
-                  {v.name}
-                </h3>
-                <span className="text-xs text-slate-400 font-medium">
-                  {v.nativeScript}
-                </span>
-
-                {/* Playing Indicator or Track # */}
-                <div className="mt-3 pt-2 border-t border-white/5 w-full flex items-center justify-between text-[10px] font-mono">
-                  <span className="text-slate-500">TRK 0{idx + 1}</span>
-                  <span className={isCurrentPlaying ? 'text-[#d6f549] font-bold' : 'text-[#60a5fa]'}>
-                    {isCurrentPlaying ? 'PLAYING' : 'LOAD ⏏'}
+                {/* Language */}
+                <p lang={lang} className="truncate text-2xl font-bold text-white leading-tight">
+                  {voice.nativeScript}
+                </p>
+                <div className="mt-1 flex items-center justify-between gap-3">
+                  <h2 className="text-sm font-medium text-slate-400 tracking-normal">{voice.name}</h2>
+                  <span className="shrink-0 rounded-md border border-white/10 px-1.5 py-0.5 font-mono text-[10px] text-slate-500">
+                    {voice.code}
                   </span>
                 </div>
-              </div>
+
+                {/* Player: same height whether idle or playing, so cards never shift */}
+                <div
+                  className={`mt-4 h-[124px] rounded-xl border px-3 py-3 transition-colors ${
+                    isActive ? 'bg-[#080b11] border-[#245ae2]/25' : 'bg-[#080b11]/60 border-white/5'
+                  }`}
+                >
+                  {cardError ? (
+                    <p role="alert" className="flex h-full items-center justify-center text-center text-xs leading-relaxed text-amber-300">
+                      {cardError}
+                    </p>
+                  ) : activeGender ? (
+                    <div className="flex h-full flex-col justify-between">
+                      <div className="text-[11px] leading-4">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="flex items-center gap-1.5 font-semibold text-white">
+                            <span
+                              className={`h-1.5 w-1.5 rounded-full bg-[#d6f549] ${
+                                playing ? 'motion-safe:animate-pulse' : 'opacity-50'
+                              }`}
+                            />
+                            Audeora
+                          </span>
+                          <span className="font-mono tabular-nums text-slate-400">
+                            {formatTime(currentTime)} / {formatTime(duration)}
+                          </span>
+                        </div>
+                        <p className="truncate text-slate-400">
+                          {voice.name} · {GENDER_LABEL[activeGender]} voice
+                        </p>
+                      </div>
+
+                      <Waveform
+                        live
+                        playing={playing}
+                        animate={!reducedMotion}
+                        analyserRef={analyserRef}
+                        audioRef={audioRef}
+                      />
+
+                      <div
+                        role="slider"
+                        tabIndex={0}
+                        aria-label={`Seek ${voice.name} ${activeGender} voice`}
+                        aria-valuemin={0}
+                        aria-valuemax={Math.round(duration)}
+                        aria-valuenow={Math.round(currentTime)}
+                        aria-valuetext={`${formatTime(currentTime)} of ${formatTime(duration)}`}
+                        onClick={(e) => {
+                          const rect = e.currentTarget.getBoundingClientRect();
+                          seekTo(((e.clientX - rect.left) / rect.width) * duration);
+                        }}
+                        onKeyDown={onSeekKey}
+                        className="group flex h-5 cursor-pointer items-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#60a5fa]"
+                      >
+                        <div className="relative h-1 w-full overflow-hidden rounded-full bg-white/10 transition-[height] group-hover:h-1.5">
+                          <div
+                            className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-[#245ae2] to-[#60a5fa]"
+                            style={{ width: `${progress}%` }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex h-full items-center">
+                      <Waveform
+                        live={false}
+                        playing={false}
+                        animate={false}
+                        analyserRef={analyserRef}
+                        audioRef={audioRef}
+                      />
+                    </div>
+                  )}
+                </div>
+
+                {/* Greeting */}
+                <div className="mt-4">
+                  <p className="font-mono text-[10px] uppercase tracking-wider text-slate-500">Greeting</p>
+                  <p lang={lang} className={`mt-1 text-sm leading-snug ${isActive ? 'text-white' : 'text-slate-300'}`}>
+                    "{greetingFor(voice, activeGender ?? 'female')}"
+                  </p>
+                  {voice.translation !== voice.greeting && (
+                    <p className="mt-1 text-xs italic leading-snug text-slate-400">{voice.translation}</p>
+                  )}
+                </div>
+
+                {/* Female / Male */}
+                <div className="mt-auto grid grid-cols-2 gap-2 pt-4">
+                  {GENDERS.map((gender) => {
+                    const isThis = activeGender === gender;
+                    const isPlayingThis = isThis && playing;
+                    const isLoadingThis = isThis && loading;
+                    const Icon = isLoadingThis ? Loader2 : isPlayingThis ? Pause : Play;
+                    return (
+                      <button
+                        key={gender}
+                        type="button"
+                        onClick={() => handleToggle(index, gender)}
+                        aria-pressed={isPlayingThis}
+                        aria-label={`${isPlayingThis ? 'Pause' : 'Play'} ${voice.name} ${gender} voice`}
+                        className={`inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl border px-2 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#60a5fa] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0d121f] ${
+                          isPlayingThis
+                            ? 'bg-[#245ae2] border-[#245ae2] text-white shadow-[0_0_20px_rgba(36,90,226,0.45)]'
+                            : isThis
+                              ? 'bg-[#245ae2]/15 border-[#245ae2]/70 text-white'
+                              : 'bg-white/[0.04] border-white/10 text-slate-200 hover:bg-[#245ae2]/10 hover:border-[#245ae2]/50 hover:text-white'
+                        }`}
+                      >
+                        <Icon
+                          aria-hidden="true"
+                          className={`h-4 w-4 shrink-0 ${isLoadingThis ? 'motion-safe:animate-spin' : ''}`}
+                          fill={isLoadingThis ? 'none' : 'currentColor'}
+                        />
+                        {GENDER_LABEL[gender]}
+                      </button>
+                    );
+                  })}
+                </div>
+              </li>
             );
           })}
-        </div>
+        </ul>
+
+        <p className="mt-10 text-center text-sm text-slate-400">
+          Want to hear Audeora on a real call?{' '}
+          <Link to="/demo" className="font-semibold text-[#60a5fa] hover:text-white transition-colors">
+            Test on your phone &rarr;
+          </Link>
+        </p>
       </section>
+
+      <audio
+        ref={audioRef}
+        preload="none"
+        onPlay={() => setPlaying(true)}
+        onPlaying={() => setLoading(false)}
+        onWaiting={() => setLoading(true)}
+        onPause={() => {
+          setPlaying(false);
+          setLoading(false);
+        }}
+        onEnded={resetToIdle}
+        onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
+        onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
+        onDurationChange={(e) => setDuration(e.currentTarget.duration)}
+        onError={() => {
+          const current = activeRef.current;
+          if (current) fail(current.index, 'This clip could not be loaded. Please try again.');
+        }}
+      />
 
       <TryItLiveCTA />
     </div>
   );
 }
-
