@@ -100,12 +100,28 @@ export default function Home() {
       desc: "Natural turn-taking, barge-in support, and smooth interruption handling." 
     },
     { 
-      title: "Indian & Global Voices", 
-      desc: "Hindi, English and other Indian languages, with male and female voices." 
+      title: "Indian, EMEA & Global Voices", 
+      desc: "Hindi, English and other Indian languages, plus Arabic and Urdu for EMEA callers and growing support for South-East Asian languages, with male and female voices." 
     },
     { 
-      title: "Built for busy periods", 
-      desc: "Festival spikes or Monday morning surges, Audeora takes calls in parallel so callers spend less time waiting." 
+      title: "Parallel calling", 
+      desc: "Festival spikes or Monday morning surges, Audeora runs many calls at the same time so callers spend less time waiting." 
+    },
+    { 
+      title: "Auto lead creation", 
+      desc: "Every enquiry call creates or updates a lead in your CRM automatically, with the caller's details, intent and call outcome." 
+    },
+    { 
+      title: "Batch calling", 
+      desc: "Upload a list of numbers and let Audeora work through it in one campaign, with results logged against each contact." 
+    },
+    { 
+      title: "Inbound & outbound calling", 
+      desc: "Answer incoming enquiries and place follow-up, reminder and confirmation calls from the same agent setup." 
+    },
+    { 
+      title: "One number, many enquiries", 
+      desc: "When the same number raises different kinds of enquiry, each is classified and tracked separately so neither overwrites the other." 
     },
     { 
       title: "Actionable call summaries", 

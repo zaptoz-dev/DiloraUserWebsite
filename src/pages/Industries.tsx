@@ -54,7 +54,7 @@ export default function Industries() {
     },
     {
       id: 'retail',
-      title: 'Retail & E-commerce',
+      title: 'Retail',
       badge: 'Order Confirmation',
       focus: 'Returns & Exchanges',
       icon: ShoppingBag,
@@ -68,7 +68,7 @@ export default function Industries() {
     },
     {
       id: 'bfsi',
-      title: 'Banking, Financial Services & Insurance',
+      title: 'BFSI',
       badge: 'KYC & Verification',
       focus: 'Payment Reminders',
       icon: Landmark,
@@ -82,7 +82,7 @@ export default function Industries() {
     },
     {
       id: 'manufacturing',
-      title: 'Manufacturing & Distribution',
+      title: 'Manufacturing',
       badge: 'Dealer Orders',
       focus: 'Service Requests',
       icon: Factory,

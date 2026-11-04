@@ -16,7 +16,8 @@ interface VoiceItem {
   /** Masculine form of the greeting, for languages where the wording is gendered. */
   greetingMale?: string;
   translation: string;
-  audio: {
+  /** Recorded samples. Omitted while a language has no clips yet ("Coming soon"). */
+  audio?: {
     female: string;
     male: string;
   };
@@ -141,18 +142,81 @@ const VOICES: VoiceItem[] = [
       male: 'audio/Bengali_male.mp3'
     }
   },
+  // International and regional additions. No recorded sample exists yet, so
+  // they render as "Coming soon" until `audio` is filled in with real clips.
   {
-    id: 'odia',
-    name: 'Odia',
-    nativeScript: 'ଓଡ଼ିଆ',
-    code: 'OR-IN',
-    color: 'from-cyan-500 to-blue-600',
-    greeting: 'ନମସ୍କାର, ମୁଁ ଅଡିଓରା।',
-    translation: 'Namaskara, this is Audeora.',
-    audio: {
-      female: 'audio/Odia_female.mp3',
-      male: 'audio/Odia_male.mp3'
-    }
+    id: 'arabic',
+    name: 'Arabic',
+    nativeScript: 'العربية',
+    code: 'AR-AE',
+    color: 'from-emerald-500 to-green-600',
+    greeting: 'مرحباً، معكم أوديورا.',
+    translation: 'Hello, this is Audeora.'
+  },
+  {
+    id: 'urdu',
+    name: 'Urdu',
+    nativeScript: 'اردو',
+    code: 'UR-PK',
+    color: 'from-lime-500 to-emerald-600',
+    greeting: 'السلام علیکم، میں آڈیورا بول رہی ہوں۔',
+    greetingMale: 'السلام علیکم، میں آڈیورا بول رہا ہوں۔',
+    translation: 'Assalam o alaikum, this is Audeora speaking.'
+  },
+  {
+    id: 'assamese',
+    name: 'Assamese',
+    nativeScript: 'অসমীয়া',
+    code: 'AS-IN',
+    color: 'from-rose-500 to-pink-600',
+    greeting: 'নমস্কাৰ, মই অডিঅ’ৰা।',
+    translation: 'Nomoskar, this is Audeora.'
+  },
+  {
+    id: 'vietnamese',
+    name: 'Vietnamese',
+    nativeScript: 'Tiếng Việt',
+    code: 'VI-VN',
+    color: 'from-red-500 to-yellow-600',
+    greeting: 'Xin chào, tôi là Audeora.',
+    translation: 'Hello, this is Audeora.'
+  },
+  {
+    id: 'malay',
+    name: 'Bahasa Malaysia',
+    nativeScript: 'Bahasa Malaysia',
+    code: 'MS-MY',
+    color: 'from-sky-500 to-blue-600',
+    greeting: 'Hai, saya Audeora.',
+    translation: 'Hello, this is Audeora.'
+  },
+  {
+    id: 'mandarin',
+    name: 'Mandarin (Singapore)',
+    nativeScript: '中文',
+    code: 'ZH-SG',
+    color: 'from-red-500 to-rose-600',
+    greeting: '您好，我是 Audeora。',
+    translation: 'Hello, this is Audeora.'
+  },
+  {
+    id: 'filipino',
+    name: 'Filipino',
+    nativeScript: 'Filipino',
+    code: 'FIL-PH',
+    color: 'from-indigo-500 to-blue-600',
+    greeting: 'Kumusta, ito si Audeora.',
+    translation: 'Hello, this is Audeora.'
+  },
+  {
+    id: 'thai',
+    name: 'Thai',
+    nativeScript: 'ไทย',
+    code: 'TH-TH',
+    color: 'from-fuchsia-500 to-purple-600',
+    greeting: 'สวัสดีค่ะ ดิฉันคือ Audeora',
+    greetingMale: 'สวัสดีครับ ผมคือ Audeora',
+    translation: 'Hello, this is Audeora.'
   }
 ];
 
@@ -373,7 +437,8 @@ export default function VoiceLab() {
 
   const handleToggle = (index: number, gender: Gender) => {
     const audio = audioRef.current;
-    if (!audio) return;
+    const clip = VOICES[index].audio?.[gender];
+    if (!audio || !clip) return;
     connectAnalyser(audio);
     setError(null);
 
@@ -385,7 +450,7 @@ export default function VoiceLab() {
     }
 
     audio.pause();
-    audio.src = audioUrl(VOICES[index].audio[gender]);
+    audio.src = audioUrl(clip);
     setActive({ index, gender });
     setPlaying(false);
     setLoading(true);
@@ -434,7 +499,8 @@ export default function VoiceLab() {
             </span>
           </h1>
           <p className="text-base sm:text-lg text-slate-400 max-w-xl mx-auto">
-            Pick a language and press play to hear a female or male voice.
+            Pick a language and press play to hear a female or male voice. Indian, Middle East,
+            South-East Asian and other international languages, with Arabic and Urdu for EMEA callers.
           </p>
         </div>
       </section>
@@ -443,6 +509,7 @@ export default function VoiceLab() {
       <section aria-label="Voice samples" className="px-4 max-w-7xl mx-auto">
         <ul className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4">
           {VOICES.map((voice, index) => {
+            const hasAudio = Boolean(voice.audio);
             const isActive = active?.index === index;
             const activeGender = isActive ? active.gender : null;
             const lang = langTag(voice.code);
@@ -473,8 +540,15 @@ export default function VoiceLab() {
                 </p>
                 <div className="mt-1 flex items-center justify-between gap-3">
                   <h2 className="text-sm font-medium text-slate-400 tracking-normal">{voice.name}</h2>
-                  <span className="shrink-0 rounded-md border border-white/10 px-1.5 py-0.5 font-mono text-[10px] text-slate-500">
-                    {voice.code}
+                  <span className="flex shrink-0 items-center gap-1.5">
+                    {!hasAudio && (
+                      <span className="rounded-md bg-[#d6f549]/10 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wide text-[#d6f549]">
+                        Coming soon
+                      </span>
+                    )}
+                    <span className="rounded-md border border-white/10 px-1.5 py-0.5 font-mono text-[10px] text-slate-500">
+                      {voice.code}
+                    </span>
                   </span>
                 </div>
 
@@ -576,9 +650,14 @@ export default function VoiceLab() {
                         key={gender}
                         type="button"
                         onClick={() => handleToggle(index, gender)}
+                        disabled={!hasAudio}
                         aria-pressed={isPlayingThis}
-                        aria-label={`${isPlayingThis ? 'Pause' : 'Play'} ${voice.name} ${gender} voice`}
-                        className={`inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl border px-2 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#60a5fa] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0d121f] ${
+                        aria-label={
+                          hasAudio
+                            ? `${isPlayingThis ? 'Pause' : 'Play'} ${voice.name} ${gender} voice`
+                            : `${voice.name} ${gender} voice, coming soon`
+                        }
+                        className={`inline-flex min-h-11 items-center justify-center gap-1.5 rounded-xl border px-2 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#60a5fa] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0d121f] disabled:cursor-not-allowed disabled:opacity-40 ${
                           isPlayingThis
                             ? 'bg-[#245ae2] border-[#245ae2] text-white shadow-[0_0_20px_rgba(36,90,226,0.45)]'
                             : isThis

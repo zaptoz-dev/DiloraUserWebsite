@@ -21,12 +21,13 @@ export default function Features() {
       category: "Multilingual Intelligence",
       tag: "Regional AI",
       title: "Native Indian & Global Accents",
-      desc: "Talk to callers in the language they are comfortable with, including English, Hindi and Hinglish, with replies in the same language.",
+      desc: "Talk to callers in the language they are comfortable with, including English, Hindi and Hinglish, with replies in the same language. Arabic and Urdu bring the same experience to EMEA callers.",
       stat: "Multilingual",
       statLabel: "Languages & Accents",
       features: [
         "Voices that sound familiar to Indian callers",
         "English + Hindi (Hinglish) conversations",
+        "Arabic and Urdu for EMEA markets",
         "Pre-configured regional male and female vocal personas"
       ]
     },
@@ -55,6 +56,41 @@ export default function Features() {
         "Lead status dispositioning and follow-up scheduling",
         "Human handoff with a call summary"
       ]
+    }
+  ];
+
+  const highlights = [
+    {
+      title: "Auto Lead Creation",
+      desc: "Each enquiry creates or updates a lead in your CRM with the caller's details, intent and call outcome."
+    },
+    {
+      title: "Batch Calling",
+      desc: "Load a list of contacts and run them as one campaign, with an outcome logged for every number."
+    },
+    {
+      title: "Parallel Calling",
+      desc: "Run many calls at the same time during campaign spikes, so fewer callers wait."
+    },
+    {
+      title: "Inbound & Outbound",
+      desc: "Answer incoming enquiries and place reminders, confirmations and follow-ups from the same agent."
+    },
+    {
+      title: "Multilingual Conversations",
+      desc: "Hindi, English and regional languages, with Arabic and Urdu for EMEA and more international languages being added."
+    },
+    {
+      title: "Same-Number Enquiry Handling",
+      desc: "Two different enquiries from one phone number are classified and tracked separately, never merged or overwritten."
+    },
+    {
+      title: "Call Recording & Transcripts",
+      desc: "Every call can be recorded and transcribed for quality review and team training."
+    },
+    {
+      title: "Call Score & Summary",
+      desc: "Every call gets a score against your criteria and a short summary of what was discussed and agreed."
     }
   ];
 
@@ -164,6 +200,33 @@ export default function Features() {
                   See in action &rarr;
                 </Link>
               </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Key Voice Bot Capabilities */}
+      <section className="py-16 px-4 max-w-7xl mx-auto border-t border-white/5">
+        <div className="text-center max-w-2xl mx-auto mb-12">
+          <Badge className="mb-4">KEY CAPABILITIES</Badge>
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
+            Everything the voice bot does for you
+          </h2>
+          <p className="text-slate-400 text-sm sm:text-base">
+            The capabilities teams ask about most, in one place.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {highlights.map((item) => (
+            <div
+              key={item.title}
+              className="bg-[#0f1422] border border-white/10 rounded-2xl p-6 hover:border-[#245ae2]/40 transition-all group"
+            >
+              <h3 className="text-base font-bold text-white mb-2 group-hover:text-[#60a5fa] transition-colors">
+                {item.title}
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">{item.desc}</p>
             </div>
           ))}
         </div>

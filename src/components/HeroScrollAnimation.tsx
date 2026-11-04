@@ -117,7 +117,7 @@ const SCENARIOS: WorkflowScenario[] = [
       { icon: '📊', title: 'Update loan ledger in CRM', color: 'text-teal-400' }
     ],
     rightPhone: {
-      title: 'Collections Ledger (Real-time)',
+      title: 'Payments Ledger (Real-time)',
       columns: ['Account', 'EMI Due', 'Disposition', 'Status'],
       rows: [
         ['Amitabh J.', '₹8,500', 'PTP Today', 'UPI Sent ✓'],

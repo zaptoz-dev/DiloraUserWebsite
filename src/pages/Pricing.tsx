@@ -70,7 +70,7 @@ export default function Pricing() {
     },
     {
       q: "How does Audeora handle callers speaking Hinglish or regional dialects?",
-      a: "Audeora is designed for Indian callers. It can talk in English, Hindi or Hinglish and replies in the language the caller uses."
+      a: "Audeora is designed for Indian callers and is expanding across EMEA. It can talk in English, Hindi or Hinglish and replies in the language the caller uses. Arabic and Urdu are part of the language roadmap for EMEA, alongside regional Indian and South-East Asian languages."
     },
     {
       q: "What happens when a caller asks a complex edge-case question?",
