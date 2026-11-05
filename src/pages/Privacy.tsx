@@ -58,13 +58,13 @@ export default function Privacy() {
         <li>any notes you add (optional)</li>
       </ul>
       <p>
-        We send these details to Bolna (bolna.ai), a voice AI provider, so that it can place the demo call to the
-        number you entered. The call itself, including what is said on it, is handled by Bolna and its telephony
+        We send these details to our voice calling provider so that it can place the demo call to the number you
+        entered. The call itself, including what is said on it, is handled by that provider and its telephony
         partners.
       </p>
       <p>
-        Our server passes the details on to Bolna and does not save them. Its logs record only the Bolna execution
-        ID for the call, not your phone number. To prevent abuse, the server may briefly keep counters of requests
+        Our server passes the details on to the calling provider and does not save them. Its logs record only an ID
+        for the call, not your phone number. To prevent abuse, the server may briefly keep counters of requests
         per IP address and per phone number in memory. These counters are not written to disk, are cleared when the
         server restarts, and expire within 24 hours.
       </p>
@@ -119,7 +119,7 @@ export default function Privacy() {
       <p>To run the features described above, the website shares personal data with these service providers:</p>
       <ul>
         <li>
-          <strong>Bolna:</strong> places the demo calls requested through the demo form.
+          <strong>Voice calling provider:</strong> places the demo calls requested through the demo form.
         </li>
         <li>
           <strong>Deepgram:</strong> speech to text for the live voice demo.

@@ -200,7 +200,7 @@ app.post("/api/demo-call", async (req, res) => {
       return res.json({
         executionId: result.execution_id,
         status: "rescheduled",
-        message: `That number couldn't be reached right now, so Bolna has scheduled the call for ${formatIstClock(
+        message: `That number couldn't be reached right now, so the call has been scheduled for ${formatIstClock(
           new Date(confirmation.scheduledAt)
         )} instead.`,
       });

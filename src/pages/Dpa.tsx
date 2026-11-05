@@ -39,8 +39,8 @@ export default function Dpa() {
       </p>
       <ul>
         <li>
-          <strong>Bolna (bolna.ai):</strong> places the outbound demo call requested through the demo form, with its
-          telephony partners.
+          <strong>Voice calling provider:</strong> places the outbound demo call requested through the demo form,
+          with its telephony partners.
         </li>
         <li>
           <strong>Deepgram:</strong> converts speech to text in the live voice demo.

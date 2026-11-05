@@ -58,8 +58,8 @@ export default function Terms() {
 
       <h2>Third-party services</h2>
       <p>
-        The website and its demos rely on third-party services, including Bolna, Deepgram, Amazon Web Services,
-        ElevenLabs, Sarvam AI and Google Fonts. Those providers' own terms also apply to the features that depend on
+        The website and its demos rely on third-party services, including a voice calling provider, Deepgram, Amazon
+        Web Services, ElevenLabs, Sarvam AI and Google Fonts. Those providers' own terms also apply to the features that depend on
         them. The website links to other sites, such as our social media pages, and we are not responsible for their
         content or practices.
       </p>
