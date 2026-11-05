@@ -538,9 +538,9 @@ export default function VoiceLab() {
                 <p lang={lang} className="truncate text-2xl font-bold text-white leading-tight">
                   {voice.nativeScript}
                 </p>
-                <div className="mt-1 flex items-center justify-between gap-3">
+                <div className="mt-1 flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
                   <h2 className="text-sm font-medium text-slate-400 tracking-normal">{voice.name}</h2>
-                  <span className="flex shrink-0 items-center gap-1.5">
+                  <span className="ml-auto flex shrink-0 items-center gap-1.5">
                     {!hasAudio && (
                       <span className="rounded-md bg-[#d6f549]/10 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wide text-[#d6f549]">
                         Coming soon
